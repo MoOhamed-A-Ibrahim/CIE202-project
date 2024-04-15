@@ -5,8 +5,8 @@ class game;
 
 class grid
 {
-	enum { MaxShapeCount = 1000  };	//assuming max shape count = 1000
-	
+	enum { MaxShapeCount = 1000 };	//assuming max shape count = 1000
+
 	int rows, cols;	//numner of rows and columns in the grid to draw grid points
 	int height, width;
 	point uprLeft;	//upper left point of the grid
@@ -25,5 +25,11 @@ public:
 	void clearGridArea() const;
 	bool addShape(shape* newShape);
 	void setActiveShape(shape* actShape);
+
+	/////////
+	void DELshapes(); // Delete the grid
+	shape* getActiveShape();  // pointer to
 };
+
+
 

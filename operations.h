@@ -26,3 +26,13 @@ public:
 	virtual void Act();
 };
 
+class operDELETE : public operation
+{
+public:
+	operDELETE(game* r_pGame);
+
+
+	virtual void Act();
+
+
+};

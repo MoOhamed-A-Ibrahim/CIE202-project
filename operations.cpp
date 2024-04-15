@@ -36,3 +36,15 @@ void operAddSign::Act()
 	pGrid->setActiveShape(psh);
 
 }
+
+operDELETE::operDELETE(game* r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
+{
+	// a constructor that take a pointer to a game object as a parameter
+}
+
+void operDELETE::Act()
+{
+	grid* grid = pGame->getGrid(); //pGame is pointer to the game class
+	grid->DELshapes();
+}
+

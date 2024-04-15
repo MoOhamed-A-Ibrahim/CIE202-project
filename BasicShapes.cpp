@@ -50,9 +50,36 @@ void circle::draw() const
 	pW->SetBrush(fillColor);
 	pW->DrawCircle(RefPoint.x, RefPoint.y, rad, FILLED);
 }
+void circle::setRadius(int radius) {
+	rad = radius;
+}
+int circle::getRadius() const {
+	return rad;
+}
 
+void triangle::draw() const
+{
+	window* pW = pGame->getWind();	//get interface window
+	pW->SetPen(config.penColor, config.penWidth);
+	pW->SetBrush(config.fillColor);
+	point upperpoint, leftlowerpoint, rightlowerpoint;
+	leftlowerpoint.x = RefPoint.x - 0.5 * base;
+	leftlowerpoint.y = RefPoint.y - (sqrt(3) / 6.0) * base;
+	upperpoint.x = RefPoint.x;
+	upperpoint.y = RefPoint.y - (sqrt(3) / 3.0) * base;
+	rightlowerpoint.x = RefPoint.x + 0.5 * base;
+	rightlowerpoint.y = RefPoint.y - (sqrt(3) / 6) * base;
+	pW->DrawTriangle(leftlowerpoint.x, leftlowerpoint.y, rightlowerpoint.x, rightlowerpoint.x, upperpoint.x, upperpoint.y, FILLED);
 
+}
 
-////////////////////////////////////////////////////  class triangle  ///////////////////////////////////////
-//TODO: Add implementation for class triangle here
+void triangle::setbase(int BASE)
+{
+	base = BASE;
+}
+
+int triangle::getbase() const
+{
+	return base;
+}
 
