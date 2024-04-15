@@ -19,7 +19,10 @@ class Rect:public shape
 public:
 	Rect(game* r_pGame, point ref, int r_hght, int r_wdth);
 	virtual void draw() const;
-
+	void setHeight(int height);
+	void setWidth(int width);
+	int getHeight() const;
+	int getWidth() const;
 
 };
 

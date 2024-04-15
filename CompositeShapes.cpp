@@ -17,4 +17,18 @@ void Sign::draw() const
 	top->draw();
 }
 
+void Sign::resizeDown(int factor) const {
+	int newHeight = (base->getHeight()) - factor;
+	int newWidth = (base->getWidth()) - factor;
+	base->setHeight(newHeight);
+	base->setWidth(newWidth);
+}
+
+void Sign::resizeUp(int factor) const {
+	int newHeight = (base->getHeight()) + factor;
+	int newWidth = (base->getWidth()) + factor;
+	base->setHeight(newHeight);
+	base->setWidth(newWidth);
+}
+
 

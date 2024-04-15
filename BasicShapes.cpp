@@ -24,7 +24,18 @@ void Rect::draw() const
 
 	pW->DrawRectangle(upperLeft.x, upperLeft.y, lowerBottom.x, lowerBottom.y, FILLED);
 }
-
+void Rect::setHeight(int height) {
+	hght = height;
+}
+void Rect::setWidth(int width) {
+	wdth = width;
+}
+int Rect::getHeight() const {
+	return hght;
+}
+int Rect::getWidth() const {
+	return wdth;
+}
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
 circle::circle(game* r_pGame, point ref, int r):shape(r_pGame,ref)
