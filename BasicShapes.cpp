@@ -57,18 +57,23 @@ int circle::getRadius() const {
 	return rad;
 }
 
+triangle::triangle(game* r_pGame, point ref, int r_base) :shape(r_pGame, ref)
+{
+	base = r_base;
+}
+
 void triangle::draw() const
 {
 	window* pW = pGame->getWind();	//get interface window
 	pW->SetPen(config.penColor, config.penWidth);
 	pW->SetBrush(config.fillColor);
-	point upperpoint, leftlowerpoint, rightlowerpoint;
+	point upperpoint, leftlowerpoint, rightlowerpoint; /// refrence point is centriod 
 	leftlowerpoint.x = RefPoint.x - 0.5 * base;
-	leftlowerpoint.y = RefPoint.y - (sqrt(3) / 6.0) * base;
+	leftlowerpoint.y = RefPoint.y + (sqrt(3) / 6.0) * base;
 	upperpoint.x = RefPoint.x;
 	upperpoint.y = RefPoint.y - (sqrt(3) / 3.0) * base;
 	rightlowerpoint.x = RefPoint.x + 0.5 * base;
-	rightlowerpoint.y = RefPoint.y - (sqrt(3) / 6) * base;
+	rightlowerpoint.y = RefPoint.y + (sqrt(3) / 6) * base;
 	pW->DrawTriangle(leftlowerpoint.x, leftlowerpoint.y, rightlowerpoint.x, rightlowerpoint.x, upperpoint.x, upperpoint.y, FILLED);
 
 }
@@ -82,4 +87,3 @@ int triangle::getbase() const
 {
 	return base;
 }
-

@@ -47,6 +47,4 @@ public:
 	virtual void draw() const;
 	void setbase(int BASE);
 	int getbase()const;
-
-
 };

@@ -33,3 +33,47 @@ public:
 
 };
 
+class Tree :public shape
+{
+	Rect* base;
+	triangle* Layer_1, * Layer_2, * layer_3;
+public:
+	Tree(game* r_pGame, point ref);
+	virtual void draw() const;
+};
+
+class Car :public shape
+{
+	Rect* base;
+	circle* frontalWheel, * posteriorWheel;
+public:
+	Car(game* r_pGame, point ref);
+	virtual void draw() const;
+};
+
+class IceCream :public shape
+{
+	triangle* base;
+	circle* iceCircle;
+public:
+	IceCream(game* r_pGame, point ref);
+	virtual void draw() const;
+};
+
+class Rocket :public shape
+{
+	Rect* base;
+	triangle* head, * liftbase, * rightbase;
+public:
+	Rocket(game* r_pGame, point ref);
+	virtual void draw() const;
+};
+
+class House :public shape
+{
+	Rect* base, * door;
+	triangle* head;
+public:
+	House(game* r_pGame, point ref);
+	virtual void draw() const;
+};

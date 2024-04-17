@@ -84,8 +84,9 @@ shape* grid::getActiveShape()
 
 void grid::DELshapes()
 {
-	delete activeShape; // after deltete(dangling)
-	activeShape = nullptr;// activeShape(pointer)=nullptr
-	draw();// call again
-
+	if (activeShape != nullptr) {
+		delete activeShape; // after deltete(dangling)
+		activeShape = nullptr;// activeShape(pointer)=nullptr
+		draw();// call again
+	}
 }

@@ -6,14 +6,13 @@
 
 
 
-//Main class that coordinates the game operation
 class game
 {
 
 	/// Add more members if needed
 
 	toolbar* gameToolbar;
-	
+
 	window* pWind;	//Pointer to the CMU graphics window
 	grid* shapesGrid;
 
@@ -31,12 +30,8 @@ public:
 	window* getWind() const;		//returns a pointer to the graphics window
 	grid* getGrid() const;		//returns a pointer to the shapes grid
 
-	//creates an operation according to the toolbar item clicked
 	operation* createRequiredOperation(toolbarItem clickedItem);
-
-
 
 	void run();	//start the game
 
 };
-

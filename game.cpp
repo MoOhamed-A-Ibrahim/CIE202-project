@@ -62,12 +62,47 @@ void game::createGrid()
 
 operation* game::createRequiredOperation(toolbarItem clickedItem)
 {
-	operation* op=nullptr;
+	operation* op = nullptr;
 	switch (clickedItem)
 	{
+
+
 	case ITM_SIGN:
 		op = new operAddSign(this);
+		printMessage("Sign is being clicked");
 		break;
+	case ITM_Save:
+
+		printMessage("Save  is being clicked");
+		break;
+	case ITM_Enlarge:
+		printMessage("Enlarge is being clicked");
+		break;
+	case ITM_Minimize:
+		printMessage("Minimize is being clicked");
+		break;
+	case ITM_Hint:
+		printMessage("Hint is being clicked");
+		break;
+	case ITM_Rotate:
+		printMessage("Rotate is being clicked");
+		break;
+	case ITM_Refresh:
+		printMessage("Refresh is being clicked");
+		break;
+	case ITM_Select:
+		printMessage("Select is being clicked");
+		break;
+	case ITM_Trash:
+		op = new operDELETE(this);
+		printMessage("Trash is being clicked");
+		break;
+	case ITM_EXIT:
+		printMessage("Exit is being clicked");
+		break;
+	default:
+		break;
+
 	}
 	return op;
 }

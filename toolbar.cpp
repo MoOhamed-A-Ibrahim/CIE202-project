@@ -31,10 +31,10 @@ toolbar::toolbar(game* pG)
 	for (int i = 0; i < ITM_CNT; i++)
 		pWind->DrawImage(toolbarItemImages[i], i * config.toolbarItemWidth, 0, config.toolbarItemWidth, height);
 
-
 	//Draw a line under the toolbar
 	pWind->SetPen(DARKBLUE, 3);
 	pWind->DrawLine(0, height,width , height);
+
 }
 
 
@@ -46,43 +46,8 @@ toolbarItem toolbar::getItemClicked(int x)
 	//==> This assumes that toolbar items are lined up horizontally <==
 	//Divide x coord of the point clicked by the icon width (int division)
 	//if division result is 0 ==> first item is clicked, if 1 ==> 2nd item and so on
-	int division = (x / config.toolbarItemWidth);
-	switch (division)
-	{
-	case ITM_SIGN:
-		pGame->printMessage("Sign is being clicked");
-		break;
-	case ITM_Save:
-		pGame->printMessage("Save  is being clicked");
-		break;
-	case ITM_Enlarge:
-		pGame->printMessage("Enlarge is being clicked");
-		break;
-	case ITM_Minimize:
-		pGame->printMessage("Minimize is being clicked");
-		break;
-	case ITM_Hint:
-		pGame->printMessage("Hint is being clicked");
-		break;
-	case ITM_Rotate:
-		pGame->printMessage("Rotate is being clicked");
-		break;
-	case ITM_Refresh:
-		pGame->printMessage("Refresh is being clicked");
-		break;
-	case ITM_Select:
-		pGame->printMessage("Select is being clicked");
-		break;
-	case ITM_Trash:
-		pGame->printMessage("Trash is being clicked");
-		break;
-	case ITM_EXIT:
-		pGame->printMessage("Exit is being clicked");
-		break;
-	default:
-		break;
 
-	}
+
 
 
 
