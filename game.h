@@ -26,6 +26,7 @@ public:
 	void printMessage(string msg) const;	//Print a message on Status bar
 	void createToolBar();		//creates the toolbar
 	void createGrid();		//creates the shapes grid
+	void trackLives() const;
 
 	window* getWind() const;		//returns a pointer to the graphics window
 	grid* getGrid() const;		//returns a pointer to the shapes grid

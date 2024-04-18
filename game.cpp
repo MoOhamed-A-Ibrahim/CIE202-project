@@ -18,6 +18,8 @@ game::game()
 
 	//Create and clear the status bar
 	clearStatusBar();
+	trackLives();
+
 }
 
 game::~game()
@@ -42,6 +44,7 @@ void game::clearStatusBar() const
 	pWind->SetPen(config.statusBarColor, 1);
 	pWind->SetBrush(config.statusBarColor);
 	pWind->DrawRectangle(0, config.windHeight - config.statusBarHeight, config.windWidth, config.windHeight);
+	trackLives();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -113,11 +116,21 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 void game::printMessage(string msg) const	//Prints a message on status bar
 {
 	clearStatusBar();	//First clear the status bar
-
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(24, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(10, config.windHeight - (int)(0.85 * config.statusBarHeight), msg);
 }
+
+void game::trackLives() const {
+	static int lives = 5;
+	static int score = 0;
+	static int level = 1;
+	string msg = "Lives = "+to_string(lives)+" \nScore = "+to_string(score)+" \nLevel = "+to_string(level);
+	pWind->SetPen(config.penColor, 50);
+	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(config.windWidth-250, config.windHeight - (int)(0.85 * config.statusBarHeight), msg);
+}
+
 
 
 

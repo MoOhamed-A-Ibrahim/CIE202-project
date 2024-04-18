@@ -28,9 +28,8 @@ class Sign :public shape
 public:
 	Sign(game* r_pGame, point ref);
 	virtual void draw() const;
-	virtual void resizeDown(int factor) const;
-	virtual void resizeUp(int factor) const;
-
+	virtual void resizeUp(int factor) ;
+	virtual void resizeDown(int factor) ;
 };
 
 class Tree :public shape
@@ -40,6 +39,9 @@ class Tree :public shape
 public:
 	Tree(game* r_pGame, point ref);
 	virtual void draw() const;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
+
 };
 
 class Car :public shape
@@ -49,6 +51,8 @@ class Car :public shape
 public:
 	Car(game* r_pGame, point ref);
 	virtual void draw() const;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };
 
 class IceCream :public shape
@@ -58,6 +62,8 @@ class IceCream :public shape
 public:
 	IceCream(game* r_pGame, point ref);
 	virtual void draw() const;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };
 
 class Rocket :public shape
@@ -67,6 +73,8 @@ class Rocket :public shape
 public:
 	Rocket(game* r_pGame, point ref);
 	virtual void draw() const;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };
 
 class House :public shape
@@ -76,4 +84,6 @@ class House :public shape
 public:
 	House(game* r_pGame, point ref);
 	virtual void draw() const;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };

@@ -30,7 +30,8 @@ toolbar::toolbar(game* pG)
 	//Draw toolbar item one image at a time
 	for (int i = 0; i < ITM_CNT; i++)
 		pWind->DrawImage(toolbarItemImages[i], i * config.toolbarItemWidth, 0, config.toolbarItemWidth, height);
-
+	//pWind->SetPen(RED, 2);
+	//pWind->DrawString(1000,50,"xx");
 	//Draw a line under the toolbar
 	pWind->SetPen(DARKBLUE, 3);
 	pWind->DrawLine(0, height,width , height);

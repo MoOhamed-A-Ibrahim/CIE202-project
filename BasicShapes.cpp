@@ -18,7 +18,7 @@ void Rect::draw() const
 	pW->SetBrush(config.fillColor);
 	point upperLeft, lowerBottom;
 	upperLeft.x = RefPoint.x - wdth / 2;
-	upperLeft.y = RefPoint.y - hght / 2;
+	upperLeft.y = RefPoint.y -hght / 2;
 	lowerBottom.x = RefPoint.x + wdth / 2;
 	lowerBottom.y = RefPoint.y + hght / 2;
 
@@ -35,6 +35,14 @@ int Rect::getHeight() const {
 }
 int Rect::getWidth() const {
 	return wdth;
+}
+void Rect::resizeUp(double factor) {
+	setHeight(hght * factor);
+	setWidth(wdth * factor);
+}
+void Rect::resizeDown(double factor) {
+	setHeight(hght / factor);
+	setWidth(wdth /factor);
 }
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
@@ -56,7 +64,14 @@ void circle::setRadius(int radius) {
 int circle::getRadius() const {
 	return rad;
 }
+void circle::resizeUp(double factor) {
+	setRadius(rad * factor);
+}
+void circle::resizeDown(double factor) {
+	setRadius(rad / factor);
+}
 
+///Triangle class///////
 triangle::triangle(game* r_pGame, point ref, int r_base) :shape(r_pGame, ref)
 {
 	base = r_base;
@@ -86,4 +101,12 @@ void triangle::setbase(int BASE)
 int triangle::getbase() const
 {
 	return base;
+}
+
+void triangle::resizeDown(double factor){
+	setbase(base / factor);
+}
+
+void triangle::resizeUp(double factor) {
+	setbase(base * factor);
 }

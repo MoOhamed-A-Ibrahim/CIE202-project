@@ -17,13 +17,15 @@ class Rect:public shape
 {
 	int hght, wdth;	//height and width of the recangle
 public:
+
 	Rect(game* r_pGame, point ref, int r_hght, int r_wdth);
 	virtual void draw() const;
 	void setHeight(int height);
 	void setWidth(int width);
 	int getHeight() const;
 	int getWidth() const;
-
+	void resizeUp(double factor);
+	void resizeDown(double factor);
 };
 
 
@@ -38,6 +40,8 @@ public:
 	virtual void draw() const;
 	void setRadius(int radius);
 	int getRadius() const;
+	void resizeUp(double factor);
+	void resizeDown(double factor);
 };
 
 class triangle :public shape {
@@ -47,4 +51,6 @@ public:
 	virtual void draw() const;
 	void setbase(int BASE);
 	int getbase()const;
+	void resizeUp(double factor);
+	void resizeDown(double factor);
 };
