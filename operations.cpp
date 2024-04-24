@@ -48,3 +48,34 @@ void operDELETE::Act()
 	grid->DELshapes();
 }
 
+
+
+operResizeUp::operResizeUp(game * r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
+{
+	// a constructor that take a pointer to a game object as a parameter
+}
+
+void operResizeUp::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape=pGrid->getActiveShape();
+	currentShape->resizeUp(2);
+	pGrid->setActiveShape(currentShape);
+}
+
+
+
+operResizeDown::operResizeDown(game* r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
+{
+	// a constructor that take a pointer to a game object as a parameter
+}
+
+void operResizeDown::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape = pGrid->getActiveShape();
+	currentShape->resizeDown(2);
+	pGrid->setActiveShape(currentShape);
+}
+
+

@@ -32,3 +32,16 @@ public:
 	operDELETE(game* r_pGame);
 	virtual void Act();
 };
+
+class operResizeUp :public operation {
+public:
+	operResizeUp(game* r_pGame);
+	virtual void Act();
+};
+
+
+class operResizeDown :public operation {
+public:
+	operResizeDown(game* r_pGame);
+	virtual void Act();
+};

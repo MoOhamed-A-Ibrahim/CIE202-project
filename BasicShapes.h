@@ -24,8 +24,8 @@ public:
 	void setWidth(int width);
 	int getHeight() const;
 	int getWidth() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };
 
 
@@ -40,8 +40,8 @@ public:
 	virtual void draw() const;
 	void setRadius(int radius);
 	int getRadius() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };
 
 class triangle :public shape {
@@ -51,6 +51,6 @@ public:
 	virtual void draw() const;
 	void setbase(int BASE);
 	int getbase()const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
 };

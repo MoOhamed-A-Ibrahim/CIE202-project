@@ -82,9 +82,11 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Save  is being clicked");
 		break;
 	case ITM_Enlarge:
+		op = new operResizeUp(this);
 		printMessage("Enlarge is being clicked");
 		break;
 	case ITM_Minimize:
+		op = new operResizeDown(this);
 		printMessage("Minimize is being clicked");
 		break;
 	case ITM_Hint:

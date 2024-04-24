@@ -28,17 +28,20 @@ void Sign::resizeUp(int factor) {
 
 }
 
-void Sign::resizeDown(int factor)  {
-	point oldRefBottom = base->getRefPoint();
-	point newRefBottom;
-	newRefBottom.y = base->getHeight() + top->getRefPoint().y + top->getHeight();
-	newRefBottom.x = oldRefBottom.x;
-	base->setRefPoint(newRefBottom);
+void Sign::resizeDown(int factor) {
+	// Retrieve the old reference point of the base
+	point oldBaseRef = base->getRefPoint();
 
+	// Calculate the new reference point for the base after resizing down
+	point newBaseRef;
+	// Subtract half of the scaled-down height of the base and half of the scaled-down height of the top part from the old reference point's y-coordinate
+	newBaseRef.y = oldBaseRef.y - (base->getHeight() / factor) / 2 - (top->getHeight() / 2) / factor;
+	newBaseRef.x = oldBaseRef.x; 
+	base->setRefPoint(newBaseRef);
 	top->resizeDown(factor);
 	base->resizeDown(factor);
-
 }
+
 
 
 

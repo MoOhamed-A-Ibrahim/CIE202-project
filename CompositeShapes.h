@@ -28,7 +28,7 @@ class Sign :public shape
 public:
 	Sign(game* r_pGame, point ref);
 	virtual void draw() const;
-	virtual void resizeUp(int factor) ;
+	virtual void resizeUp(int factor) override;
 	virtual void resizeDown(int factor) ;
 };
 

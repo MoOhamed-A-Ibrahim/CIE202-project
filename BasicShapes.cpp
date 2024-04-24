@@ -36,13 +36,13 @@ int Rect::getHeight() const {
 int Rect::getWidth() const {
 	return wdth;
 }
-void Rect::resizeUp(double factor) {
+void Rect::resizeUp(int factor) {
 	setHeight(hght * factor);
 	setWidth(wdth * factor);
 }
-void Rect::resizeDown(double factor) {
+void Rect::resizeDown(int factor) {
 	setHeight(hght / factor);
-	setWidth(wdth /factor);
+	setWidth(wdth / factor);
 }
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
@@ -64,10 +64,10 @@ void circle::setRadius(int radius) {
 int circle::getRadius() const {
 	return rad;
 }
-void circle::resizeUp(double factor) {
+void circle::resizeUp(int factor) {
 	setRadius(rad * factor);
 }
-void circle::resizeDown(double factor) {
+void circle::resizeDown(int factor) {
 	setRadius(rad / factor);
 }
 
@@ -103,10 +103,10 @@ int triangle::getbase() const
 	return base;
 }
 
-void triangle::resizeDown(double factor){
+void triangle::resizeDown(int factor){
 	setbase(base / factor);
 }
 
-void triangle::resizeUp(double factor) {
+void triangle::resizeUp(int factor) {
 	setbase(base * factor);
 }
