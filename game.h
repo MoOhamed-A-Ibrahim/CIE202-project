@@ -10,7 +10,9 @@ class game
 {
 
 	/// Add more members if needed
-
+	static int lives;
+	static int score;
+	static int level;
 	toolbar* gameToolbar;
 
 	window* pWind;	//Pointer to the CMU graphics window

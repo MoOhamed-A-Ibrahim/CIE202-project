@@ -2,6 +2,9 @@
 #include "gameConfig.h"
 
 
+int game::lives = 5;
+int game::score = 0;
+int game::level = 1;
 
 game::game()
 {
@@ -122,9 +125,7 @@ void game::printMessage(string msg) const	//Prints a message on status bar
 }
 
 void game::trackLives() const {
-	static int lives = 5;
-	static int score = 0;
-	static int level = 1;
+
 	string msg = "Lives = "+to_string(lives)+" \nScore = "+to_string(score)+" \nLevel = "+to_string(level);
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
