@@ -78,7 +78,6 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Sign is being clicked");
 		break;
 	case ITM_Save:
-		op = new operAddIceCream(this);
 		printMessage("Save  is being clicked");
 		break;
 	case ITM_Enlarge:
@@ -90,7 +89,6 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Minimize is being clicked");
 		break;
 	case ITM_Hint:
-		op = new operAddCar(this);
 		printMessage("Hint is being clicked");
 		break;
 	case ITM_Rotate:
@@ -98,11 +96,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Rotate is being clicked");
 		break;
 	case ITM_Refresh:
-		op = new operRocket(this);
 		printMessage("Refresh is being clicked");
 		break;
 	case ITM_Select:
-		op = new operAddHouse(this);
 		printMessage("Select is being clicked");
 		break;
 	case ITM_Trash:
@@ -111,6 +107,26 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		break;
 	case ITM_EXIT:
 		printMessage("Exit is being clicked");
+		break;
+	case ITM_TREE:
+		op = new operAddTree(this);
+		printMessage("Tree is being clicked");
+		break;
+	case ITM_CAR:
+		op = new operAddCar(this);
+		printMessage("Car is being clicked");
+		break;
+	case ITM_ICECREAM:
+		op = new operAddIceCream(this);
+		printMessage("Icecream is being clicked");
+		break;
+	case ITM_ROCKET:
+		op = new operRocket(this);
+		printMessage("Rocket is being clicked");
+		break;
+	case ITM_HOUSE:
+		op = new operAddHouse(this);
+		printMessage("House is being clicked");
 		break;
 	default:
 		break;

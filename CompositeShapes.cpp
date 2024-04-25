@@ -144,14 +144,39 @@ void Car::draw() const
 }
  
 void Car::resizeUp(int factor) {
+	point oldRefPoint = base->getRefPoint();
+	point newfwRef;
+	point newpwRef;
+
+	newfwRef.x = oldRefPoint.x + (0.3 * config.car.baseWdth)*factor;
+	newfwRef.y = oldRefPoint.y + (config.car.baseHeight / 2)*factor;
+
+	newpwRef.x = oldRefPoint.x - (0.3 * config.car.baseWdth) * factor;
+	newpwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) * factor;
+
+	frontalWheel->setRefPoint(newfwRef);
+	posteriorWheel->setRefPoint(newpwRef);
+
 	base->resizeUp(factor);
-	//frontalWheel->setRadius(config.car.wheelRadius *factor);
 	frontalWheel->resizeUp(factor);
 	posteriorWheel->resizeUp(factor);
 }
+
 void Car::resizeDown(int factor) {
+	point oldRefPoint = base->getRefPoint();
+	point newfwRef;
+	point newpwRef;
+
+	newfwRef.x = oldRefPoint.x + (0.3 * config.car.baseWdth) / factor;
+	newfwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) / factor;
+
+	newpwRef.x = oldRefPoint.x - (0.3 * config.car.baseWdth) / factor;
+	newpwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) / factor;
+
+	frontalWheel->setRefPoint(newfwRef);
+	posteriorWheel->setRefPoint(newpwRef);
+
 	base->resizeDown(factor);
-	//frontalWheel->setRadius(config.car.wheelRadius / factor);
 	frontalWheel->resizeDown(factor);
 	posteriorWheel->resizeDown(factor);
 }
@@ -281,7 +306,7 @@ void Rocket::rotate(double deg)
 House::House(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
-	point headRef = { ref.x, ref.y - config.house.baseHeight / 2 - config.house.headwdth / 2 };
+	point headRef = { ref.x, ref.y - config.house.baseHeight/2 - (sqrt(3) / 6.0)*config.house.baseWdth };
 	point doorRef = { ref.x, ref.y + config.house.baseHeight / 2 - config.house.doorhight / 2 };
 
 	base = new Rect(pGame, baseRef, config.house.baseHeight, config.house.baseWdth);
@@ -298,20 +323,21 @@ void House::draw() const
 
 
 void House ::resizeUp(int factor) {
-	point oldDoorRefPoint = door->getRefPoint();
-	point newDoorRefPoint = {
-		oldDoorRefPoint.x,oldDoorRefPoint.y* factor
-	};
-	point oldHeadRefPoint = head->getRefPoint();
-	point newHeadRefPoint = {
-		oldHeadRefPoint.x,oldHeadRefPoint.y*factor
-
-	};
-	door->setRefPoint(newDoorRefPoint);
-	head->setRefPoint(newHeadRefPoint);
 	base->resizeUp(factor);
 	door->resizeUp(factor);
 	head->resizeUp(factor);
+
+	point oldRefPoint = base->getRefPoint();
+	point newHeadRef;
+	point newDoorRef;
+	newHeadRef.x = oldRefPoint.x;
+	newHeadRef.y = oldRefPoint.y - (config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth);
+
+	newDoorRef.x = oldRefPoint.x;
+	newDoorRef.y = oldRefPoint.y + (config.house.baseHeight / 2 - config.house.doorhight / 2) ;
+	head->setRefPoint(newHeadRef);
+	door->setRefPoint(newDoorRef);
+
 
 }
 void House::resizeDown(int factor) {

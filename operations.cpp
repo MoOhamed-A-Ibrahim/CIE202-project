@@ -175,7 +175,6 @@ void operRotate::Act()
 	double angle = 90;
 	grid* grid = pGame->getGrid();
 	shape* shape = grid->getActiveShape();
-
 	shape->rotate(angle);
 }
 

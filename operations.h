@@ -26,30 +26,12 @@ public:
 	virtual void Act();
 };
 
-class operDELETE : public operation
-{
-public:
-	operDELETE(game* r_pGame);
-	virtual void Act();
-};
-
-class operResizeUp :public operation {
-public:
-	operResizeUp(game* r_pGame);
-	virtual void Act();
-};
 
 class operRocket :public operation {
 public:
 	operRocket(game* r_pGame);
 	virtual void Act();
 
-};
-
-class operResizeDown :public operation {
-public:
-	operResizeDown(game* r_pGame);
-	virtual void Act();
 };
 
 
@@ -86,6 +68,27 @@ public:
 
 
 };
+
+class operDELETE : public operation
+{
+public:
+	operDELETE(game* r_pGame);
+	virtual void Act();
+};
+
+class operResizeUp :public operation {
+public:
+	operResizeUp(game* r_pGame);
+	virtual void Act();
+};
+
+class operResizeDown :public operation {
+public:
+	operResizeDown(game* r_pGame);
+	virtual void Act();
+};
+
+
 
 class operRotate : public operation
 {

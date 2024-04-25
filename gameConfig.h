@@ -21,7 +21,7 @@ struct
 
 	//Default colors
 	color	penColor = RED,			//color used to draw borders/write messages
-		fillColor = RED,			//shapes fill color (Default)
+		fillColor = BLUE,			//shapes fill color (Default)
 		bkGrndColor = LAVENDER,		//Screen Background color
 		statusBarColor = LIGHTSEAGREEN;	//background color of the status
 	int penWidth = 3;			//width of the pen that draws shapes
@@ -74,6 +74,11 @@ enum toolbarItem //The items of the  toolbar (you should add more items)
 	//Note: Items are ordered here as they appear in the toolbar
 	//If you want to change the toolbar items order, just change the order here
 	ITM_SIGN,
+	ITM_TREE,
+	ITM_CAR,
+	ITM_ICECREAM,
+	ITM_ROCKET,
+	ITM_HOUSE,
 	ITM_Save,
 	ITM_Enlarge,
 	ITM_Minimize,
@@ -82,6 +87,8 @@ enum toolbarItem //The items of the  toolbar (you should add more items)
 	ITM_Refresh,
 	ITM_Select,
 	ITM_Trash,
+	ITM_BLANK1,
+	ITM_BLANK2,
 	ITM_EXIT,
 
 	ITM_CNT		//no. of toolbar items ==> This should be the last line in this enum
