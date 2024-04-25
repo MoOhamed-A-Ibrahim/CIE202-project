@@ -44,7 +44,7 @@ struct
 
 	struct {
 		int baseWdth = 20, baseHeight = 80;
-		int triwdth = 60;
+		int triwdth = 100;
 	}tree;
 
 	struct {

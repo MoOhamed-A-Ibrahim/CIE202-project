@@ -73,7 +73,7 @@ Tree::Tree(game* r_pGame, point ref) :shape(r_pGame, ref)
 
 	base = new Rect(pGame, baseRef, config.tree.baseHeight, config.tree.baseWdth);
 	Layer_1 = new triangle(pGame, layer_1_ref, config.tree.triwdth);
-	Layer_2 = new triangle(pGame, layer_1_ref, config.tree.triwdth);
+	Layer_2 = new triangle(pGame, layer_2_ref, config.tree.triwdth);
 	layer_3 = new triangle(pGame, layer_3_ref, config.tree.triwdth);
 }
 
@@ -229,9 +229,9 @@ void IceCream::rotate(double deg)
 Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
-	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2 - config.rocket.headwdth / 2 };
-	point leftbaseRef = { ref.x - config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 };
-	point rightbaseRef = { ref.x + config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 };
+	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2 - config.rocket.headwdth / 3 };
+	point leftbaseRef = { ref.x - config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
+	point rightbaseRef = { ref.x + config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
 
 	base = new Rect(pGame, baseRef, config.rocket.baseHeight, config.rocket.baseWdth);
 	head = new triangle(pGame, headref, config.rocket.headwdth);
