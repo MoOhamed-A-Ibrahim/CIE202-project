@@ -37,6 +37,8 @@ void operAddSign::Act()
 
 }
 
+///////////////////////////////////
+
 operDELETE::operDELETE(game* r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
 {
 	// a constructor that take a pointer to a game object as a parameter
@@ -49,6 +51,7 @@ void operDELETE::Act()
 }
 
 
+///////////////////////////////////
 
 operResizeUp::operResizeUp(game * r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
 {
@@ -64,7 +67,7 @@ void operResizeUp::Act()
 }
 
 
-
+///////////////////////////////////
 operResizeDown::operResizeDown(game* r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
 {
 	// a constructor that take a pointer to a game object as a parameter
@@ -78,4 +81,101 @@ void operResizeDown::Act()
 	pGrid->setActiveShape(currentShape);
 }
 
+//////////////////////////////
+
+operAddIceCream::operAddIceCream(game* r_pGame) : operation(r_pGame)
+{
+
+}
+
+void operAddIceCream::Act()
+{
+	window* pw = pGame->getWind();
+	int xGrid = config.RefX - config.RefX % config.gridSpacing;
+	int yGrid = config.RefY - config.RefX % config.gridSpacing;
+	point triShapeRef = { xGrid,yGrid };
+	shape* psh = new IceCream(pGame, triShapeRef);
+	grid* pGrid = pGame->getGrid();
+	pGrid->setActiveShape(psh);
+
+}
+
+///////////////////////////////
+
+operAddCar::operAddCar(game* r_pGame) : operation(r_pGame)
+{
+}
+
+void operAddCar::Act()
+{
+	window* pw = pGame->getWind();
+	int xGrid = config.RefX - config.RefX % config.gridSpacing;
+	int yGrid = config.RefY - config.RefX % config.gridSpacing;
+	point triShapeRef = { xGrid,yGrid };
+	shape* psh = new Car(pGame, triShapeRef);
+	grid* pGrid = pGame->getGrid();
+	pGrid->setActiveShape(psh);
+}
+////////////////////////////////////////////////
+
+operAddHouse::operAddHouse(game* r_pGame) : operation(r_pGame)
+{
+}
+
+void operAddHouse::Act()
+{
+	window* pw = pGame->getWind();
+	int xGrid = config.RefX - config.RefX % config.gridSpacing;
+	int yGrid = config.RefY - config.RefX % config.gridSpacing;
+	point triShapeRef = { xGrid,yGrid };
+	shape* psh = new House(pGame, triShapeRef);
+	grid* pGrid = pGame->getGrid();
+	pGrid->setActiveShape(psh);
+}
+////////////////////////////////////////
+
+operAddTree::operAddTree(game* r_pGame) : operation(r_pGame)
+{
+}
+
+void operAddTree::Act()
+{
+	window* pw = pGame->getWind();
+	int xGrid = config.RefX - config.RefX % config.gridSpacing;
+	int yGrid = config.RefY - config.RefX % config.gridSpacing;
+	point triShapeRef = { xGrid,yGrid };
+	shape* psh = new Tree(pGame, triShapeRef);
+	grid* pGrid = pGame->getGrid();
+	pGrid->setActiveShape(psh);
+}
+
+///////////////////////////////////////
+
+operRocket::operRocket(game* r_pGame) : operation(r_pGame)
+{
+}
+void operRocket::Act()
+{
+	window* pw = pGame->getWind();
+	int xGrid = config.RefX - config.RefX % config.gridSpacing;
+	int yGrid = config.RefY - config.RefX % config.gridSpacing;
+	point triShapeRef = { xGrid,yGrid };
+	shape* psh = new Rocket(pGame, triShapeRef);
+	grid* pGrid = pGame->getGrid();
+	pGrid->setActiveShape(psh);
+}
+/////////////////////////////////////////
+
+operRotate::operRotate(game* r_pGame):operation(r_pGame)
+{
+}
+
+void operRotate::Act()
+{
+	double angle = 90;
+	grid* grid = pGame->getGrid();
+	shape* shape = grid->getActiveShape();
+
+	shape->rotate(angle);
+}
 

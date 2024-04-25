@@ -40,7 +40,7 @@ struct
 	struct {
 		int baseWdth = 20, baseHeight = 80;
 		int topWdth = 100, topHeight = 50;
-	}sighShape;
+	}signShape;
 
 	struct {
 		int baseWdth = 20, baseHeight = 80;

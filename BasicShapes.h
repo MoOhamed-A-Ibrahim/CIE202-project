@@ -26,6 +26,7 @@ public:
 	int getWidth() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };
 
 
@@ -42,6 +43,7 @@ public:
 	int getRadius() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };
 
 class triangle :public shape {
@@ -53,4 +55,5 @@ public:
 	int getbase()const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };

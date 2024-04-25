@@ -2,20 +2,38 @@
 #include "gameConfig.h"
 
 ////////////////////////////////////////////////////  class Sign  ///////////////////////////////////////
-Sign::Sign(game* r_pGame, point ref):shape(r_pGame, ref)
+Sign::Sign(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	//calc the ref point of the Sign base and top rectangles relative to the Sign shape
 	point topRef = ref;	//top rect ref is the same as the sign
-	point baseRef = { ref.x, ref.y + config.sighShape.topHeight / 2 + config.sighShape.baseHeight / 2 };
-	top = new Rect(pGame, topRef, config.sighShape.topHeight, config.sighShape.topWdth);
-	base = new Rect(pGame, baseRef, config.sighShape.baseHeight, config.sighShape.baseWdth);
-}
+	point baseRef = { ref.x, ref.y + config.signShape.topHeight / 2 + config.signShape.baseHeight / 2 };
 
+
+	top = new Rect(pGame, topRef, config.signShape.topHeight, config.signShape.topWdth);
+	base = new Rect(pGame, baseRef, config.signShape.baseHeight, config.signShape.baseWdth);
+
+
+}
 void Sign::draw() const
 {
 	base->draw();
 	top->draw();
 }
+void Sign::rotate(double deg)
+{
+	point topRef = RefPoint;
+	//point baseRef = { RefPoint.x - config.signShape.topHeight / 2 - config.signShape.baseWdth / 2 + config.signShape.baseWdth , RefPoint.y - config.signShape.topHeight- config.signShape.baseWdth };
+	point baseRef = { RefPoint.x - config.signShape.topWdth / 2 - config.signShape.baseWdth / 2 + config.signShape.topWdth / 2 - config.signShape.baseWdth ,RefPoint.y + config.signShape.topWdth / 2 + config.signShape.baseWdth / 2 };
+
+	top->setRefPoint(topRef);
+	base->setRefPoint(baseRef);
+	top->rotate(deg);
+	base->rotate(deg);
+
+
+}
+
+
 void Sign::resizeUp(int factor) {
 	point oldRefBottom = base->getRefPoint();
 	point newRefBottom;
@@ -44,7 +62,7 @@ void Sign::resizeDown(int factor) {
 
 
 
-
+////////////////////////////////////////////////////////////////
 
 Tree::Tree(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
@@ -98,7 +116,15 @@ void Tree::resizeDown(int factor) {
 	layer_3->resizeDown(factor);
 
 }
+void Tree::rotate(double deg)
+{
+	Layer_1->rotate(deg);
+	Layer_2->rotate(deg);
+	layer_3->rotate(deg);
+	base->rotate(deg);
+}
 
+//////////////////////////////////////////////////////////////////////
 Car::Car(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
@@ -130,6 +156,15 @@ void Car::resizeDown(int factor) {
 	posteriorWheel->resizeDown(factor);
 }
 
+void Car::rotate(double deg)
+{
+	base->rotate(deg);
+	frontalWheel->rotate(deg);
+	posteriorWheel->rotate(deg);
+}
+
+
+///////////////////////////////////////////
 IceCream::IceCream(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
@@ -154,6 +189,17 @@ void IceCream::resizeDown(int factor) {
 	base->resizeDown(factor);
 	iceCircle->resizeDown(factor);
 }
+
+void IceCream::rotate(double deg)
+{
+	base->rotate(deg);
+	iceCircle->rotate(deg);
+}
+
+
+
+
+////////////////////////////////////////////
 
 Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
@@ -222,6 +268,15 @@ void Rocket::resizeDown(int factor) {
 	head->resizeUp(factor);
 
 }
+void Rocket::rotate(double deg)
+{
+	rightbase->rotate(deg);
+	liftbase->rotate(deg);
+	head->rotate(deg);
+	base->rotate(deg);
+}
+
+///////////////////////////////////////////////////
 
 House::House(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
@@ -275,4 +330,11 @@ void House::resizeDown(int factor) {
 	door->resizeDown(factor);
 	head->resizeDown(factor);
 
+}
+
+void House::rotate(double deg)
+{
+	head->rotate(deg);
+	base->rotate(deg);
+	door->rotate(deg);
 }

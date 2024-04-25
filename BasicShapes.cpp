@@ -44,6 +44,17 @@ void Rect::resizeDown(int factor) {
 	setHeight(hght / factor);
 	setWidth(wdth / factor);
 }
+void Rect::rotate(double deg)
+{
+
+
+	double temp = wdth;
+	wdth = hght;
+	hght = temp;
+
+
+}
+
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
 circle::circle(game* r_pGame, point ref, int r):shape(r_pGame,ref)
@@ -70,7 +81,10 @@ void circle::resizeUp(int factor) {
 void circle::resizeDown(int factor) {
 	setRadius(rad / factor);
 }
-
+void circle::rotate(double deg)
+{
+	
+}
 ///Triangle class///////
 triangle::triangle(game* r_pGame, point ref, int r_base) :shape(r_pGame, ref)
 {
@@ -89,7 +103,7 @@ void triangle::draw() const
 	upperpoint.y = RefPoint.y - (sqrt(3) / 3.0) * base;
 	rightlowerpoint.x = RefPoint.x + 0.5 * base;
 	rightlowerpoint.y = RefPoint.y + (sqrt(3) / 6) * base;
-	pW->DrawTriangle(leftlowerpoint.x, leftlowerpoint.y, rightlowerpoint.x, rightlowerpoint.x, upperpoint.x, upperpoint.y, FILLED);
+	pW->DrawTriangle(leftlowerpoint.x, leftlowerpoint.y, rightlowerpoint.x, rightlowerpoint.y, upperpoint.x, upperpoint.y, FILLED);
 
 }
 
@@ -109,4 +123,17 @@ void triangle::resizeDown(int factor){
 
 void triangle::resizeUp(int factor) {
 	setbase(base * factor);
+}
+
+void triangle::rotate(double deg)
+{
+	// Calculate the new coordinates of the vertices after rotation
+	double newX_A = (base / 2.0) * cos(deg) - (sqrt(3) / 6 )*base * sin(deg);
+	double newY_A = (base / 2.0) * sin(deg) + (sqrt(3) / 6) * base * cos(deg);
+
+	double newX_B = -(base / 2.0) * cos(deg) - (sqrt(3) / 6) * base * sin(deg);
+	double newY_B = -(base / 2.0) * sin(deg) + (sqrt(3) / 6) * base * cos(deg);
+
+	double newX_C = 0.0;
+	double newY_C = (sqrt(3) / 3.0)*base * cos(deg);
 }

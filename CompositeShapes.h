@@ -25,11 +25,15 @@ class Sign :public shape
 {
 	Rect* base;
 	Rect* top;
+
+
 public:
 	Sign(game* r_pGame, point ref);
 	virtual void draw() const;
-	virtual void resizeUp(int factor) override;
-	virtual void resizeDown(int factor) ;
+	virtual void resizeUp(int factor);
+	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
+
 };
 
 class Tree :public shape
@@ -41,6 +45,7 @@ public:
 	virtual void draw() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 
 };
 
@@ -53,6 +58,7 @@ public:
 	virtual void draw() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };
 
 class IceCream :public shape
@@ -64,6 +70,7 @@ public:
 	virtual void draw() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };
 
 class Rocket :public shape
@@ -75,6 +82,7 @@ public:
 	virtual void draw() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
 };
 
 class House :public shape
@@ -86,4 +94,6 @@ public:
 	virtual void draw() const;
 	virtual void resizeUp(int factor);
 	virtual void resizeDown(int factor);
+	virtual void rotate(double deg);
+
 };
