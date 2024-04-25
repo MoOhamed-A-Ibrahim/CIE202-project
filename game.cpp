@@ -81,19 +81,23 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Save  is being clicked");
 		break;
 	case ITM_Enlarge:
-		op = new operResizeUp(this);
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operResizeUp(this);
+		}
 		printMessage("Enlarge is being clicked");
 		break;
 	case ITM_Minimize:
-		op = new operResizeDown(this);
-		printMessage("Minimize is being clicked");
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operResizeDown(this);
+		}		printMessage("Minimize is being clicked");
 		break;
 	case ITM_Hint:
 		printMessage("Hint is being clicked");
 		break;
 	case ITM_Rotate:
-		op = new operRotate(this);
-		printMessage("Rotate is being clicked");
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operRotate(this);
+		}		printMessage("Rotate is being clicked");
 		break;
 	case ITM_Refresh:
 		printMessage("Refresh is being clicked");
