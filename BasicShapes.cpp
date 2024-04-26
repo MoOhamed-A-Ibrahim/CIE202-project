@@ -4,7 +4,7 @@
 
 ////////////////////////////////////////////////////  class Rect  ///////////////////////////////////////
 
-Rect::Rect(game* r_pGame, point ref, int r_hght, int r_wdth):shape(r_pGame,ref)
+Rect::Rect(game* r_pGame, point ref, double r_hght, double r_wdth):shape(r_pGame,ref)
 {
 	pGame = r_pGame;
 	hght = r_hght;
@@ -24,23 +24,23 @@ void Rect::draw() const
 
 	pW->DrawRectangle(upperLeft.x, upperLeft.y, lowerBottom.x, lowerBottom.y, FILLED);
 }
-void Rect::setHeight(int height) {
+void Rect::setHeight(double height) {
 	hght = height;
 }
-void Rect::setWidth(int width) {
+void Rect::setWidth(double width) {
 	wdth = width;
 }
-int Rect::getHeight() const {
+double Rect::getHeight() const {
 	return hght;
 }
-int Rect::getWidth() const {
+double Rect::getWidth() const {
 	return wdth;
 }
-void Rect::resizeUp(int factor) {
+void Rect::resizeUp(double factor) {
 	setHeight(hght * factor);
 	setWidth(wdth * factor);
 }
-void Rect::resizeDown(int factor) {
+void Rect::resizeDown(double factor) {
 	setHeight(hght / factor);
 	setWidth(wdth / factor);
 }
@@ -57,7 +57,7 @@ void Rect::rotate(double deg)
 
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
-circle::circle(game* r_pGame, point ref, int r):shape(r_pGame,ref)
+circle::circle(game* r_pGame, point ref, double r):shape(r_pGame,ref)
 {
 	rad = r;
 }
@@ -69,16 +69,16 @@ void circle::draw() const
 	pW->SetBrush(fillColor);
 	pW->DrawCircle(RefPoint.x, RefPoint.y, rad, FILLED);
 }
-void circle::setRadius(int radius) {
+void circle::setRadius(double radius) {
 	rad = radius;
 }
-int circle::getRadius() const {
+double circle::getRadius() const {
 	return rad;
 }
-void circle::resizeUp(int factor) {
+void circle::resizeUp(double factor) {
 	setRadius(rad * factor);
 }
-void circle::resizeDown(int factor) {
+void circle::resizeDown(double factor) {
 	setRadius(rad / factor);
 }
 void circle::rotate(double deg)
@@ -86,7 +86,7 @@ void circle::rotate(double deg)
 	
 }
 ///Triangle class///////
-triangle::triangle(game* r_pGame, point ref, int r_base) :shape(r_pGame, ref)
+triangle::triangle(game* r_pGame, point ref, double r_base) :shape(r_pGame, ref)
 {
 	base = r_base;
 }
@@ -107,21 +107,21 @@ void triangle::draw() const
 
 }
 
-void triangle::setbase(int BASE)
+void triangle::setbase(double BASE)
 {
 	base = BASE;
 }
 
-int triangle::getbase() const
+double triangle::getbase() const
 {
 	return base;
 }
 
-void triangle::resizeDown(int factor){
+void triangle::resizeDown(double factor){
 	setbase(base / factor);
 }
 
-void triangle::resizeUp(int factor) {
+void triangle::resizeUp(double factor) {
 	setbase(base * factor);
 }
 

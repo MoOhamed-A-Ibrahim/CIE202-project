@@ -38,34 +38,34 @@ struct
 	////-----  Sign Shape Confoguration ---------////
 	// For the Sign shape, define width and height of both rectangles
 	struct {
-		int baseWdth = 20, baseHeight = 80;
-		int topWdth = 100, topHeight = 50;
+		double baseWdth = 20, baseHeight = 80;
+		double topWdth = 100, topHeight = 50;
 	}signShape;
 
 	struct {
-		int baseWdth = 20, baseHeight = 80;
-		int triwdth = 100;
+		double baseWdth = 20, baseHeight = 80;
+		double triwdth = 100;
 	}tree;
 
 	struct {
-		int baseWdth = 160, baseHeight = 100;
-		int wheelRadius = 20;
+		double baseWdth = 160, baseHeight = 100;
+		double wheelRadius = 20;
 	}car;
 
 	struct {
-		int baseWdth = 30;
+		double baseWdth = 30;
 	}icecream;
 
 	struct {
-		int baseWdth = 35, baseHeight = 100;
-		int headwdth = 35;
-		int smallbaseWdth = 15;
+		double baseWdth = 35, baseHeight = 100;
+		double headwdth = 35;
+		double smallbaseWdth = 15;
 	}rocket;
 
 	struct {
-		int baseWdth = 100, baseHeight = 100;
-		int headwdth = 100;
-		int doorwdth = 30; int doorhight = 60;
+		double baseWdth = 100, baseHeight = 100;
+		double headwdth = 100;
+		double doorwdth = 30; double doorhight = 60;
 	}house;
 
 }config;

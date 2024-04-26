@@ -34,30 +34,36 @@ void Sign::rotate(double deg)
 }
 
 
-void Sign::resizeUp(int factor) {
-	point oldRefBottom = base->getRefPoint();
-	point newRefBottom;
-	newRefBottom.y = base->getHeight() + top->getRefPoint().y + top->getHeight();
-	newRefBottom.x = oldRefBottom.x;
-	base->setRefPoint(newRefBottom);
+void Sign::resizeUp(double factor) {
+	point oldRefPoint = top->getRefPoint();
 
 	top->resizeUp(factor);
 	base->resizeUp(factor);
 
+	double newTopHeight = top->getHeight();
+	double newBaseHeight = base->getHeight();
+
+	point newRefBase;
+	newRefBase.x = oldRefPoint.x;
+	newRefBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+	base->setRefPoint(newRefBase);
+
 }
 
-void Sign::resizeDown(int factor) {
-	// Retrieve the old reference point of the base
-	point oldBaseRef = base->getRefPoint();
+void Sign::resizeDown(double factor) {
+	point oldRefPoint = top->getRefPoint();
 
-	// Calculate the new reference point for the base after resizing down
-	point newBaseRef;
-	// Subtract half of the scaled-down height of the base and half of the scaled-down height of the top part from the old reference point's y-coordinate
-	newBaseRef.y = oldBaseRef.y - (base->getHeight() / factor) / 2 - (top->getHeight() / 2) / factor;
-	newBaseRef.x = oldBaseRef.x; 
-	base->setRefPoint(newBaseRef);
 	top->resizeDown(factor);
 	base->resizeDown(factor);
+
+	double newTopHeight = top->getHeight();
+	double newBaseHeight = base->getHeight();
+
+	point newRefBase;
+	newRefBase.x = oldRefPoint.x;
+	newRefBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+	base->setRefPoint(newRefBase);
+
 }
 
 
@@ -85,35 +91,60 @@ void Tree::draw() const
 	layer_3->draw();
 }
 
-void Tree::resizeUp(int factor) {
-	point newReference1 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - config.tree.baseWdth) * factor };
-	point newReference2 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) * factor };
-	point newReference3 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) * factor };
-
-	Layer_1->setRefPoint(newReference1);
-	Layer_2->setRefPoint(newReference2);
-	layer_3->setRefPoint(newReference3);
+void Tree::resizeUp(double factor) {
+	point oldRefPoint = base->getRefPoint();
 
 	base->resizeUp(factor);
 	Layer_1->resizeUp(factor);
 	Layer_2->resizeUp(factor);
 	layer_3->resizeUp(factor);
 
+	double newBaseHeight = base->getHeight();
+	double newBaseWidth = base->getWidth();
+
+	point newRefLay1;
+	point newRefLay2;
+	point newRefLay3;
+
+	newRefLay1.x = oldRefPoint.x;
+	newRefLay2.x = oldRefPoint.x;
+	newRefLay3.x = oldRefPoint.x;
+
+	newRefLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
+	newRefLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2*newBaseWidth;
+	newRefLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3*newBaseWidth;
+
+	Layer_1->setRefPoint(newRefLay1);
+	Layer_2->setRefPoint(newRefLay2);
+	layer_3->setRefPoint(newRefLay3);
 
 }
-void Tree::resizeDown(int factor) {
-	point newReference1 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - config.tree.baseWdth) / factor };
-	point newReference2 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) / factor };
-	point newReference3 = { base->getRefPoint().x,base->getRefPoint().y - (config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) / factor };
-
-	Layer_1->setRefPoint(newReference1);
-	Layer_2->setRefPoint(newReference2);
-	layer_3->setRefPoint(newReference3);
+void Tree::resizeDown(double factor) {
+	point oldRefPoint = base->getRefPoint();
 
 	base->resizeDown(factor);
 	Layer_1->resizeDown(factor);
 	Layer_2->resizeDown(factor);
 	layer_3->resizeDown(factor);
+
+	double newBaseHeight = base->getHeight();
+	double newBaseWidth = base->getWidth();
+
+	point newRefLay1;
+	point newRefLay2;
+	point newRefLay3;
+
+	newRefLay1.x = oldRefPoint.x;
+	newRefLay2.x = oldRefPoint.x;
+	newRefLay3.x = oldRefPoint.x;
+
+	newRefLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
+	newRefLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2 * newBaseWidth;
+	newRefLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+
+	Layer_1->setRefPoint(newRefLay1);
+	Layer_2->setRefPoint(newRefLay2);
+	layer_3->setRefPoint(newRefLay3);
 
 }
 void Tree::rotate(double deg)
@@ -143,42 +174,54 @@ void Car::draw() const
 	posteriorWheel->draw();
 }
  
-void Car::resizeUp(int factor) {
+void Car::resizeUp(double factor) {
 	point oldRefPoint = base->getRefPoint();
-	point newfwRef;
-	point newpwRef;
-
-	newfwRef.x = oldRefPoint.x + (0.3 * config.car.baseWdth)*factor;
-	newfwRef.y = oldRefPoint.y + (config.car.baseHeight / 2)*factor;
-
-	newpwRef.x = oldRefPoint.x - (0.3 * config.car.baseWdth) * factor;
-	newpwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) * factor;
-
-	frontalWheel->setRefPoint(newfwRef);
-	posteriorWheel->setRefPoint(newpwRef);
 
 	base->resizeUp(factor);
 	frontalWheel->resizeUp(factor);
 	posteriorWheel->resizeUp(factor);
+
+	double newBaseWidth = base->getWidth();
+	double newBaseHeight = base->getHeight();
+
+	point newFrontRefPoint;
+	point newPostRefPoint;
+
+	newFrontRefPoint.x = oldRefPoint.x + (0.3 * newBaseWidth);
+	newPostRefPoint.x = oldRefPoint.x - (0.3 * newBaseWidth);
+
+	newFrontRefPoint.y = oldRefPoint.y + newBaseHeight / 2;
+	newPostRefPoint.y = oldRefPoint.y + newBaseHeight / 2;
+
+	frontalWheel->setRefPoint(newFrontRefPoint);
+	posteriorWheel->setRefPoint(newPostRefPoint);
+
+
 }
 
-void Car::resizeDown(int factor) {
+
+void Car::resizeDown(double factor) {
 	point oldRefPoint = base->getRefPoint();
-	point newfwRef;
-	point newpwRef;
-
-	newfwRef.x = oldRefPoint.x + (0.3 * config.car.baseWdth) / factor;
-	newfwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) / factor;
-
-	newpwRef.x = oldRefPoint.x - (0.3 * config.car.baseWdth) / factor;
-	newpwRef.y = oldRefPoint.y + (config.car.baseHeight / 2) / factor;
-
-	frontalWheel->setRefPoint(newfwRef);
-	posteriorWheel->setRefPoint(newpwRef);
 
 	base->resizeDown(factor);
 	frontalWheel->resizeDown(factor);
 	posteriorWheel->resizeDown(factor);
+
+	double newBaseWidth = base->getWidth();
+	double newBaseHeight = base->getHeight();
+
+	point newFrontRefPoint;
+	point newPostRefPoint;
+
+	newFrontRefPoint.x = oldRefPoint.x + (0.3 * newBaseWidth);
+	newPostRefPoint.x = oldRefPoint.x - (0.3 * newBaseWidth);
+
+	newFrontRefPoint.y = oldRefPoint.y + newBaseHeight / 2;
+	newPostRefPoint.y = oldRefPoint.y + newBaseHeight / 2;
+
+	frontalWheel->setRefPoint(newFrontRefPoint);
+	posteriorWheel->setRefPoint(newPostRefPoint);
+
 }
 
 void Car::rotate(double deg)
@@ -193,10 +236,10 @@ void Car::rotate(double deg)
 IceCream::IceCream(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
-	point circleRef = { ref.x, ref.y + config.icecream.baseWdth / 2 };
+	point circleRef = { ref.x, ref.y + config.icecream.baseWdth / 3 };
 
 	base = new triangle(pGame, baseRef, config.icecream.baseWdth);
-	iceCircle = new circle(pGame, circleRef, config.icecream.baseWdth/2);
+	iceCircle = new circle(pGame, circleRef, config.icecream.baseWdth / 2.17);
 }
 
 void IceCream::draw() const
@@ -205,14 +248,39 @@ void IceCream::draw() const
 	base->draw();
 }
 
-void IceCream:: resizeUp(int factor) {
+void IceCream:: resizeUp(double factor) {
+	point oldRefPoint = base->getRefPoint();
+
 	base->resizeUp(factor);
-	//iceCircle->setRadius((config.icecream.baseWdth / 2 )*factor);
 	iceCircle->resizeUp(factor);
+
+	double newBaseWidth = base->getbase();
+	double newIceWidth = newBaseWidth / 2;
+
+	point newIceRefPoint;
+
+	newIceRefPoint.x = oldRefPoint.x;
+	newIceRefPoint.y = oldRefPoint.y + newBaseWidth / 3;
+
+	iceCircle->setRefPoint(newIceRefPoint);
+
 }
-void IceCream::resizeDown(int factor) {
+void IceCream::resizeDown(double factor) {
+	point oldRefPoint = base->getRefPoint();
+
 	base->resizeDown(factor);
 	iceCircle->resizeDown(factor);
+
+	double newBaseWidth = base->getbase();
+	double newIceWidth = newBaseWidth / 2;
+
+	point newIceRefPoint;
+
+	newIceRefPoint.x = oldRefPoint.x;
+	newIceRefPoint.y = oldRefPoint.y + newBaseWidth / 3;
+
+	iceCircle->setRefPoint(newIceRefPoint);
+
 }
 
 void IceCream::rotate(double deg)
@@ -229,7 +297,7 @@ void IceCream::rotate(double deg)
 Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
 	point baseRef = ref;
-	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2 - config.rocket.headwdth / 3 };
+	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2  -(sqrt(3) / 6.0) * config.rocket.headwdth };
 	point leftbaseRef = { ref.x - config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
 	point rightbaseRef = { ref.x + config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
 
@@ -247,50 +315,62 @@ void Rocket::draw() const
 	head->draw();
 }
 
-void Rocket::resizeUp(int factor) {
-	point oldHeadRef = head->getRefPoint();
-	point oldRbRef = rightbase->getRefPoint();
-	point oldLbRef = liftbase->getRefPoint();
-	point newHeadRef = {
-		oldHeadRef.x,oldHeadRef.y*factor
-	};
-	point newRbRef= {
-			oldRbRef.x*factor,oldRbRef.y * factor
-	};
-	point newLbRef = {
-			oldLbRef.x* factor,oldLbRef.y* factor
-	};
-	liftbase->setRefPoint(newLbRef);
-	rightbase->setRefPoint(newRbRef);
-	head->setRefPoint(newHeadRef);
+void Rocket::resizeUp(double factor) {
+	point oldRefPoint = base->getRefPoint();
 
 	liftbase->resizeUp(factor);
 	rightbase->resizeUp(factor);
 	base->resizeUp(factor);
 	head->resizeUp(factor);
+
+	double newRocketBaseHeight=base->getHeight();
+	double newRocketBaseWidth=base->getWidth();
+	double newRocketHeadWidth=head->getbase();
+	double newSmallBaseWidth=rightbase->getbase();
+
+	point newLeftBaseRefPoint, newRightBaseRefPoint, newHeadRefPoint;
+
+	newHeadRefPoint.x = oldRefPoint.x;
+	newHeadRefPoint.y = oldRefPoint.y - newRocketBaseHeight / 2 - (sqrt(3) / 6.0) * newRocketHeadWidth;
+
+	newLeftBaseRefPoint.x = oldRefPoint.x - newRocketBaseWidth / 2;
+	newLeftBaseRefPoint.y = oldRefPoint.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+
+	newRightBaseRefPoint.x= oldRefPoint.x + newRocketBaseWidth / 2;
+	newRightBaseRefPoint.y = oldRefPoint.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+
+	head->setRefPoint(newHeadRefPoint);
+	liftbase->setRefPoint(newLeftBaseRefPoint);
+	rightbase->setRefPoint(newRightBaseRefPoint);
 
 }
-void Rocket::resizeDown(int factor) {
-	point oldHeadRef = head->getRefPoint();
-	point oldRbRef = rightbase->getRefPoint();
-	point oldLbRef = liftbase->getRefPoint();
-	point newHeadRef = {
-		oldHeadRef.x,oldHeadRef.y /factor
-	};
-	point newRbRef = {
-			oldRbRef.x * factor,oldRbRef.y /factor
-	};
-	point newLbRef = {
-			oldLbRef.x * factor,oldLbRef.y /factor
-	};
-	liftbase->setRefPoint(newLbRef);
-	rightbase->setRefPoint(newRbRef);
-	head->setRefPoint(newHeadRef);
+void Rocket::resizeDown(double factor) {
+	point oldRefPoint = base->getRefPoint();
 
-	liftbase->resizeUp(factor);
-	rightbase->resizeUp(factor);
-	base->resizeUp(factor);
-	head->resizeUp(factor);
+	liftbase->resizeDown(factor);
+	rightbase->resizeDown(factor);
+	base->resizeDown(factor);
+	head->resizeDown(factor);
+
+	double newRocketBaseHeight = base->getHeight();
+	double newRocketBaseWidth = base->getWidth();
+	double newRocketHeadWidth = head->getbase();
+	double newSmallBaseWidth = rightbase->getbase();
+
+	point newLeftBaseRefPoint, newRightBaseRefPoint, newHeadRefPoint;
+
+	newHeadRefPoint.x = oldRefPoint.x;
+	newHeadRefPoint.y = oldRefPoint.y - newRocketBaseHeight / 2 - (sqrt(3) / 6.0) * newRocketHeadWidth;
+
+	newLeftBaseRefPoint.x = oldRefPoint.x - newRocketBaseWidth / 2;
+	newLeftBaseRefPoint.y = oldRefPoint.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+
+	newRightBaseRefPoint.x = oldRefPoint.x + newRocketBaseWidth / 2;
+	newRightBaseRefPoint.y = oldRefPoint.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+
+	head->setRefPoint(newHeadRefPoint);
+	liftbase->setRefPoint(newLeftBaseRefPoint);
+	rightbase->setRefPoint(newRightBaseRefPoint);
 
 }
 void Rocket::rotate(double deg)
@@ -322,40 +402,52 @@ void House::draw() const
 }
 
 
-void House ::resizeUp(int factor) {
+void House ::resizeUp(double factor) {
+	point oldRefPoint = base->getRefPoint();
+
 	base->resizeUp(factor);
 	door->resizeUp(factor);
 	head->resizeUp(factor);
 
-	point oldRefPoint = base->getRefPoint();
-	point newHeadRef;
-	point newDoorRef;
-	newHeadRef.x = oldRefPoint.x;
-	newHeadRef.y = oldRefPoint.y - (config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth);
+	double newHouseBaseHeight =base->getHeight() ;
+	double newHouseBaseWidth = base->getWidth();
+	double newDoorHeight = door->getHeight();
 
-	newDoorRef.x = oldRefPoint.x;
-	newDoorRef.y = oldRefPoint.y + (config.house.baseHeight / 2 - config.house.doorhight / 2) ;
-	head->setRefPoint(newHeadRef);
-	door->setRefPoint(newDoorRef);
+	point newDoorRefPoint;
+	point newHeadRefPoint;
 
+	newDoorRefPoint.x = oldRefPoint.x;
+	newHeadRefPoint.x = oldRefPoint.x;
 
-}
-void House::resizeDown(int factor) {
-	point oldDoorRefPoint = door->getRefPoint();
-	point newDoorRefPoint = {
-		oldDoorRefPoint.x,oldDoorRefPoint.y/factor
-	};
-	point oldHeadRefPoint = head->getRefPoint();
-	point newHeadRefPoint = {
-		oldHeadRefPoint.x,oldHeadRefPoint.y/factor
+	newHeadRefPoint.y = oldRefPoint.y - newHouseBaseHeight / 2 - (sqrt(3) / 6.0) * newHouseBaseWidth;
+	newDoorRefPoint.y = oldRefPoint.y + newHouseBaseHeight / 2 - newDoorHeight / 2;
 
-	};
 	door->setRefPoint(newDoorRefPoint);
 	head->setRefPoint(newHeadRefPoint);
+
+}
+void House::resizeDown(double factor) {
+	point oldRefPoint = base->getRefPoint();
+
 	base->resizeDown(factor);
 	door->resizeDown(factor);
 	head->resizeDown(factor);
 
+	double newHouseBaseHeight = base->getHeight();
+	double newHouseBaseWidth = base->getWidth();
+	double newDoorHeight = door->getHeight();
+
+	point newDoorRefPoint;
+	point newHeadRefPoint;
+
+	newDoorRefPoint.x = oldRefPoint.x;
+	newHeadRefPoint.x = oldRefPoint.x;
+
+	newHeadRefPoint.y = oldRefPoint.y - newHouseBaseHeight / 2 - (sqrt(3) / 6.0) * newHouseBaseWidth;
+	newDoorRefPoint.y = oldRefPoint.y + newHouseBaseHeight / 2 - newDoorHeight / 2;
+
+	door->setRefPoint(newDoorRefPoint);
+	head->setRefPoint(newHeadRefPoint);
 }
 
 void House::rotate(double deg)
