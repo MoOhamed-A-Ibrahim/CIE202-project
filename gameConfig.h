@@ -74,6 +74,11 @@ enum toolbarItem //The items of the  toolbar (you should add more items)
 	//Note: Items are ordered here as they appear in the toolbar
 	//If you want to change the toolbar items order, just change the order here
 	ITM_SIGN,
+	ITM_TREE,
+	ITM_CAR,
+	ITM_ICECREAM,
+	ITM_ROCKET,
+	ITM_HOUSE,
 	ITM_Save,
 	ITM_Enlarge,
 	ITM_Minimize,
