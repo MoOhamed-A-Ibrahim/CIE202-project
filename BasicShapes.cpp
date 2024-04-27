@@ -89,6 +89,8 @@ void circle::rotate(double deg)
 triangle::triangle(game* r_pGame, point ref, double r_base) :shape(r_pGame, ref)
 {
 	base = r_base;
+	width = 0;
+
 }
 
 void triangle::draw() const
@@ -97,13 +99,13 @@ void triangle::draw() const
 	pW->SetPen(config.penColor, config.penWidth);
 	pW->SetBrush(config.fillColor);
 	point upperpoint, leftlowerpoint, rightlowerpoint; /// refrence point is centriod 
-	leftlowerpoint.x = RefPoint.x - 0.5 * base;
-	leftlowerpoint.y = RefPoint.y + (sqrt(3) / 6.0) * base;
-	upperpoint.x = RefPoint.x;
+	leftlowerpoint.x = RefPoint.x - 0.5 * base - (sqrt(3) / 6.0) * width;
+	leftlowerpoint.y = RefPoint.y + (sqrt(3) / 6.0) * base - 0.5 * width;
+	upperpoint.x = RefPoint.x + (sqrt(3) / 3.0) * width;
 	upperpoint.y = RefPoint.y - (sqrt(3) / 3.0) * base;
-	rightlowerpoint.x = RefPoint.x + 0.5 * base;
-	rightlowerpoint.y = RefPoint.y + (sqrt(3) / 6) * base;
-	pW->DrawTriangle(leftlowerpoint.x, leftlowerpoint.y, rightlowerpoint.x, rightlowerpoint.y, upperpoint.x, upperpoint.y, FILLED);
+	rightlowerpoint.x = RefPoint.x + 0.5 * base - (sqrt(3) / 6) * width;
+	rightlowerpoint.y = RefPoint.y + (sqrt(3) / 6) * base + 0.5 * width;
+	pW->DrawTriangle((int)leftlowerpoint.x, (int)leftlowerpoint.y, (int)rightlowerpoint.x, (int)rightlowerpoint.y, (int)upperpoint.x, (int)upperpoint.y, FILLED);
 
 }
 
@@ -117,7 +119,7 @@ double triangle::getbase() const
 	return base;
 }
 
-void triangle::resizeDown(double factor){
+void triangle::resizeDown(double factor) {
 	setbase(base / factor);
 }
 
@@ -127,13 +129,17 @@ void triangle::resizeUp(double factor) {
 
 void triangle::rotate(double deg)
 {
-	// Calculate the new coordinates of the vertices after rotation
-	double newX_A = (base / 2.0) * cos(deg) - (sqrt(3) / 6 )*base * sin(deg);
-	double newY_A = (base / 2.0) * sin(deg) + (sqrt(3) / 6) * base * cos(deg);
 
-	double newX_B = -(base / 2.0) * cos(deg) - (sqrt(3) / 6) * base * sin(deg);
-	double newY_B = -(base / 2.0) * sin(deg) + (sqrt(3) / 6) * base * cos(deg);
-
-	double newX_C = 0.0;
-	double newY_C = (sqrt(3) / 3.0)*base * cos(deg);
+	int temp;
+	temp = base;
+	if (base != 0)
+	{
+		base = width;
+	}
+	if (width != 0)
+	{
+		base = -width;
+	}
+	width = temp;
+	draw();
 }

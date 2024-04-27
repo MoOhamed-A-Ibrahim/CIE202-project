@@ -25,6 +25,7 @@ class Sign :public shape
 {
 	Rect* base;
 	Rect* top;
+	double angle = 0;
 
 
 public:
@@ -40,6 +41,7 @@ class Tree :public shape
 {
 	Rect* base;
 	triangle* Layer_1, * Layer_2, * layer_3;
+	double angle = 0;
 public:
 	Tree(game* r_pGame, point ref);
 	virtual void draw() const;
@@ -53,6 +55,7 @@ class Car :public shape
 {
 	Rect* base;
 	circle* frontalWheel, * posteriorWheel;
+	double angle = 0;
 public:
 	Car(game* r_pGame, point ref);
 	virtual void draw() const;
@@ -65,6 +68,7 @@ class IceCream :public shape
 {
 	triangle* base;
 	circle* iceCircle;
+	double angle = 0;
 public:
 	IceCream(game* r_pGame, point ref);
 	virtual void draw() const;
@@ -77,6 +81,7 @@ class Rocket :public shape
 {
 	Rect* base;
 	triangle* head, * liftbase, * rightbase;
+	double angle = 0;
 public:
 	Rocket(game* r_pGame, point ref);
 	virtual void draw() const;
@@ -89,6 +94,7 @@ class House :public shape
 {
 	Rect* base, * door;
 	triangle* head;
+	double angle = 0;
 public:
 	House(game* r_pGame, point ref);
 	virtual void draw() const;

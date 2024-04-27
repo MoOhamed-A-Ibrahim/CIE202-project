@@ -132,6 +132,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		op = new operAddHouse(this);
 		printMessage("House is being clicked");
 		break;
+	case ITM_LOAD:
+		printMessage("Load is being clicked");
+		break;
 	default:
 		break;
 

@@ -48,6 +48,7 @@ public:
 
 class triangle :public shape {
 	double base;
+	double width;
 public:
 	triangle(game* r_pGame, point ref, double r_base);
 	virtual void draw() const;
