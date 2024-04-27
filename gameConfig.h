@@ -79,7 +79,6 @@ enum toolbarItem //The items of the  toolbar (you should add more items)
 	ITM_ICECREAM,
 	ITM_ROCKET,
 	ITM_HOUSE,
-	ITM_Save,
 	ITM_Enlarge,
 	ITM_Minimize,
 	ITM_Hint,
@@ -87,8 +86,9 @@ enum toolbarItem //The items of the  toolbar (you should add more items)
 	ITM_Refresh,
 	ITM_Select,
 	ITM_Trash,
-	ITM_BLANK1,
-	ITM_BLANK2,
+	ITM_Save,
+	ITM_LOAD,
+	ITM_BLANK,
 	ITM_EXIT,
 
 	ITM_CNT		//no. of toolbar items ==> This should be the last line in this enum

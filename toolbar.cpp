@@ -27,8 +27,8 @@ toolbar::toolbar(game* pG)
 	toolbarItemImages[ITM_Trash] = "images\\toolbarItems\\Trash.jpg";
 	toolbarItemImages[ITM_Select] = "images\\toolbarItems\\Select.jpg";
 	toolbarItemImages[ITM_Refresh] = "images\\toolbarItems\\Refresh.jpg";
-	toolbarItemImages[ITM_BLANK1] = "images\\toolbarItems\\Blank1.jpg";
-	toolbarItemImages[ITM_BLANK2] = "images\\toolbarItems\\Blank2.jpg";
+	toolbarItemImages[ITM_LOAD] = "images\\toolbarItems\\Load.jpg";
+	toolbarItemImages[ITM_BLANK] = "images\\toolbarItems\\Blank.jpg";
 	toolbarItemImages[ITM_Hint] = "images\\toolbarItems\\Hint.jpg";
 	toolbarItemImages[ITM_Save] = "images\\toolbarItems\\Save.jpg";
 
