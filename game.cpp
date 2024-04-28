@@ -237,3 +237,25 @@ void game::run()
 
 	} while (clickedItem!=ITM_EXIT);
 }
+
+int game::getLives() {
+	return lives;
+}
+
+int game::getScore() {
+	return score;
+}
+
+int game::getLevel() {
+	return level;
+}
+
+void game::setLives(int lvs) {
+	lives = lvs;
+}
+void game::setScore(int sc) {
+	score = sc;
+}
+void game::setLevel(int lvl) {
+	level = lvl;
+}

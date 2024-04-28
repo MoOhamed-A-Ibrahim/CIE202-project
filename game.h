@@ -36,5 +36,12 @@ public:
 	operation* createRequiredOperation(toolbarItem clickedItem);
 
 	void run();	//start the game
+	static int getLevel();
+	static int getLives();
+	static int getScore();
+
+	static void setLives(int lvs);
+	static void setScore(int sc);
+	static void setLevel(int lvl);
 
 };
