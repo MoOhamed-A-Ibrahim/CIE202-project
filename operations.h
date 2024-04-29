@@ -98,3 +98,34 @@ public:
 
 
 };
+
+
+class operMoveUp : public operation
+{
+public:
+	operMoveUp(game* r_pGame);
+	virtual void Act();
+};
+
+class operMoveDown : public operation
+{
+public:
+	operMoveDown(game* r_pGame);
+	virtual void Act();
+};
+
+
+class operMoveRight : public operation
+{
+public:
+	operMoveRight(game* r_pGame);
+	virtual void Act();
+};
+
+
+class operMoveLeft : public operation
+{
+public:
+	operMoveLeft(game* r_pGame);
+	virtual void Act();
+};

@@ -18,3 +18,40 @@ void shape::setRefPoint(point p)
 point shape::getRefPoint() const {
 	return RefPoint;
 }
+
+
+void shape::moveUp(double dist) {
+	point oldRefPoint = this->getRefPoint();
+	point newRefPoint;
+	newRefPoint.x = oldRefPoint.x;
+	newRefPoint.y = oldRefPoint.y - dist;
+
+	this->setRefPoint(newRefPoint);
+}
+
+void shape::moveDown(double dist) {
+	point oldRefPoint = this->getRefPoint();
+	point newRefPoint;
+	newRefPoint.x = oldRefPoint.x;
+	newRefPoint.y = oldRefPoint.y + dist;
+
+	this->setRefPoint(newRefPoint);
+}
+
+void shape::moveRight(double dist) {
+	point oldRefPoint = this->getRefPoint();
+	point newRefPoint;
+	newRefPoint.x = oldRefPoint.x+dist;
+	newRefPoint.y = oldRefPoint.y;
+
+	this->setRefPoint(newRefPoint);
+}
+
+void shape::moveLeft(double dist) {
+	point oldRefPoint = this->getRefPoint();
+	point newRefPoint;
+	newRefPoint.x = oldRefPoint.x-dist;
+	newRefPoint.y = oldRefPoint.y;
+
+	this->setRefPoint(newRefPoint);
+}

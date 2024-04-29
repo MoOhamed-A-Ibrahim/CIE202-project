@@ -30,11 +30,17 @@ class Sign :public shape
 
 public:
 	Sign(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
 
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };
 
 class Tree :public shape
@@ -44,11 +50,16 @@ class Tree :public shape
 	double angle = 0;
 public:
 	Tree(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
 
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };
 
 class Car :public shape
@@ -58,10 +69,16 @@ class Car :public shape
 	double angle = 0;
 public:
 	Car(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
+
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };
 
 class IceCream :public shape
@@ -71,10 +88,16 @@ class IceCream :public shape
 	double angle = 0;
 public:
 	IceCream(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
+
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };
 
 class Rocket :public shape
@@ -84,10 +107,16 @@ class Rocket :public shape
 	double angle = 0;
 public:
 	Rocket(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
+
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };
 
 class House :public shape
@@ -97,9 +126,14 @@ class House :public shape
 	double angle = 0;
 public:
 	House(game* r_pGame, point ref);
-	virtual void draw() const;
-	virtual void resizeUp(double factor);
-	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	void draw() const;
 
+	void resizeUp(double factor);
+	void resizeDown(double factor);
+	void rotate(double deg);
+
+	void moveUp(double dist);
+	void moveDown(double dist);
+	void moveRight(double dist);
+	void moveLeft(double dist);
 };

@@ -53,6 +53,25 @@ void Sign::rotate(double deg)
 
 }
 
+void Sign::moveUp(double dist) {
+	top->moveUp(dist);
+	base->moveUp(dist);
+}
+
+void Sign::moveDown(double dist) {
+	top->moveDown(dist);
+	base->moveDown(dist);
+}
+
+void Sign::moveRight(double dist) {
+	top->moveRight(dist);
+	base->moveRight(dist);
+}
+
+void Sign::moveLeft(double dist) {
+	top->moveLeft(dist);
+	base->moveLeft(dist);
+}
 
 
 
@@ -224,7 +243,33 @@ void Tree::rotate(double deg)
 }
 
 
+void Tree::moveUp(double dist) {
+	base->moveUp(dist);
+	Layer_1->moveUp(dist);
+	Layer_2->moveUp(dist);
+	layer_3->moveUp(dist);
+}
 
+void Tree::moveDown(double dist) {
+	base->moveDown(dist);
+	Layer_1->moveDown(dist);
+	Layer_2->moveDown(dist);
+	layer_3->moveDown(dist);
+}
+
+void Tree::moveRight(double dist) {
+	base->moveRight(dist);
+	Layer_1->moveRight(dist);
+	Layer_2->moveRight(dist);
+	layer_3->moveRight(dist);
+}
+
+void Tree::moveLeft(double dist) {
+	base->moveLeft(dist);
+	Layer_1->moveLeft(dist);
+	Layer_2->moveLeft(dist);
+	layer_3->moveLeft(dist);
+}
 //////////////////////////////////////////////////////////////////////
 Car::Car(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
@@ -335,6 +380,31 @@ void Car::rotate(double deg)
 
 }
 
+void Car::moveUp(double dist) {
+	base->moveUp(dist);
+	frontalWheel->moveUp(dist);
+	posteriorWheel->moveUp(dist);
+}
+
+void Car::moveDown(double dist) {
+	base->moveDown(dist);
+	frontalWheel->moveDown(dist);
+	posteriorWheel->moveDown(dist);
+}
+
+void Car::moveRight(double dist) {
+	base->moveRight(dist);
+	frontalWheel->moveRight(dist);
+	posteriorWheel->moveRight(dist);
+}
+
+void Car::moveLeft(double dist) {
+	base->moveLeft(dist);
+	frontalWheel->moveLeft(dist);
+	posteriorWheel->moveLeft(dist);
+}
+
+
 ///////////////////////////////////////////
 IceCream::IceCream(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
@@ -417,8 +487,25 @@ void IceCream::rotate(double deg)
 	iceCircle->rotate(deg);
 }
 
+void IceCream::moveUp(double dist) {
+	base->moveUp(dist);
+	iceCircle->moveUp(dist);
+}
 
+void IceCream::moveDown(double dist) {
+	base->moveDown(dist);
+	iceCircle->moveDown(dist);
+}
 
+void IceCream::moveRight(double dist) {
+	base->moveRight(dist);
+	iceCircle->moveRight(dist);
+}
+
+void IceCream::moveLeft(double dist) {
+	base->moveLeft(dist);
+	iceCircle->moveLeft(dist);
+}
 
 
 ////////////////////////////////////////////
@@ -546,6 +633,34 @@ void Rocket::rotate(double deg)
 	base->rotate(deg);
 }
 
+void Rocket::moveUp(double dist) {
+	base->moveUp(dist);
+	head->moveUp(dist);
+	liftbase->moveUp(dist);
+	rightbase->moveUp(dist);
+}
+
+void Rocket::moveDown(double dist) {
+	base->moveDown(dist);
+	head->moveDown(dist);
+	liftbase->moveDown(dist);
+	rightbase->moveDown(dist);
+}
+
+void Rocket::moveRight(double dist) {
+	base->moveRight(dist);
+	head->moveRight(dist);
+	liftbase->moveRight(dist);
+	rightbase->moveRight(dist);
+}
+
+void Rocket::moveLeft(double dist) {
+	base->moveLeft(dist);
+	head->moveLeft(dist);
+	liftbase->moveLeft(dist);
+	rightbase->moveLeft(dist);
+}
+
 
 ///////////////////////////////////////////////////
 
@@ -652,4 +767,28 @@ void House::rotate(double deg)
 	head->rotate(deg);
 	base->rotate(deg);
 	door->rotate(deg);
+}
+
+void House::moveUp(double dist) {
+	base->moveUp(dist);
+	door->moveUp(dist);
+	head->moveUp(dist);
+}
+
+void House::moveDown(double dist) {
+	base->moveDown(dist);
+	door->moveDown(dist);
+	head->moveDown(dist);
+}
+
+void House::moveRight(double dist) {
+	base->moveRight(dist);
+	door->moveRight(dist);
+	head->moveRight(dist);
+}
+
+void House::moveLeft(double dist) {
+	base->moveLeft(dist);
+	door->moveLeft(dist);
+	head->moveLeft(dist);
 }

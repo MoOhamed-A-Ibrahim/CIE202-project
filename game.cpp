@@ -1,5 +1,7 @@
 #include "game.h"
 #include "gameConfig.h"
+#include<iostream>
+using namespace std;
 
 
 int game::lives = 5;
@@ -143,6 +145,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 }
 
 
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void game::printMessage(string msg) const	//Prints a message on status bar
@@ -209,15 +214,43 @@ void game::run()
 	//This function reads the position where the user clicks to determine the desired operation
 	int x, y;
 	bool isExit = false;
-
+	operation* op;
+	char keyPressed;
 	//Change the title
 	pWind->ChangeTitle("- - - - - - - - - - SHAPE HUNT (CIE 101 / CIE202 - project) - - - - - - - - - -");
 	toolbarItem clickedItem=ITM_CNT;
 	do
 	{
+		pWind->GetKeyPress(keyPressed);
+		if (shapesGrid->getActiveShape() != nullptr) {
+			if (keyPressed) {
+				switch (keyPressed) {
+				case 8:
+					op = new operMoveUp(this);
+					op->Act();
+					shapesGrid->draw();
+					break;
+				case 2:
+					op = new operMoveDown(this);
+					op->Act();
+					shapesGrid->draw();
+					break;
+				case 6:
+					op = new operMoveRight(this);
+					op->Act();
+					shapesGrid->draw();
+					break;
+				case 4:
+					op = new operMoveLeft(this);
+					op->Act();
+					shapesGrid->draw();
+					break;
+				}
+			}
+		}
 		//printMessage("Ready...");
 		//1- Get user click
-		pWind->WaitMouseClick(x, y);	//Get the coordinates of the user click
+		pWind->GetMouseClick(x, y);	//Get the coordinates of the user click
 
 		//2-Explain the user click
 		//If user clicks on the Toolbar, ask toolbar which item is clicked
@@ -226,7 +259,7 @@ void game::run()
 			clickedItem=gameToolbar->getItemClicked(x);
 
 			//3-create the approp operation accordin to item clicked by the user
-			operation* op = createRequiredOperation(clickedItem);
+			op = createRequiredOperation(clickedItem);
 			if (op)
 				op->Act();
 

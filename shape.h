@@ -38,7 +38,12 @@ public:
 	virtual void resizeDown(double factor) = 0;
 	void setRefPoint(point p);
 	point getRefPoint() const;
-								  
+
+	virtual void moveUp(double dist);
+	virtual void moveDown(double dist);
+	virtual void moveRight(double dist);
+	virtual void moveLeft(double dist);
+
 							  
 	//-- The following functions should be supported by the shape class
 	//-- It should be overridden by each inherited shape
