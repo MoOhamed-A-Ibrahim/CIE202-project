@@ -176,6 +176,7 @@ void operRotate::Act()
 	grid* grid = pGame->getGrid();
 	shape* shape = grid->getActiveShape();
 	shape->rotate(angle);
+	///
 }
 
 
@@ -186,7 +187,7 @@ operMoveUp::operMoveUp(game* r_pGame) :operation(r_pGame)
 void operMoveUp::Act(){
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
-	currentShape->moveUp(50);
+	currentShape->moveUp(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
 }
 
@@ -197,7 +198,7 @@ operMoveDown::operMoveDown(game* r_pGame) :operation(r_pGame)
 void operMoveDown::Act() {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
-	currentShape->moveDown(50);
+	currentShape->moveDown(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
 }
 
@@ -208,7 +209,7 @@ operMoveRight::operMoveRight(game* r_pGame) :operation(r_pGame)
 void operMoveRight::Act() {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
-	currentShape->moveRight(50);
+	currentShape->moveRight(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
 }
 
@@ -219,6 +220,6 @@ operMoveLeft::operMoveLeft(game* r_pGame) :operation(r_pGame)
 void operMoveLeft::Act() {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
-	currentShape->moveLeft(50);
+	currentShape->moveLeft(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
 }
