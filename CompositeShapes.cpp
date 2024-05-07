@@ -16,8 +16,33 @@ Sign::Sign(game* r_pGame, point ref) :shape(r_pGame, ref)
 }
 void Sign::draw() const
 {
-	base->draw();
-	top->draw();
+	point topRefPoint = top->getRefPoint();
+	point baseRefPoint = base->getRefPoint();
+
+	point upperPoint1 = {topRefPoint.x-top->getWidth()/2,topRefPoint.y-top->getHeight()/2};
+	point upperPoint2 = { topRefPoint.x + top->getWidth() / 2,topRefPoint.y - top->getHeight() / 2 };
+
+	point lowerPoint1= { baseRefPoint.x - base->getWidth() / 2,baseRefPoint.y + base->getHeight() / 2 };
+	point lowerPoint2 = { baseRefPoint.x + base->getWidth() / 2,baseRefPoint.y + base->getHeight() / 2 };
+
+	point upperWindow1 = {0,config.toolBarHeight};
+	point upperWindow2 = { config.windWidth,config.toolBarHeight };
+	point lowerWindow1 = { 0,config.windHeight-config.statusBarHeight };
+	point lowerWindow2 = { config.windWidth,config.windHeight - config.statusBarHeight };
+
+	//conditions
+	bool c1 = upperPoint1.x >= upperWindow1.x; 
+	bool c2 = upperPoint1.y >= upperWindow1.y;
+	bool c3 = upperPoint2.x<= upperWindow2.x;
+	bool c4 = upperPoint2.y >= upperWindow1.y;
+	bool c5 = lowerPoint1.y <= lowerWindow1.y;
+	bool c6 = lowerPoint2.y <= lowerWindow1.y;
+
+	if (c1 && c2 && c3 && c4 && c5 && c6) {
+		base->draw();
+		top->draw();
+	}
+
 }
 void Sign::rotate(double deg)
 {
