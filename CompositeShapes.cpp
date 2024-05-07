@@ -118,11 +118,13 @@ Tree::Tree(game* r_pGame, point ref) :shape(r_pGame, ref)
 	point layer_1_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - config.tree.baseWdth };
 	point layer_2_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth };
 	point layer_3_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth };
+	point apple_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth };
 
 	base = new Rect(pGame, baseRef, config.tree.baseHeight, config.tree.baseWdth);
 	Layer_1 = new triangle(pGame, layer_1_ref, config.tree.triwdth);
 	Layer_2 = new triangle(pGame, layer_2_ref, config.tree.triwdth);
 	layer_3 = new triangle(pGame, layer_3_ref, config.tree.triwdth);
+	apple = new circle(pGame, apple_ref, config.tree.apple);
 }
 
 void Tree::draw() const
@@ -131,6 +133,7 @@ void Tree::draw() const
 	Layer_1->draw();
 	Layer_2->draw();
 	layer_3->draw();
+	apple->draw();
 }
 
 void Tree::resizeUp(double factor) {
@@ -521,6 +524,7 @@ Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
 	head = new triangle(pGame, headref, config.rocket.headwdth);
 	liftbase = new triangle(pGame, leftbaseRef, config.rocket.smallbaseWdth);
 	rightbase = new triangle(pGame, rightbaseRef, config.rocket.smallbaseWdth);
+	door = new circle(pGame, baseRef, config.rocket.door);
 }
 
 void Rocket::draw() const
@@ -529,6 +533,7 @@ void Rocket::draw() const
 	rightbase->draw();
 	base->draw();
 	head->draw();
+	door->draw();
 }
 
 void Rocket::resizeUp(double factor) {

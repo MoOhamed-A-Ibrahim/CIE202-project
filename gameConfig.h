@@ -45,6 +45,7 @@ struct
 	struct {
 		double baseWdth = 20, baseHeight = 80;
 		double triwdth = 100;
+		double apple = 10;
 	}tree;
 
 	struct {
@@ -60,6 +61,7 @@ struct
 		double baseWdth = 35, baseHeight = 100;
 		double headwdth = 35;
 		double smallbaseWdth = 15;
+		double door = 10;
 	}rocket;
 
 	struct {

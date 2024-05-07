@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////  class Sign  ///////////////////////////////////////
 //This class reprsents the composite shape "sign"
 //The sign is composed of 2 Recatngles
-/*				
+/*
 
 					 ------------------
 					|				   |
@@ -47,6 +47,7 @@ class Tree :public shape
 {
 	Rect* base;
 	triangle* Layer_1, * Layer_2, * layer_3;
+	circle* apple;
 	double angle = 0;
 public:
 	Tree(game* r_pGame, point ref);
@@ -104,6 +105,7 @@ class Rocket :public shape
 {
 	Rect* base;
 	triangle* head, * liftbase, * rightbase;
+	circle* door;
 	double angle = 0;
 public:
 	Rocket(game* r_pGame, point ref);
