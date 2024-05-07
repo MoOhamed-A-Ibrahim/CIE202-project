@@ -10,7 +10,7 @@ operation::operation(game* r_pGame)
 
 /////////////////////////////////// class operAddSign  //////////////////
 
-operAddSign::operAddSign(game* r_pGame):operation(r_pGame)
+operAddSign::operAddSign(game* r_pGame) :operation(r_pGame)
 {
 }
 
@@ -53,7 +53,7 @@ void operDELETE::Act()
 
 ///////////////////////////////////
 
-operResizeUp::operResizeUp(game * r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
+operResizeUp::operResizeUp(game* r_pGame) : operation(r_pGame) // intialize the constructor  witj operation class
 {
 	// a constructor that take a pointer to a game object as a parameter
 }
@@ -61,7 +61,7 @@ operResizeUp::operResizeUp(game * r_pGame) : operation(r_pGame) // intialize the
 void operResizeUp::Act()
 {
 	grid* pGrid = pGame->getGrid();
-	shape* currentShape=pGrid->getActiveShape();
+	shape* currentShape = pGrid->getActiveShape();
 	currentShape->resizeUp(2);
 	pGrid->setActiveShape(currentShape);
 }
@@ -166,7 +166,7 @@ void operRocket::Act()
 }
 /////////////////////////////////////////
 
-operRotate::operRotate(game* r_pGame):operation(r_pGame)
+operRotate::operRotate(game* r_pGame) :operation(r_pGame)
 {
 }
 
@@ -175,7 +175,7 @@ void operRotate::Act()
 	double angle = 90;
 	grid* grid = pGame->getGrid();
 	shape* shape = grid->getActiveShape();
-	shape->rotate(angle);
+	shape->rotate();
 	///
 }
 
@@ -184,7 +184,7 @@ operMoveUp::operMoveUp(game* r_pGame) :operation(r_pGame)
 {
 }
 
-void operMoveUp::Act(){
+void operMoveUp::Act() {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
 	currentShape->moveUp(config.gridSpacing);

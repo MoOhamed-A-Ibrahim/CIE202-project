@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////  class Sign  ///////////////////////////////////////
 //This class reprsents the composite shape "sign"
 //The sign is composed of 2 Recatngles
-/*				
+/*
 
 					 ------------------
 					|				   |
@@ -25,7 +25,7 @@ class Sign :public shape
 {
 	Rect* base;
 	Rect* top;
-	double angle = 0;
+	double* SignRotation = ROT_angle;
 
 
 public:
@@ -35,7 +35,7 @@ public:
 	void resizeUp(double factor);
 	void resizeDown(double factor);
 
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
@@ -47,14 +47,15 @@ class Tree :public shape
 {
 	Rect* base;
 	triangle* Layer_1, * Layer_2, * layer_3;
-	double angle = 0;
+	circle* apple;
+	double* TreeRotation = ROT_angle;
 public:
 	Tree(game* r_pGame, point ref);
 	void draw() const;
 
 	void resizeUp(double factor);
 	void resizeDown(double factor);
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
@@ -66,14 +67,14 @@ class Car :public shape
 {
 	Rect* base;
 	circle* frontalWheel, * posteriorWheel;
-	double angle = 0;
+	double* CarRotation = ROT_angle;
 public:
 	Car(game* r_pGame, point ref);
 	void draw() const;
 
 	void resizeUp(double factor);
 	void resizeDown(double factor);
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
@@ -85,14 +86,14 @@ class IceCream :public shape
 {
 	triangle* base;
 	circle* iceCircle;
-	double angle = 0;
+	double* IceCreamRotation = ROT_angle;
 public:
 	IceCream(game* r_pGame, point ref);
 	void draw() const;
 
 	void resizeUp(double factor);
 	void resizeDown(double factor);
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
@@ -104,14 +105,15 @@ class Rocket :public shape
 {
 	Rect* base;
 	triangle* head, * liftbase, * rightbase;
-	double angle = 0;
+	circle* door;
+	double* RocketRotation = ROT_angle;
 public:
 	Rocket(game* r_pGame, point ref);
 	void draw() const;
 
 	void resizeUp(double factor);
 	void resizeDown(double factor);
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
@@ -123,14 +125,14 @@ class House :public shape
 {
 	Rect* base, * door;
 	triangle* head;
-	double angle = 0;
+	double* HouseRotation = ROT_angle;
 public:
 	House(game* r_pGame, point ref);
 	void draw() const;
 
 	void resizeUp(double factor);
 	void resizeDown(double factor);
-	void rotate(double deg);
+	void rotate();
 
 	void moveUp(double dist);
 	void moveDown(double dist);
