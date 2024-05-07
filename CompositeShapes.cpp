@@ -16,54 +16,32 @@ Sign::Sign(game* r_pGame, point ref) :shape(r_pGame, ref)
 }
 void Sign::draw() const
 {
-	point topRefPoint = top->getRefPoint();
-	point baseRefPoint = base->getRefPoint();
-
-	point upperPoint1 = {topRefPoint.x-top->getWidth()/2,topRefPoint.y-top->getHeight()/2};
-	point upperPoint2 = { topRefPoint.x + top->getWidth() / 2,topRefPoint.y - top->getHeight() / 2 };
-
-	point lowerPoint1= { baseRefPoint.x - base->getWidth() / 2,baseRefPoint.y + base->getHeight() / 2 };
-	point lowerPoint2 = { baseRefPoint.x + base->getWidth() / 2,baseRefPoint.y + base->getHeight() / 2 };
-
-	point upperWindow1 = {0,config.toolBarHeight};
-	point upperWindow2 = { config.windWidth,config.toolBarHeight };
-	point lowerWindow1 = { 0,config.windHeight-config.statusBarHeight };
-	point lowerWindow2 = { config.windWidth,config.windHeight - config.statusBarHeight };
-
-	//conditions
-	bool c1 = upperPoint1.x >= upperWindow1.x; 
-	bool c2 = upperPoint1.y >= upperWindow1.y;
-	bool c3 = upperPoint2.x<= upperWindow2.x;
-	bool c4 = upperPoint2.y >= upperWindow1.y;
-	bool c5 = lowerPoint1.y <= lowerWindow1.y;
-	bool c6 = lowerPoint2.y <= lowerWindow1.y;
-
-	if (c1 && c2 && c3 && c4 && c5 && c6) {
-		base->draw();
-		top->draw();
-	}
-
+	base->draw();
+	top->draw();
 }
 void Sign::rotate()
 {
+	point oldRefPoint = top->getRefPoint();
+
+	base->rotate();
+	top->rotate();
+
+	double newTopHeight = top->getHeight();
+	double newBaseHeight = base->getHeight();
+
+
 	if (*SignRotation == ROT_angle[4]) {
 		SignRotation = ROT_angle + 1;
-
-
 	}
 	else {
 		SignRotation = SignRotation + 1;
 	}
 
 	point baseRef;
-	baseRef.x = (0 * cos(*SignRotation) - ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * sin(*SignRotation))) + RefPoint.x;
-	baseRef.y = (0 * sin(*SignRotation) + ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * cos(*SignRotation))) + RefPoint.y;
+	baseRef.x = (0 * cos(*SignRotation) - ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * sin(*SignRotation))) + oldRefPoint.x;
+	baseRef.y = (0 * sin(*SignRotation) + ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * cos(*SignRotation))) + oldRefPoint.y;
 
 	base->setRefPoint(baseRef);
-
-	base->rotate();
-	top->rotate();
-
 }
 
 void Sign::moveUp(double dist) {
@@ -98,9 +76,29 @@ void Sign::resizeUp(double factor) {
 	double newTopHeight = top->getHeight();
 	double newBaseHeight = base->getHeight();
 
+	point refBase;
+	refBase.x = oldRefPoint.x;
+	refBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+
 	point newRefBase;
-	newRefBase.x = oldRefPoint.x;
-	newRefBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+	if (*SignRotation == ROT_angle[0] || *SignRotation == ROT_angle[4]) {
+		newRefBase.x = refBase.x;
+		newRefBase.y = refBase.y;
+	}
+	else if (*SignRotation == ROT_angle[1]) {
+		newRefBase.x = oldRefPoint.x - (refBase.y - oldRefPoint.y);
+		newRefBase.y = oldRefPoint.y + (refBase.x - oldRefPoint.x);
+	}
+	else if (*SignRotation == ROT_angle[2]) {
+		newRefBase.x = oldRefPoint.x - (refBase.x - oldRefPoint.x);
+		newRefBase.y = oldRefPoint.y - (refBase.y - oldRefPoint.y);
+	}
+	else if (*SignRotation == ROT_angle[3]) {
+		newRefBase.x = oldRefPoint.x + (refBase.y - oldRefPoint.y);
+		newRefBase.y = oldRefPoint.y - (refBase.x - oldRefPoint.x);
+	}
+
+
 	base->setRefPoint(newRefBase);
 
 }
@@ -114,9 +112,28 @@ void Sign::resizeDown(double factor) {
 	double newTopHeight = top->getHeight();
 	double newBaseHeight = base->getHeight();
 
+	point refBase;
+	refBase.x = oldRefPoint.x;
+	refBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+
 	point newRefBase;
-	newRefBase.x = oldRefPoint.x;
-	newRefBase.y = oldRefPoint.y + newTopHeight / 2 + newBaseHeight / 2;
+	if (*SignRotation == ROT_angle[0] || *SignRotation == ROT_angle[4]) {
+		newRefBase.x = refBase.x;
+		newRefBase.y = refBase.y;
+	}
+	else if (*SignRotation == ROT_angle[1]) {
+		newRefBase.x = oldRefPoint.x - (refBase.y - oldRefPoint.y);
+		newRefBase.y = oldRefPoint.y + (refBase.x - oldRefPoint.x);
+	}
+	else if (*SignRotation == ROT_angle[2]) {
+		newRefBase.x = oldRefPoint.x - (refBase.x - oldRefPoint.x);
+		newRefBase.y = oldRefPoint.y - (refBase.y - oldRefPoint.y);
+	}
+	else if (*SignRotation == ROT_angle[3]) {
+		newRefBase.x = oldRefPoint.x + (refBase.y - oldRefPoint.y);
+		newRefBase.y = oldRefPoint.y - (refBase.x - oldRefPoint.x);
+	}
+
 	base->setRefPoint(newRefBase);
 
 }
@@ -156,26 +173,88 @@ void Tree::resizeUp(double factor) {
 	Layer_1->resizeUp(factor);
 	Layer_2->resizeUp(factor);
 	layer_3->resizeUp(factor);
+	apple->resizeUp(factor);
 
 	double newBaseHeight = base->getHeight();
 	double newBaseWidth = base->getWidth();
 
+	point refLay1;
+	point refLay2;
+	point refLay3;
+	point refApple;
+
+	refLay1.x = oldRefPoint.x;
+	refLay2.x = oldRefPoint.x;
+	refLay3.x = oldRefPoint.x;
+	refApple.x = oldRefPoint.x;
+
+	refLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
+	refLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2 * newBaseWidth;
+	refLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+	refApple.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+
 	point newRefLay1;
 	point newRefLay2;
 	point newRefLay3;
+	point newRefApple;
 
-	newRefLay1.x = oldRefPoint.x;
-	newRefLay2.x = oldRefPoint.x;
-	newRefLay3.x = oldRefPoint.x;
+	if (*TreeRotation == ROT_angle[0] || *TreeRotation == ROT_angle[4]) {
+		newRefLay1.x= refLay1.x;
+		newRefLay1.y = refLay1.y;
 
-	newRefLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
-	newRefLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2 * newBaseWidth;
-	newRefLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+		newRefLay2.x = refLay2.x;
+		newRefLay2.y = refLay2.y;
+
+		newRefLay3.x = refLay3.x;
+		newRefLay3.y = refLay3.y;
+
+		newRefApple.x = refApple.x;
+		newRefApple.y = refApple.y;
+	}
+	else if (*TreeRotation == ROT_angle[1]) {
+		newRefLay1.x = oldRefPoint.x - (refLay1.y - oldRefPoint.y);
+		newRefLay1.y = oldRefPoint.y + (refLay1.x - oldRefPoint.x);
+
+		newRefLay2.x = oldRefPoint.x - (refLay2.y - oldRefPoint.y);
+		newRefLay2.y = oldRefPoint.y + (refLay2.x - oldRefPoint.x);
+
+		newRefLay3.x = oldRefPoint.x - (refLay3.y - oldRefPoint.y);
+		newRefLay3.y = oldRefPoint.y + (refLay3.x - oldRefPoint.x);
+
+		newRefApple.x = oldRefPoint.x - (refApple.y - oldRefPoint.y);
+		newRefApple.y = oldRefPoint.y + (refApple.x - oldRefPoint.x);
+	}
+	else if (*TreeRotation == ROT_angle[2]) {
+		newRefLay1.x = oldRefPoint.x - (refLay1.x - oldRefPoint.x);
+		newRefLay1.y = oldRefPoint.y - (refLay1.y - oldRefPoint.y);
+
+		newRefLay2.x = oldRefPoint.x - (refLay2.x - oldRefPoint.x);
+		newRefLay2.y = oldRefPoint.y - (refLay2.y - oldRefPoint.y);
+
+		newRefLay3.x = oldRefPoint.x - (refLay3.x - oldRefPoint.x);
+		newRefLay3.y = oldRefPoint.y - (refLay3.y - oldRefPoint.y);
+
+		newRefApple.x = oldRefPoint.x - (refApple.x - oldRefPoint.x);
+		newRefApple.y = oldRefPoint.y - (refApple.y - oldRefPoint.y);
+	}
+	else if (*TreeRotation == ROT_angle[3]) {
+		newRefLay1.x = oldRefPoint.x + (refLay1.y - oldRefPoint.y);
+		newRefLay1.y = oldRefPoint.y - (refLay1.x - oldRefPoint.x);
+
+		newRefLay2.x = oldRefPoint.x + (refLay2.y - oldRefPoint.y);
+		newRefLay2.y = oldRefPoint.y - (refLay2.x - oldRefPoint.x);
+
+		newRefLay3.x = oldRefPoint.x + (refLay3.y - oldRefPoint.y);
+		newRefLay3.y = oldRefPoint.y - (refLay3.x - oldRefPoint.x);
+
+		newRefApple.x = oldRefPoint.x + (refApple.y - oldRefPoint.y);
+		newRefApple.y = oldRefPoint.y - (refApple.x - oldRefPoint.x);
+	}
 
 	Layer_1->setRefPoint(newRefLay1);
 	Layer_2->setRefPoint(newRefLay2);
 	layer_3->setRefPoint(newRefLay3);
-
+	apple->setRefPoint(newRefApple);
 }
 void Tree::resizeDown(double factor) {
 	point oldRefPoint = base->getRefPoint();
@@ -184,30 +263,103 @@ void Tree::resizeDown(double factor) {
 	Layer_1->resizeDown(factor);
 	Layer_2->resizeDown(factor);
 	layer_3->resizeDown(factor);
+	apple->resizeDown(factor);
 
 	double newBaseHeight = base->getHeight();
 	double newBaseWidth = base->getWidth();
 
+	point refLay1;
+	point refLay2;
+	point refLay3;
+	point refApple;
+
+	refLay1.x = oldRefPoint.x;
+	refLay2.x = oldRefPoint.x;
+	refLay3.x = oldRefPoint.x;
+	refApple.x = oldRefPoint.x;
+
+	refLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
+	refLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2 * newBaseWidth;
+	refLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+	refApple.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+
 	point newRefLay1;
 	point newRefLay2;
 	point newRefLay3;
+	point newRefApple;
 
-	newRefLay1.x = oldRefPoint.x;
-	newRefLay2.x = oldRefPoint.x;
-	newRefLay3.x = oldRefPoint.x;
+	if (*TreeRotation == ROT_angle[0] || *TreeRotation == ROT_angle[4]) {
+		newRefLay1.x = refLay1.x;
+		newRefLay1.y = refLay1.y;
 
-	newRefLay1.y = oldRefPoint.y - newBaseHeight / 2 - newBaseWidth;
-	newRefLay2.y = oldRefPoint.y - newBaseHeight / 2 - 2 * newBaseWidth;
-	newRefLay3.y = oldRefPoint.y - newBaseHeight / 2 - 3 * newBaseWidth;
+		newRefLay2.x = refLay2.x;
+		newRefLay2.y = refLay2.y;
+
+		newRefLay3.x = refLay3.x;
+		newRefLay3.y = refLay3.y;
+
+		newRefApple.x = refApple.x;
+		newRefApple.y = refApple.y;
+	}
+	else if (*TreeRotation == ROT_angle[1]) {
+		newRefLay1.x = oldRefPoint.x - (refLay1.y - oldRefPoint.y);
+		newRefLay1.y = oldRefPoint.y + (refLay1.x - oldRefPoint.x);
+
+		newRefLay2.x = oldRefPoint.x - (refLay2.y - oldRefPoint.y);
+		newRefLay2.y = oldRefPoint.y + (refLay2.x - oldRefPoint.x);
+
+		newRefLay3.x = oldRefPoint.x - (refLay3.y - oldRefPoint.y);
+		newRefLay3.y = oldRefPoint.y + (refLay3.x - oldRefPoint.x);
+
+		newRefApple.x = oldRefPoint.x - (refApple.y - oldRefPoint.y);
+		newRefApple.y = oldRefPoint.y + (refApple.x - oldRefPoint.x);
+	}
+	else if (*TreeRotation == ROT_angle[2]) {
+		newRefLay1.x = oldRefPoint.x - (refLay1.x - oldRefPoint.x);
+		newRefLay1.y = oldRefPoint.y - (refLay1.y - oldRefPoint.y);
+
+		newRefLay2.x = oldRefPoint.x - (refLay2.x - oldRefPoint.x);
+		newRefLay2.y = oldRefPoint.y - (refLay2.y - oldRefPoint.y);
+
+		newRefLay3.x = oldRefPoint.x - (refLay3.x - oldRefPoint.x);
+		newRefLay3.y = oldRefPoint.y - (refLay3.y - oldRefPoint.y);
+
+		newRefApple.x = oldRefPoint.x - (refApple.x - oldRefPoint.x);
+		newRefApple.y = oldRefPoint.y - (refApple.y - oldRefPoint.y);
+	}
+	else if (*TreeRotation == ROT_angle[3]) {
+		newRefLay1.x = oldRefPoint.x + (refLay1.y - oldRefPoint.y);
+		newRefLay1.y = oldRefPoint.y - (refLay1.x - oldRefPoint.x);
+
+		newRefLay2.x = oldRefPoint.x + (refLay2.y - oldRefPoint.y);
+		newRefLay2.y = oldRefPoint.y - (refLay2.x - oldRefPoint.x);
+
+		newRefLay3.x = oldRefPoint.x + (refLay3.y - oldRefPoint.y);
+		newRefLay3.y = oldRefPoint.y - (refLay3.x - oldRefPoint.x);
+
+		newRefApple.x = oldRefPoint.x + (refApple.y - oldRefPoint.y);
+		newRefApple.y = oldRefPoint.y - (refApple.x - oldRefPoint.x);
+	}
 
 	Layer_1->setRefPoint(newRefLay1);
 	Layer_2->setRefPoint(newRefLay2);
 	layer_3->setRefPoint(newRefLay3);
-
+	apple->setRefPoint(newRefApple);
 }
 
 void Tree::rotate()
 {
+	point oldRefPoint = base->getRefPoint();
+
+
+	double newBaseWdth = base->getWidth();
+	double newBaseHeight = base->getHeight();
+
+	Layer_1->rotate();
+	Layer_2->rotate();
+	layer_3->rotate();
+	base->rotate();
+	apple->rotate();
 	if (*TreeRotation == ROT_angle[4]) {
 		TreeRotation = ROT_angle + 1;
 
@@ -222,28 +374,36 @@ void Tree::rotate()
 	point topRef;
 	point appleRef;
 
-	bottomRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
-	bottomRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
+	if (*TreeRotation == ROT_angle[1] || *TreeRotation == ROT_angle[3])
+	{
+		bottomRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseHeight / 2 - newBaseWdth) * sin(*TreeRotation))) + oldRefPoint.x;
+		bottomRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseHeight / 2 - newBaseWdth) * cos(*TreeRotation))) + oldRefPoint.y;
 
 
-	middleRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
-	middleRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
+		middleRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseHeight / 2 - 2 * newBaseWdth) * sin(*TreeRotation))) + oldRefPoint.x;
+		middleRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseHeight / 2 - 2 * newBaseWdth) * cos(*TreeRotation))) + oldRefPoint.y;
 
-	topRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
-	topRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
+		topRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseHeight / 2 - 3 * newBaseWdth) * sin(*TreeRotation))) + oldRefPoint.x;
+		topRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseHeight / 2 - 3 * newBaseWdth) * cos(*TreeRotation))) + oldRefPoint.y;
 
+	}
+	else {
+		bottomRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseWdth / 2 - newBaseHeight) * sin(*TreeRotation))) + oldRefPoint.x;
+		bottomRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseWdth / 2 - newBaseHeight) * cos(*TreeRotation))) + oldRefPoint.y;
+
+
+		middleRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseWdth / 2 - 2 * newBaseHeight) * sin(*TreeRotation))) + oldRefPoint.x;
+		middleRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseWdth / 2 - 2 * newBaseHeight) * cos(*TreeRotation))) + oldRefPoint.y;
+
+		topRef.x = (0 * cos(*TreeRotation) - ((0 - newBaseWdth / 2 - 3 * newBaseHeight) * sin(*TreeRotation))) + oldRefPoint.x;
+		topRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseWdth / 2 - 3 * newBaseHeight) * cos(*TreeRotation))) + oldRefPoint.y;
+	}
 
 	Layer_2->setRefPoint(middleRef);
 	Layer_1->setRefPoint(bottomRef);
 	layer_3->setRefPoint(topRef);
 	apple->setRefPoint(topRef);
 
-
-	Layer_1->rotate();
-	Layer_2->rotate();
-	layer_3->rotate();
-	base->rotate();
-	apple->rotate();
 }
 
 
@@ -254,6 +414,7 @@ void Tree::moveUp(double dist) {
 	Layer_1->moveUp(dist);
 	Layer_2->moveUp(dist);
 	layer_3->moveUp(dist);
+	apple->moveUp(dist);
 }
 
 void Tree::moveDown(double dist) {
@@ -261,6 +422,7 @@ void Tree::moveDown(double dist) {
 	Layer_1->moveDown(dist);
 	Layer_2->moveDown(dist);
 	layer_3->moveDown(dist);
+	apple->moveDown(dist);
 }
 
 void Tree::moveRight(double dist) {
@@ -268,6 +430,7 @@ void Tree::moveRight(double dist) {
 	Layer_1->moveRight(dist);
 	Layer_2->moveRight(dist);
 	layer_3->moveRight(dist);
+	apple->moveRight(dist);
 }
 
 void Tree::moveLeft(double dist) {
@@ -275,6 +438,7 @@ void Tree::moveLeft(double dist) {
 	Layer_1->moveLeft(dist);
 	Layer_2->moveLeft(dist);
 	layer_3->moveLeft(dist);
+	apple->moveLeft(dist);
 }
 //////////////////////////////////////////////////////////////////////
 Car::Car(game* r_pGame, point ref) :shape(r_pGame, ref)
@@ -346,6 +510,15 @@ void Car::resizeDown(double factor) {
 }
 
 void Car::rotate() {
+	point oldRefPoint = base->getRefPoint();
+
+	base->rotate();
+	frontalWheel->rotate();
+	posteriorWheel->rotate();
+
+	double newBaseWidth = base->getWidth();
+	double newBaseHeight = base->getHeight();
+
 	if (*CarRotation == ROT_angle[4]) {
 		CarRotation = ROT_angle + 1;
 
@@ -353,20 +526,34 @@ void Car::rotate() {
 	else {
 		CarRotation = CarRotation + 1;
 	}
+
 	point new_fWRef, new_PWRef;
+	if (*CarRotation == ROT_angle[4] || *CarRotation == ROT_angle[2]) {
 
-	new_fWRef.x = ((0 + (0.3 * config.car.baseWdth)) * cos(*CarRotation) - (0 + (config.car.baseHeight / 2) * sin(*CarRotation))) + RefPoint.x;
-	new_fWRef.y = ((0 + (0.3 * config.car.baseWdth)) * sin(*CarRotation) + (0 + (config.car.baseHeight / 2) * cos(*CarRotation))) + RefPoint.y;
+		new_fWRef.x = ((0 + (0.3 * newBaseWidth)) * cos(*CarRotation) - (0 + (newBaseHeight / 2) * sin(*CarRotation))) + oldRefPoint.x;
+		new_fWRef.y = ((0 + (0.3 * newBaseWidth)) * sin(*CarRotation) + (0 + (newBaseHeight / 2) * cos(*CarRotation))) + oldRefPoint.y;
 
-	new_PWRef.x = ((0 - (0.3 * config.car.baseWdth)) * cos(*CarRotation) - (0 + (config.car.baseHeight / 2) * sin(*CarRotation))) + RefPoint.x;
-	new_PWRef.y = ((0 - (0.3 * config.car.baseWdth)) * sin(*CarRotation) + (0 + (config.car.baseHeight / 2) * cos(*CarRotation))) + RefPoint.y;
+		new_PWRef.x = ((0 - (0.3 * newBaseWidth)) * cos(*CarRotation) - (0 + (newBaseHeight / 2) * sin(*CarRotation))) + oldRefPoint.x;
+		new_PWRef.y = ((0 - (0.3 * newBaseWidth)) * sin(*CarRotation) + (0 + (newBaseHeight / 2) * cos(*CarRotation))) + oldRefPoint.y;
 
-	frontalWheel->setRefPoint(new_fWRef);
-	posteriorWheel->setRefPoint(new_PWRef);
+		frontalWheel->setRefPoint(new_fWRef);
+		posteriorWheel->setRefPoint(new_PWRef);
 
-	base->rotate();
-	frontalWheel->rotate();
-	posteriorWheel->rotate();
+
+	}
+	else {
+
+		new_fWRef.x = ((0 + (0.3 * newBaseHeight)) * cos(*CarRotation) - (0 + (newBaseWidth / 2) * sin(*CarRotation))) + oldRefPoint.x;
+		new_fWRef.y = ((0 + (0.3 * newBaseHeight)) * sin(*CarRotation) + (0 + (newBaseWidth / 2) * cos(*CarRotation))) + oldRefPoint.y;
+
+		new_PWRef.x = ((0 - (0.3 * newBaseHeight)) * cos(*CarRotation) - (0 + (newBaseWidth / 2) * sin(*CarRotation))) + oldRefPoint.x;
+		new_PWRef.y = ((0 - (0.3 * newBaseHeight)) * sin(*CarRotation) + (0 + (newBaseWidth / 2) * cos(*CarRotation))) + oldRefPoint.y;
+
+		frontalWheel->setRefPoint(new_fWRef);
+		posteriorWheel->setRefPoint(new_PWRef);
+
+	}
+
 
 }
 
@@ -524,6 +711,7 @@ void Rocket::resizeUp(double factor) {
 	rightbase->resizeUp(factor);
 	base->resizeUp(factor);
 	head->resizeUp(factor);
+	door->resizeUp(factor);
 
 	double newRocketBaseHeight = base->getHeight();
 	double newRocketBaseWidth = base->getWidth();
@@ -553,6 +741,7 @@ void Rocket::resizeDown(double factor) {
 	rightbase->resizeDown(factor);
 	base->resizeDown(factor);
 	head->resizeDown(factor);
+	door->resizeDown(factor);
 
 	double newRocketBaseHeight = base->getHeight();
 	double newRocketBaseWidth = base->getWidth();
@@ -616,6 +805,7 @@ void Rocket::moveUp(double dist) {
 	head->moveUp(dist);
 	liftbase->moveUp(dist);
 	rightbase->moveUp(dist);
+	door->moveUp(dist);
 }
 
 void Rocket::moveDown(double dist) {
@@ -623,6 +813,8 @@ void Rocket::moveDown(double dist) {
 	head->moveDown(dist);
 	liftbase->moveDown(dist);
 	rightbase->moveDown(dist);
+	door->moveDown(dist);
+
 }
 
 void Rocket::moveRight(double dist) {
@@ -630,6 +822,7 @@ void Rocket::moveRight(double dist) {
 	head->moveRight(dist);
 	liftbase->moveRight(dist);
 	rightbase->moveRight(dist);
+	door->moveRight(dist);
 }
 
 void Rocket::moveLeft(double dist) {
@@ -637,6 +830,7 @@ void Rocket::moveLeft(double dist) {
 	head->moveLeft(dist);
 	liftbase->moveLeft(dist);
 	rightbase->moveLeft(dist);
+	door->moveLeft(dist);
 }
 
 

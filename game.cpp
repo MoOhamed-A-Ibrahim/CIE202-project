@@ -224,32 +224,31 @@ void game::run()
 		pWind->GetKeyPress(keyPressed);
 		if (shapesGrid->getActiveShape() != nullptr) {
 			if (keyPressed) {
-				switch (keyPressed) {
-				case 8:
-					printMessage("ARROW_UP is being clicked");
+				if (keyPressed == 8 || keyPressed == 'w') {
+					printMessage("ARROW_UP/W is being clicked");
 					op = new operMoveUp(this);
 					op->Act();
 					shapesGrid->draw();
-					break;
-				case 2:
-					printMessage("ARROW_DOWN is being clicked");
+				}
+				else if (keyPressed == 2 || keyPressed == 's') {
+					printMessage("ARROW_DOWN/S is being clicked");
 					op = new operMoveDown(this);
 					op->Act();
 					shapesGrid->draw();
-					break;
-				case 6:
-					printMessage("ARROW_RIGHT is being clicked");
+				}
+				else if (keyPressed == 6 || keyPressed == 'd') {
+					printMessage("ARROW_RIGHT/D is being clicked");
 					op = new operMoveRight(this);
 					op->Act();
 					shapesGrid->draw();
-					break;
-				case 4:
-					printMessage("ARROW_LEFT is being clicked");
+				}
+				else if (keyPressed == 4 || keyPressed == 'a') {
+					printMessage("ARROW_LEFT/A is being clicked");
 					op = new operMoveLeft(this);
 					op->Act();
 					shapesGrid->draw();
-					break;
 				}
+
 			}
 		}
 		//printMessage("Ready...");
