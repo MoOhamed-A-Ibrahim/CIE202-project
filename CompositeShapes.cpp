@@ -25,12 +25,8 @@ void Sign::rotate()
 	point oldRefPoint = top->getRefPoint();
 
 	point baseRef;
-	angle += 90;
-
 	double newTopHeight = top->getHeight();
 	double newBaseHeight = base->getHeight();
-
-	point baseRef;
 	baseRef.x = (0 * cos(*SignRotation) - ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * sin(*SignRotation))) + RefPoint.x;
 	baseRef.y = (0 * sin(*SignRotation) + ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * cos(*SignRotation))) + RefPoint.y;
 
@@ -41,7 +37,6 @@ void Sign::rotate()
 		SignRotation = SignRotation + 1;
 	}
 
-	point baseRef;
 	baseRef.x = (0 * cos(*SignRotation) - ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * sin(*SignRotation))) + oldRefPoint.x;
 	baseRef.y = (0 * sin(*SignRotation) + ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * cos(*SignRotation))) + oldRefPoint.y;
 
