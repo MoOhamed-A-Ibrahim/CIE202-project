@@ -4,7 +4,7 @@
 
 ////////////////////////////////////////////////////  class Rect  ///////////////////////////////////////
 
-Rect::Rect(game* r_pGame, point ref, double r_hght, double r_wdth):shape(r_pGame,ref)
+Rect::Rect(game* r_pGame, point ref, double r_hght, double r_wdth) :shape(r_pGame, ref)
 {
 	pGame = r_pGame;
 	hght = r_hght;
@@ -18,7 +18,7 @@ void Rect::draw() const
 	pW->SetBrush(config.fillColor);
 	point upperLeft, lowerBottom;
 	upperLeft.x = RefPoint.x - wdth / 2;
-	upperLeft.y = RefPoint.y -hght / 2;
+	upperLeft.y = RefPoint.y - hght / 2;
 	lowerBottom.x = RefPoint.x + wdth / 2;
 	lowerBottom.y = RefPoint.y + hght / 2;
 
@@ -44,7 +44,7 @@ void Rect::resizeDown(double factor) {
 	setHeight(hght / factor);
 	setWidth(wdth / factor);
 }
-void Rect::rotate(double deg)
+void Rect::rotate()
 {
 
 
@@ -57,7 +57,7 @@ void Rect::rotate(double deg)
 
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
-circle::circle(game* r_pGame, point ref, double r):shape(r_pGame,ref)
+circle::circle(game* r_pGame, point ref, double r) :shape(r_pGame, ref)
 {
 	rad = r;
 }
@@ -81,9 +81,9 @@ void circle::resizeUp(double factor) {
 void circle::resizeDown(double factor) {
 	setRadius(rad / factor);
 }
-void circle::rotate(double deg)
+void circle::rotate()
 {
-	
+
 }
 ///Triangle class///////
 triangle::triangle(game* r_pGame, point ref, double r_base) :shape(r_pGame, ref)
@@ -127,7 +127,7 @@ void triangle::resizeUp(double factor) {
 	setbase(base * factor);
 }
 
-void triangle::rotate(double deg)
+void triangle::rotate()
 {
 
 	int temp;

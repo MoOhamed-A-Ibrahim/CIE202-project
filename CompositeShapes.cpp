@@ -19,37 +19,25 @@ void Sign::draw() const
 	base->draw();
 	top->draw();
 }
-void Sign::rotate(double deg)
+void Sign::rotate()
 {
+	if (*SignRotation == ROT_angle[4]) {
+		SignRotation = ROT_angle + 1;
+
+
+	}
+	else {
+		SignRotation = SignRotation + 1;
+	}
 
 	point baseRef;
-	angle += 90;
-
-	if (angle >= 90 && angle < 180) {
-		baseRef = { (int)(RefPoint.x - config.signShape.baseWdth / 2.0 - config.signShape.topWdth / 2.0) ,(int)RefPoint.y };
-	}
-	else if (angle >= 180 && angle < 270) {
-		baseRef = { (int)RefPoint.x,(int)(RefPoint.y - config.signShape.topWdth + config.signShape.baseHeight / 2.0) };
-	}
-	else if (angle >= 270 && angle < 360) {
-		baseRef = { (int)(RefPoint.x + config.signShape.baseWdth / 2.0 + config.signShape.topWdth / 2.0),(int)RefPoint.y };
-
-
-	}
-
-	else if (angle >= 360 && angle < 450) {
-
-		baseRef = { (int)RefPoint.x,(int)(RefPoint.y + config.signShape.topHeight / 2 + config.signShape.baseHeight / 2) };
-		angle = 0;
-	}
-
+	baseRef.x = (0 * cos(*SignRotation) - ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * sin(*SignRotation))) + RefPoint.x;
+	baseRef.y = (0 * sin(*SignRotation) + ((0 + config.signShape.topHeight / 2.0 + config.signShape.baseHeight / 2.0) * cos(*SignRotation))) + RefPoint.y;
 
 	base->setRefPoint(baseRef);
 
-
-	top->rotate(deg);
-	base->rotate(deg);
-
+	base->rotate();
+	top->rotate();
 
 }
 
@@ -192,58 +180,48 @@ void Tree::resizeDown(double factor) {
 	layer_3->setRefPoint(newRefLay3);
 
 }
-void Tree::rotate(double deg)
+
+void Tree::rotate()
 {
+	if (*TreeRotation == ROT_angle[4]) {
+		TreeRotation = ROT_angle + 1;
+
+	}
+	else {
+		TreeRotation = TreeRotation + 1;
+	}
 
 
 	point bottomRef;
 	point middleRef;
 	point topRef;
-	angle += 90;
+	point appleRef;
 
-	if (angle >= 90 && angle < 180) {
-
-
-		bottomRef = { (int)(RefPoint.x + config.tree.baseHeight / 2.0 + config.tree.baseWdth)  ,(int)RefPoint.y };
-		middleRef = { (int)(RefPoint.x + config.tree.baseHeight / 2.0 + 2.0 * config.tree.baseWdth),(int)RefPoint.y };
-		topRef = { (int)(RefPoint.x + config.tree.baseHeight / 2.0 + 3.0 * config.tree.baseWdth)  , (int)RefPoint.y };
-
-	}
-	else if (angle >= 180 && angle < 270) {
-
-		bottomRef = { (int)RefPoint.x,(int)(RefPoint.y + config.tree.baseHeight / 2.0 + config.tree.baseWdth) };
-		middleRef = { (int)RefPoint.x, (int)(RefPoint.y + config.tree.baseHeight / 2.0 + 2.0 * config.tree.baseWdth) };
-		topRef = { (int)RefPoint.x,(int)(RefPoint.y + config.tree.baseHeight / 2.0 + 3.0 * config.tree.baseWdth) };;
-
-	}
-	else if (angle >= 270 && angle < 360) {
+	bottomRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
+	bottomRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
 
 
-		bottomRef = { (int)(RefPoint.x - config.tree.baseHeight / 2.0 - config.tree.baseWdth)  ,(int)RefPoint.y };
-		middleRef = { (int)(RefPoint.x - config.tree.baseHeight / 2.0 - 2.0 * config.tree.baseWdth)   ,(int)RefPoint.y };
-		topRef = { (int)(RefPoint.x - config.tree.baseHeight / 2.0 - 3.0 * config.tree.baseWdth)  , (int)RefPoint.y };
-	}
+	middleRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
+	middleRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
 
-	else {
-
-		bottomRef = { (int)RefPoint.x,(int)(RefPoint.y - config.tree.baseHeight / 2.0 - config.tree.baseWdth) };
-		middleRef = { (int)RefPoint.x,(int)(RefPoint.y - config.tree.baseHeight / 2.0 - 2.0 * config.tree.baseWdth) };
-		topRef = { (int)RefPoint.x, (int)(RefPoint.y - config.tree.baseHeight / 2.0 - 3.0 * config.tree.baseWdth) };
-		angle = 0;
-	}
-
-
+	topRef.x = (0 * cos(*TreeRotation) - ((0 - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) * sin(*TreeRotation))) + RefPoint.x;
+	topRef.y = (0 * sin(*TreeRotation) + ((0 - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth) * cos(*TreeRotation))) + RefPoint.y;
 
 
 	Layer_2->setRefPoint(middleRef);
 	Layer_1->setRefPoint(bottomRef);
 	layer_3->setRefPoint(topRef);
+	apple->setRefPoint(topRef);
 
-	Layer_1->rotate(deg);
-	Layer_2->rotate(deg);
-	layer_3->rotate(deg);
-	base->rotate(deg);
+
+	Layer_1->rotate();
+	Layer_2->rotate();
+	layer_3->rotate();
+	base->rotate();
+	apple->rotate();
 }
+
+
 
 
 void Tree::moveUp(double dist) {
@@ -342,44 +320,28 @@ void Car::resizeDown(double factor) {
 
 }
 
-void Car::rotate(double deg)
-{
-
-	point C1Ref;
-	point C2Ref;
-
-	angle += 90;
-
-	if (angle >= 90 && angle < 180) {
-
-		C1Ref = { (int)(RefPoint.x - config.car.baseHeight / 2.0) ,(int)(RefPoint.y - 3.0 * config.car.baseWdth / 10.0) };
-		C2Ref = { (int)(RefPoint.x - config.car.baseHeight / 2.0),(int)(RefPoint.y + 3.0 * config.car.baseWdth / 10.0) };
-	}
-	else if (angle >= 180 && angle < 270) {
-		C1Ref = { (int)(RefPoint.x - 3.0 * config.car.baseWdth / 10.0), (int)(RefPoint.y - config.car.baseHeight / 2.0) };
-		C2Ref = { (int)(RefPoint.x + 3.0 * config.car.baseWdth / 10.0),  (int)(RefPoint.y - config.car.baseHeight / 2.0) };
+void Car::rotate() {
+	if (*CarRotation == ROT_angle[4]) {
+		CarRotation = ROT_angle + 1;
 
 	}
-	else if (angle >= 270 && angle < 360) {
-
-		C1Ref = { (int)(RefPoint.x + config.car.baseHeight / 2.0),  (int)(RefPoint.y - 3.0 * config.car.baseWdth / 10.0) };
-		C2Ref = { (int)(RefPoint.x + config.car.baseHeight / 2.0), (int)(RefPoint.y + 3.0 * config.car.baseWdth / 10.0) };
-
-	}
-
 	else {
-
-		C1Ref = { (int)(RefPoint.x - 3.0 * config.car.baseWdth / 10.0), (int)(RefPoint.y + config.car.baseHeight / 2.0) };
-		C2Ref = { (int)(RefPoint.x + 3.0 * config.car.baseWdth / 10.0) ,  (int)(RefPoint.y + config.car.baseHeight / 2.0) };
-		angle = 0;
+		CarRotation = CarRotation + 1;
 	}
+	point new_fWRef, new_PWRef;
 
-	frontalWheel->setRefPoint(C1Ref);
-	posteriorWheel->setRefPoint(C2Ref);
+	new_fWRef.x = ((0 + (0.3 * config.car.baseWdth)) * cos(*CarRotation) - (0 + (config.car.baseHeight / 2) * sin(*CarRotation))) + RefPoint.x;
+	new_fWRef.y = ((0 + (0.3 * config.car.baseWdth)) * sin(*CarRotation) + (0 + (config.car.baseHeight / 2) * cos(*CarRotation))) + RefPoint.y;
 
-	base->rotate(deg);
-	frontalWheel->rotate(deg);
-	posteriorWheel->rotate(deg);
+	new_PWRef.x = ((0 - (0.3 * config.car.baseWdth)) * cos(*CarRotation) - (0 + (config.car.baseHeight / 2) * sin(*CarRotation))) + RefPoint.x;
+	new_PWRef.y = ((0 - (0.3 * config.car.baseWdth)) * sin(*CarRotation) + (0 + (config.car.baseHeight / 2) * cos(*CarRotation))) + RefPoint.y;
+
+	frontalWheel->setRefPoint(new_fWRef);
+	posteriorWheel->setRefPoint(new_PWRef);
+
+	base->rotate();
+	frontalWheel->rotate();
+	posteriorWheel->rotate();
 
 }
 
@@ -459,36 +421,30 @@ void IceCream::resizeDown(double factor) {
 
 }
 
-void IceCream::rotate(double deg)
+void IceCream::rotate()
 {
+	if (*IceCreamRotation == ROT_angle[4]) {
+		IceCreamRotation = ROT_angle + 1;
+
+	}
+	else {
+		IceCreamRotation = IceCreamRotation + 1;
+	}
 
 	point New_circleRef;
-	angle += 90;
+	New_circleRef.x = (0 * cos(*IceCreamRotation) - ((0 + config.icecream.baseWdth / 3) * sin(*IceCreamRotation))) + RefPoint.x;
+	New_circleRef.y = (0 * sin(*IceCreamRotation) + ((0 + config.icecream.baseWdth / 3) * cos(*IceCreamRotation))) + RefPoint.y;
 
-	if (angle >= 90 && angle < 180) {
-		New_circleRef = { (int)(RefPoint.x - config.signShape.baseWdth / 2.0) ,(int)RefPoint.y };
-	}
-	else if (angle >= 180 && angle < 270) {
-		New_circleRef = { (int)RefPoint.x,(int)(RefPoint.y - config.icecream.baseWdth / 3.0) };
-	}
-	else if (angle >= 270 && angle < 360) {
-		New_circleRef = { (int)(RefPoint.x + config.signShape.baseWdth / 2.0),(int)RefPoint.y };
-
-	}
-
-	else {
-
-		New_circleRef = { (int)RefPoint.x, (int)(RefPoint.y + config.icecream.baseWdth / 3.0) };
-		angle = 0;
-	}
 
 
 	iceCircle->setRefPoint(New_circleRef);
 
 
-	base->rotate(deg);
-	iceCircle->rotate(deg);
+	base->rotate();
+	iceCircle->rotate();
 }
+
+
 
 void IceCream::moveUp(double dist) {
 	base->moveUp(dist);
@@ -594,48 +550,40 @@ void Rocket::resizeDown(double factor) {
 	rightbase->setRefPoint(newRightBaseRefPoint);
 
 }
-void Rocket::rotate(double deg)
+void Rocket::rotate()
 {
+	if (*RocketRotation == ROT_angle[4]) {
+		RocketRotation = ROT_angle + 1;
+
+	}
+	else {
+		RocketRotation = RocketRotation + 1;
+	}
+
 	point New_headref;
 	point New_leftbaseRef;
 	point New_rightbaseRef;
-	angle += 90;
-
-	if (angle >= 90 && angle < 180) {
-		New_headref = { (int)(RefPoint.x + config.rocket.baseHeight / 2.0 + (sqrt(3) / 6.0) * config.rocket.headwdth) ,(int)RefPoint.y };
-		New_leftbaseRef = { (int)(RefPoint.x - config.rocket.baseHeight / 2.0 + config.rocket.smallbaseWdth / 3.0),(int)(RefPoint.y - config.rocket.baseWdth / 2.0) };
-		New_rightbaseRef = { (int)(RefPoint.x - config.rocket.baseHeight / 2.0 + config.rocket.smallbaseWdth / 3.0),(int)(RefPoint.y + config.rocket.baseWdth / 2.0) };
-	}
-	else if (angle >= 180 && angle < 270) {
-		New_headref = { (int)RefPoint.x, (int)(RefPoint.y + config.rocket.baseHeight / 2.0 + (sqrt(3) / 6.0) * config.rocket.headwdth) };
-		New_leftbaseRef = { (int)(RefPoint.x - config.rocket.baseWdth / 2.0), (int)(RefPoint.y - config.rocket.baseHeight / 2.0 + config.rocket.smallbaseWdth / 3.0) };
-		New_rightbaseRef = { (int)(RefPoint.x + config.rocket.baseWdth / 2.0) , (int)(RefPoint.y - config.rocket.baseHeight / 2.0 + config.rocket.smallbaseWdth / 3.0) };
-	}
-	else if (angle >= 270 && angle < 360) {
-		New_headref = { (int)(RefPoint.x - config.rocket.baseHeight / 2.0 - (sqrt(3) / 6.0) * config.rocket.headwdth) ,(int)RefPoint.y };
-		New_leftbaseRef = { (int)(RefPoint.x + config.rocket.baseHeight / 2.0 - config.rocket.smallbaseWdth / 3.0),(int)(RefPoint.y - config.rocket.baseWdth / 2.0) };
-		New_rightbaseRef = { (int)(RefPoint.x + config.rocket.baseHeight / 2.0 - config.rocket.smallbaseWdth / 3.0),(int)(RefPoint.y + config.rocket.baseWdth / 2.0) };
-	}
-
-	else {
-
-		New_headref = { (int)RefPoint.x, (int)(RefPoint.y - config.rocket.baseHeight / 2.0 - (sqrt(3) / 6.0) * config.rocket.headwdth) };
-		New_leftbaseRef = { (int)(RefPoint.x - config.rocket.baseWdth / 2.0), (int)(RefPoint.y + config.rocket.baseHeight / 2.0 - config.rocket.smallbaseWdth / 3.0) };
-		New_rightbaseRef = { (int)(RefPoint.x + config.rocket.baseWdth / 2.0) , (int)(RefPoint.y + config.rocket.baseHeight / 2.0 - config.rocket.smallbaseWdth / 3.0) };
-
-		angle = 0;
-	}
 
 
+	New_headref.x = ((0) * cos(*RocketRotation) - ((0 - config.rocket.baseHeight / 2 - (sqrt(3) / 6.0) * config.rocket.headwdth) * sin(*RocketRotation))) + RefPoint.x;
+	New_headref.y = ((0) * sin(*RocketRotation) + ((0 - config.rocket.baseHeight / 2 - (sqrt(3) / 6.0) * config.rocket.headwdth) * cos(*RocketRotation))) + RefPoint.y;
+
+	New_leftbaseRef.x = ((0 - config.rocket.baseWdth / 2) * cos(*RocketRotation) - ((0 + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3) * sin(*RocketRotation))) + RefPoint.x;
+	New_leftbaseRef.y = ((0 - config.rocket.baseWdth / 2) * sin(*RocketRotation) + ((0 + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3) * cos(*RocketRotation))) + RefPoint.y;
+
+
+	New_rightbaseRef.x = ((0 + config.rocket.baseWdth / 2) * cos(*RocketRotation) - ((0 + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3) * sin(*RocketRotation))) + RefPoint.x;
+	New_rightbaseRef.y = ((0 + config.rocket.baseWdth / 2) * sin(*RocketRotation) + ((0 + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3) * cos(*RocketRotation))) + RefPoint.y;
 
 	head->setRefPoint(New_headref);
 	liftbase->setRefPoint(New_leftbaseRef);
 	rightbase->setRefPoint(New_rightbaseRef);
 
-	rightbase->rotate(deg);
-	liftbase->rotate(deg);
-	head->rotate(deg);
-	base->rotate(deg);
+	rightbase->rotate();
+	liftbase->rotate();
+	head->rotate();
+	base->rotate();
+	door->rotate();
 }
 
 void Rocket::moveUp(double dist) {
@@ -736,44 +684,36 @@ void House::resizeDown(double factor) {
 	head->setRefPoint(newHeadRefPoint);
 }
 
-void House::rotate(double deg)
+
+void House::rotate()
 {
+
+	if (*HouseRotation == ROT_angle[4]) {
+		HouseRotation = ROT_angle + 1;
+
+	}
+	else {
+		HouseRotation = HouseRotation + 1;
+	}
+
 	point New_headRef;
 	point New_doorRef;
 
-	angle += 90;
+	New_headRef.x = ((0) * cos(*HouseRotation) - ((0 - config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth) * sin(*HouseRotation))) + RefPoint.x;
+	New_headRef.y = ((0) * sin(*HouseRotation) + ((0 - config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth) * cos(*HouseRotation))) + RefPoint.y;
 
-	if (angle >= 90 && angle < 180) {
-		New_headRef = { (int)(RefPoint.x + config.house.baseHeight / 2.0 + (sqrt(3) / 6.0) * config.house.baseWdth),(int)RefPoint.y };
-		New_doorRef = { (int)(RefPoint.x - config.house.baseHeight / 2.0 + config.house.doorhight / 2.0),(int)RefPoint.y };
-	}
-	else if (angle >= 180 && angle < 270) {
-		New_headRef = { (int)RefPoint.x, (int)(RefPoint.y + config.house.baseHeight / 2.0 + (sqrt(3) / 6.0) * config.house.headwdth) };
-		New_doorRef = { (int)RefPoint.x, (int)(RefPoint.y - config.house.baseHeight / 2.0 + config.house.doorhight / 2.0) };
-	}
-	else if (angle >= 270 && angle < 360) {
-		New_headRef = { (int)(RefPoint.x - config.house.baseHeight / 2.0 - (sqrt(3) / 6.0) * config.house.baseWdth),(int)RefPoint.y };
-		New_doorRef = { (int)(RefPoint.x + config.house.baseHeight / 2.0 - config.house.doorhight / 2.0),(int)RefPoint.y };
-
-	}
-
-	else {
-
-		New_headRef = { (int)RefPoint.x, (int)(RefPoint.y - config.house.baseHeight / 2.0 - (sqrt(3) / 6.0) * config.house.headwdth) };
-		New_doorRef = { (int)RefPoint.x, (int)(RefPoint.y + config.house.baseHeight / 2.0 - config.house.doorhight / 2.0) };
-		angle = 0;
-	}
+	New_doorRef.x = ((0) * cos(*HouseRotation) - ((0 + config.house.baseHeight / 2 - config.house.doorhight / 2) * sin(*HouseRotation))) + RefPoint.x;
+	New_doorRef.y = ((0) * sin(*HouseRotation) + ((0 + config.house.baseHeight / 2 - config.house.doorhight / 2) * cos(*HouseRotation))) + RefPoint.y;
 
 
 	head->setRefPoint(New_headRef);
 	door->setRefPoint(New_doorRef);
 
 
-	head->rotate(deg);
-	base->rotate(deg);
-	door->rotate(deg);
+	head->rotate();
+	base->rotate();
+	door->rotate();
 }
-
 void House::moveUp(double dist) {
 	base->moveUp(dist);
 	door->moveUp(dist);
