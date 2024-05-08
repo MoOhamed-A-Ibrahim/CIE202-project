@@ -13,7 +13,7 @@
 */
 
 
-class Rect:public shape
+class Rect :public shape
 {
 	double hght, wdth;	//height and width of the recangle
 public:
@@ -26,7 +26,7 @@ public:
 	double getWidth() const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	virtual void rotate();
 };
 
 
@@ -36,14 +36,14 @@ class circle :public shape
 {
 	//Add data memebrs for class circle
 	double rad;
-public:	
+public:
 	circle(game* r_pGame, point ref, double r);	//add more parameters for the constructor if needed
 	virtual void draw() const;
 	void setRadius(double radius);
 	double getRadius() const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	virtual void rotate();
 };
 
 class triangle :public shape {
@@ -56,5 +56,5 @@ public:
 	double getbase()const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
-	virtual void rotate(double deg);
+	virtual void rotate();
 };

@@ -129,3 +129,10 @@ public:
 	operMoveLeft(game* r_pGame);
 	virtual void Act();
 };
+
+class operSaveProgress : public operation
+{
+public:
+	operSaveProgress(game* r_pgame);
+	virtual void Act();
+};

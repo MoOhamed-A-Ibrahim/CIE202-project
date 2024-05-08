@@ -55,3 +55,8 @@ void shape::moveLeft(double dist) {
 
 	this->setRefPoint(newRefPoint);
 }
+
+string shape::getName() const
+{
+	return name;
+}
