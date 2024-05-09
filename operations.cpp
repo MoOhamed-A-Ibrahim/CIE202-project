@@ -223,13 +223,3 @@ void operMoveLeft::Act() {
 	currentShape->moveLeft(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
 }
-
-
-operRandomizeShapes::operRandomizeShapes(game* r_pGame) :operation(r_pGame)
-{
-}
-
-void operRandomizeShapes::Act() {
-	window* pw = pGame->getWind();
-	int currentLevel = pGame->getLevel();
-}

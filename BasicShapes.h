@@ -53,7 +53,9 @@ public:
 	triangle(game* r_pGame, point ref, double r_base);
 	virtual void draw() const;
 	void setbase(double BASE);
+	void setwidth(double Wdth);
 	double getbase()const;
+	double getwidth()const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
 	virtual void rotate();
