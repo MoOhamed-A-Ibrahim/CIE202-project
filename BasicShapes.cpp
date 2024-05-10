@@ -113,23 +113,34 @@ void triangle::setbase(double BASE)
 {
 	base = BASE;
 }
-
+void triangle::setwidth(double Wdth)
+{
+	width = Wdth;
+}
 double triangle::getbase() const
 {
 	return base;
 }
 
+double triangle::getwidth() const
+{
+	return width;
+}
+
 void triangle::resizeDown(double factor) {
 	setbase(base / factor);
+	setwidth(width / factor);
+
 }
 
 void triangle::resizeUp(double factor) {
 	setbase(base * factor);
+	setwidth(width * factor);
 }
+
 
 void triangle::rotate()
 {
-
 	int temp;
 	temp = base;
 	if (base != 0)

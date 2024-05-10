@@ -229,7 +229,7 @@ operSaveProgress::operSaveProgress(game* r_pGame) : operation(r_pGame)
 {
 }
 
-void operSaveProgress::Act() 
+void operSaveProgress::Act()
 {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
