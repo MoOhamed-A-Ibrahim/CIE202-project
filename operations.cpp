@@ -1,6 +1,7 @@
 #include "operations.h"
 #include "game.h"
 #include "CompositeShapes.h"
+#include <fstream>
 /////////////////////////////////// class operation  //////////////////
 operation::operation(game* r_pGame)
 {
@@ -222,4 +223,22 @@ void operMoveLeft::Act() {
 	shape* currentShape = pGrid->getActiveShape();
 	currentShape->moveLeft(config.gridSpacing);
 	pGrid->setActiveShape(currentShape);
+}
+
+operSaveProgress::operSaveProgress(game* r_pGame) : operation(r_pGame)
+{
+}
+
+void operSaveProgress::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape = pGrid->getActiveShape();
+	string name = currentShape->getName();
+	int level = pGame->getLevel();
+	int lives = pGame->getLives();
+	int score = pGame->getScore();
+	ofstream outfile;
+	outfile.open("Progress//Progress.txt");
+	outfile << name << endl << level << endl << lives << endl << score << endl;
+	outfile.close();
 }

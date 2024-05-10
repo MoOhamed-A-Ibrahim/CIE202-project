@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////  class Sign  ///////////////////////////////////////
 Sign::Sign(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "Sign";
 	//calc the ref point of the Sign base and top rectangles relative to the Sign shape
 	point topRef = ref;	//top rect ref is the same as the sign
 	point baseRef = { ref.x, ref.y + config.signShape.topHeight / 2 + config.signShape.baseHeight / 2 };
@@ -119,9 +120,10 @@ void Sign::resizeDown(double factor) {
 
 Tree::Tree(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "Tree";
 	point baseRef = ref;
-	point layer_1_ref = { ref.x, ref.y - config.tree.baseHeight / 2 -  config.tree.baseWdth };
-	point layer_2_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 2 *  config.tree.baseWdth };
+	point layer_1_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - config.tree.baseWdth };
+	point layer_2_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth };
 	point layer_3_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth };
 	point apple_ref = layer_3_ref;
 
@@ -170,7 +172,7 @@ void Tree::resizeUp(double factor) {
 
 	}
 	else if (*TreeRotation == ROT_angle[1]) {
-		newRefLay1.x = oldRefPoint.x + newBaseWidth /2 + newBaseHeight;
+		newRefLay1.x = oldRefPoint.x + newBaseWidth / 2 + newBaseHeight;
 		newRefLay1.y = oldRefPoint.y;
 
 		newRefLay2.x = oldRefPoint.x + newBaseWidth / 2 + 2 * newBaseHeight;
@@ -377,6 +379,7 @@ void Tree::moveLeft(double dist) {
 //////////////////////////////////////////////////////////////////////
 Car::Car(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "Car";
 	point baseRef = ref;
 	point fWRef = { ref.x + (0.3 * config.car.baseWdth), ref.y + config.car.baseHeight / 2 };
 	point PWRef = { ref.x - (0.3 * config.car.baseWdth), ref.y + config.car.baseHeight / 2 };
@@ -570,6 +573,7 @@ void Car::moveLeft(double dist) {
 ///////////////////////////////////////////
 IceCream::IceCream(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "Icecream";
 	point baseRef = ref;
 	point circleRef = { ref.x, ref.y + config.icecream.baseWdth / 3 };
 
@@ -597,11 +601,11 @@ void IceCream::resizeUp(double factor) {
 
 	if (*IceCreamRotation == ROT_angle[0] || *IceCreamRotation == ROT_angle[4]) {
 		newIceRefPoint.x = oldRefPoint.x;
-		newIceRefPoint.y = oldRefPoint.y + abs(newBaseWidth)/ 3;
+		newIceRefPoint.y = oldRefPoint.y + abs(newBaseWidth) / 3;
 	}
 	else if (*IceCreamRotation == ROT_angle[1]) {
 		newIceRefPoint.y = oldRefPoint.y;
-		newIceRefPoint.x = oldRefPoint.x - abs(newWidth)/ 3;
+		newIceRefPoint.x = oldRefPoint.x - abs(newWidth) / 3;
 	}
 	else if (*IceCreamRotation == ROT_angle[2]) {
 		newIceRefPoint.x = oldRefPoint.x;
@@ -712,6 +716,7 @@ void IceCream::moveLeft(double dist) {
 
 Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "Rocket";
 	point baseRef = ref;
 	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2 - (sqrt(3) / 6.0) * config.rocket.headwdth };
 	point leftbaseRef = { ref.x - config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
@@ -967,6 +972,7 @@ void Rocket::moveLeft(double dist) {
 
 House::House(game* r_pGame, point ref) :shape(r_pGame, ref)
 {
+	name = "House";
 	point baseRef = ref;
 	point headRef = { ref.x, ref.y - config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth };
 	point doorRef = { ref.x, ref.y + config.house.baseHeight / 2 - config.house.doorhight / 2 };

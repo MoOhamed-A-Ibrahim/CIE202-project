@@ -135,7 +135,7 @@ void triangle::resizeDown(double factor) {
 
 void triangle::resizeUp(double factor) {
 	setbase(base * factor);
-	setwidth(width*factor);
+	setwidth(width * factor);
 }
 
 

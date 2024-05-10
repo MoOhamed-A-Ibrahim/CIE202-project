@@ -80,7 +80,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		printMessage("Sign is being clicked");
 		break;
 	case ITM_Save:
-		printMessage("Save  is being clicked");
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operSaveProgress(this);
+		}		printMessage("Save is being clicked");
 		break;
 	case ITM_Enlarge:
 		if (shapesGrid->getActiveShape() != nullptr) {

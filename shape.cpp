@@ -41,7 +41,7 @@ void shape::moveDown(double dist) {
 void shape::moveRight(double dist) {
 	point oldRefPoint = this->getRefPoint();
 	point newRefPoint;
-	newRefPoint.x = oldRefPoint.x+dist;
+	newRefPoint.x = oldRefPoint.x + dist;
 	newRefPoint.y = oldRefPoint.y;
 
 	this->setRefPoint(newRefPoint);
@@ -50,8 +50,13 @@ void shape::moveRight(double dist) {
 void shape::moveLeft(double dist) {
 	point oldRefPoint = this->getRefPoint();
 	point newRefPoint;
-	newRefPoint.x = oldRefPoint.x-dist;
+	newRefPoint.x = oldRefPoint.x - dist;
 	newRefPoint.y = oldRefPoint.y;
 
 	this->setRefPoint(newRefPoint);
+}
+
+string shape::getName() const
+{
+	return name;
 }

@@ -27,6 +27,7 @@ enum ShapeType
 class shape
 {
 protected:
+	string name;
 	point RefPoint;		//Each shape must have a reference point
 	game* pGame;        //pointer to game object
 	color fillColor;	//shape fill color
@@ -41,6 +42,7 @@ public:
 	virtual void resizeDown(double factor) = 0;
 	void setRefPoint(point p);
 	point getRefPoint() const;
+	string getName() const;
 
 	virtual void moveUp(double dist);
 	virtual void moveDown(double dist);
