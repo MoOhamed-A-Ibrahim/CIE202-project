@@ -107,7 +107,6 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		op = new operRefresh(this);
 		this->clearStatusBar();
 		printMessage("Refresh is being clicked");
-		cout << "ff";
 		break;
 	case ITM_Select:
 		op = new operSelectLevel(this);
