@@ -1,6 +1,7 @@
 //Header file for Basic shapes in the game
 #pragma once
 #include "shape.h"
+#include"gameConfig.h"
 
 ////////////////////////////////////////////////////  class Rect  ///////////////////////////////////////
 //Rectanle class
@@ -18,7 +19,7 @@ class Rect :public shape
 	double hght, wdth;	//height and width of the recangle
 public:
 
-	Rect(game* r_pGame, point ref, double r_hght, double r_wdth);
+	Rect(game* r_pGame, point ref, double r_hght, double r_wdth, color cFill = config.fillColor, color cBorder = config.penColor);
 	virtual void draw() const;
 	void setHeight(double height);
 	void setWidth(double width);
@@ -37,7 +38,7 @@ class circle :public shape
 	//Add data memebrs for class circle
 	double rad;
 public:
-	circle(game* r_pGame, point ref, double r);	//add more parameters for the constructor if needed
+	circle(game* r_pGame, point ref, double r, color cFill= config.fillColor, color cBorder= config.penColor);	//add more parameters for the constructor if needed
 	virtual void draw() const;
 	void setRadius(double radius);
 	double getRadius() const;
@@ -50,7 +51,7 @@ class triangle :public shape {
 	double base;
 	double width;
 public:
-	triangle(game* r_pGame, point ref, double r_base);
+	triangle(game* r_pGame, point ref, double r_base, color cFill = config.fillColor, color cBorder = config.penColor);
 	virtual void draw() const;
 	void setbase(double BASE);
 	void setwidth(double Wdth);

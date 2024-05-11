@@ -10,9 +10,10 @@ class game
 {
 
 	/// Add more members if needed
-	static int lives;
-	static int score;
-	static int level;
+	 int lives=5;
+	 int score=0;
+	 int level=1;
+	 bool isRandomized=0;
 	toolbar* gameToolbar;
 
 	window* pWind;	//Pointer to the CMU graphics window
@@ -36,12 +37,15 @@ public:
 	operation* createRequiredOperation(toolbarItem clickedItem);
 
 	void run();	//start the game
-	static int getLevel();
-	static int getLives();
-	static int getScore();
+	 int getLevel()const;
+	 int getLives()const;
+	 int getScore()const;
 
-	static void setLives(int lvs);
-	static void setScore(int sc);
-	static void setLevel(int lvl);
-
+	 void setLives(int lvs);
+	 void setScore(int sc);
+	 void setLevel(int lvl);
+	
+	 bool getRandomizationStatus();
+	
+	 void setRandomizationStatus(bool val);
 };

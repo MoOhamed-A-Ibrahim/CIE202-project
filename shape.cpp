@@ -8,6 +8,8 @@ shape::shape(game* r_pGame, point ref)
 	pGame = r_pGame;
 	fillColor = config.fillColor;
 	borderColor = config.penColor;
+	angle = 0;
+	size=1;
 }
 
 void shape::setRefPoint(point p)
@@ -59,4 +61,36 @@ void shape::moveLeft(double dist) {
 string shape::getName() const
 {
 	return name;
+}
+
+color shape::getFillColor() const {
+	return fillColor;
+}
+
+void shape::setFillColor(color newColor) {
+	fillColor = newColor;
+}
+
+color shape::getBorderColor() const {
+	return borderColor;
+}
+
+void shape::setBorderColor(color newColor) {
+	borderColor = newColor;
+}
+
+double shape::getSize() const {
+	return size;
+}
+
+void shape::setSize(double newSize) {
+	size = newSize;
+}
+
+double shape::getAngle() const {
+	return size;
+}
+
+void shape::setAngle(double newSize) {
+	size = newSize;
 }

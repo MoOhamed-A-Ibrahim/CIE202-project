@@ -4,18 +4,21 @@
 
 ////////////////////////////////////////////////////  class Rect  ///////////////////////////////////////
 
-Rect::Rect(game* r_pGame, point ref, double r_hght, double r_wdth) :shape(r_pGame, ref)
+Rect::Rect(game* r_pGame, point ref, double r_hght, double r_wdth, color cFill, color cBorder) :shape(r_pGame, ref)
 {
 	pGame = r_pGame;
 	hght = r_hght;
 	wdth = r_wdth;
+	fillColor = cFill;
+	borderColor = cBorder;
+
 }
 
 void Rect::draw() const
 {
 	window* pW = pGame->getWind();	//get interface window
-	pW->SetPen(config.penColor, config.penWidth);
-	pW->SetBrush(config.fillColor);
+	pW->SetPen(borderColor, config.penWidth);
+	pW->SetBrush(fillColor);
 	point upperLeft, lowerBottom;
 	upperLeft.x = RefPoint.x - wdth / 2;
 	upperLeft.y = RefPoint.y - hght / 2;
@@ -39,10 +42,12 @@ double Rect::getWidth() const {
 void Rect::resizeUp(double factor) {
 	setHeight(hght * factor);
 	setWidth(wdth * factor);
+
 }
 void Rect::resizeDown(double factor) {
 	setHeight(hght / factor);
 	setWidth(wdth / factor);
+
 }
 void Rect::rotate()
 {
@@ -57,9 +62,11 @@ void Rect::rotate()
 
 ////////////////////////////////////////////////////  class circle  ///////////////////////////////////////
 //TODO: Add implementation for class circle here
-circle::circle(game* r_pGame, point ref, double r) :shape(r_pGame, ref)
+circle::circle(game* r_pGame, point ref, double r, color cFill, color cBorder) :shape(r_pGame, ref)
 {
 	rad = r;
+	fillColor = cFill;
+	borderColor = cBorder;
 }
 
 void circle::draw() const
@@ -86,18 +93,20 @@ void circle::rotate()
 
 }
 ///Triangle class///////
-triangle::triangle(game* r_pGame, point ref, double r_base) :shape(r_pGame, ref)
+triangle::triangle(game* r_pGame, point ref, double r_base, color cFill, color cBorder) :shape(r_pGame, ref)
 {
 	base = r_base;
 	width = 0;
+	fillColor = cFill;
+	borderColor = cBorder;
 
 }
 
 void triangle::draw() const
 {
 	window* pW = pGame->getWind();	//get interface window
-	pW->SetPen(config.penColor, config.penWidth);
-	pW->SetBrush(config.fillColor);
+	pW->SetPen(borderColor, config.penWidth);
+	pW->SetBrush(fillColor);
 	point upperpoint, leftlowerpoint, rightlowerpoint; /// refrence point is centriod 
 	leftlowerpoint.x = RefPoint.x - 0.5 * base - (sqrt(3) / 6.0) * width;
 	leftlowerpoint.y = RefPoint.y + (sqrt(3) / 6.0) * base - 0.5 * width;

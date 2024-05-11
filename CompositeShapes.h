@@ -29,7 +29,7 @@ class Sign :public shape
 
 
 public:
-	Sign(game* r_pGame, point ref);
+	Sign(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);
@@ -50,7 +50,7 @@ class Tree :public shape
 	circle* apple;
 	double* TreeRotation = ROT_angle;
 public:
-	Tree(game* r_pGame, point ref);
+	Tree(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);
@@ -69,7 +69,7 @@ class Car :public shape
 	circle* frontalWheel, * posteriorWheel;
 	double* CarRotation = ROT_angle;
 public:
-	Car(game* r_pGame, point ref);
+	Car(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);
@@ -88,7 +88,7 @@ class IceCream :public shape
 	circle* iceCircle;
 	double* IceCreamRotation = ROT_angle;
 public:
-	IceCream(game* r_pGame, point ref);
+	IceCream(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);
@@ -108,7 +108,7 @@ class Rocket :public shape
 	circle* door;
 	double* RocketRotation = ROT_angle;
 public:
-	Rocket(game* r_pGame, point ref);
+	Rocket(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);
@@ -127,7 +127,7 @@ class House :public shape
 	triangle* head;
 	double* HouseRotation = ROT_angle;
 public:
-	House(game* r_pGame, point ref);
+	House(game* r_pGame, point ref, double cSize = 1, double cAngle = angleArr[0], color cFill = config.fillColor, color cBorder = config.penColor);
 	void draw() const;
 
 	void resizeUp(double factor);

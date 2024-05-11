@@ -10,18 +10,6 @@ struct point
 	int x, y;
 };
 
-enum ShapeType
-{
-	//Basic shapes
-	RCT,	//rectangle
-	CRC,	//circle
-	TRI,	//triangle
-
-	//Composite shapes
-	SIGN,	//a street sign
-
-	//TODO: Add more types
-};
 
 //Base class for all shapes including Basic shapes, Composite shapes
 class shape
@@ -34,6 +22,8 @@ protected:
 	color borderColor;	//shape border color
 	double PI_Value = 22.0 / 7.0;
 	double ROT_angle[5] = { 0,  PI_Value / 2.0,  PI_Value, 3.0 * PI_Value / 2.0, 2.0 * PI_Value };
+	double size;
+	double angle;
 
 public:
 	shape(game* r_pGame, point ref);
@@ -49,6 +39,17 @@ public:
 	virtual void moveRight(double dist);
 	virtual void moveLeft(double dist);
 
+	color getFillColor() const;
+	void setFillColor(color newColor);
+
+	color getBorderColor() const;
+	void setBorderColor(color newColor);
+
+	double getSize() const;
+	void setSize(double newSize);
+
+	double getAngle()const;
+	void setAngle(double ang);
 
 	//-- The following functions should be supported by the shape class
 	//-- It should be overridden by each inherited shape

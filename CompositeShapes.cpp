@@ -1,19 +1,43 @@
 #include "CompositeShapes.h"
 #include "gameConfig.h"
+#include<iostream>
+using namespace std;
 
 ////////////////////////////////////////////////////  class Sign  ///////////////////////////////////////
-Sign::Sign(game* r_pGame, point ref) :shape(r_pGame, ref)
+Sign::Sign(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	size = cSize;
+	angle = cAngle;
 	name = "Sign";
+	double resizeFactor;
 	//calc the ref point of the Sign base and top rectangles relative to the Sign shape
 	point topRef = ref;	//top rect ref is the same as the sign
 	point baseRef = { ref.x, ref.y + config.signShape.topHeight / 2 + config.signShape.baseHeight / 2 };
 
 
-	top = new Rect(pGame, topRef, config.signShape.topHeight, config.signShape.topWdth);
-	base = new Rect(pGame, baseRef, config.signShape.baseHeight, config.signShape.baseWdth);
+	top = new Rect(pGame, topRef, config.signShape.topHeight, config.signShape.topWdth, cFill, cBorder);
+	base = new Rect(pGame, baseRef, config.signShape.baseHeight, config.signShape.baseWdth, cFill, cBorder);
 
-
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
 }
 void Sign::draw() const
 {
@@ -43,6 +67,7 @@ void Sign::rotate()
 	baseRef.y = (0 * sin(*SignRotation) + ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * cos(*SignRotation))) + oldRefPoint.y;
 
 	base->setRefPoint(baseRef);
+	angle = *SignRotation;
 }
 
 void Sign::moveUp(double dist) {
@@ -89,6 +114,7 @@ void Sign::resizeUp(double factor) {
 
 	base->setRefPoint(newRefBase);
 
+	size *= factor;
 }
 
 void Sign::resizeDown(double factor) {
@@ -112,26 +138,53 @@ void Sign::resizeDown(double factor) {
 
 	base->setRefPoint(newRefBase);
 
+	size /= factor;
+
 }
 
 
 
 ////////////////////////////////////////////////////////////////
 
-Tree::Tree(game* r_pGame, point ref) :shape(r_pGame, ref)
+Tree::Tree(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	angle = cAngle;
+	size = cSize;
 	name = "Tree";
+	double resizeFactor;
 	point baseRef = ref;
 	point layer_1_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - config.tree.baseWdth };
 	point layer_2_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 2 * config.tree.baseWdth };
 	point layer_3_ref = { ref.x, ref.y - config.tree.baseHeight / 2 - 3 * config.tree.baseWdth };
 	point apple_ref = layer_3_ref;
 
-	base = new Rect(pGame, baseRef, config.tree.baseHeight, config.tree.baseWdth);
-	Layer_1 = new triangle(pGame, layer_1_ref, config.tree.triwdth);
-	Layer_2 = new triangle(pGame, layer_2_ref, config.tree.triwdth);
-	layer_3 = new triangle(pGame, layer_3_ref, config.tree.triwdth);
-	apple = new circle(pGame, apple_ref, config.tree.apple);
+	base = new Rect(pGame, baseRef, config.tree.baseHeight, config.tree.baseWdth, cFill, cBorder);
+	Layer_1 = new triangle(pGame, layer_1_ref, config.tree.triwdth, cFill, cBorder);
+	Layer_2 = new triangle(pGame, layer_2_ref, config.tree.triwdth, cFill, cBorder);
+	layer_3 = new triangle(pGame, layer_3_ref, config.tree.triwdth, cFill, cBorder);
+	apple = new circle(pGame, apple_ref, config.tree.apple, cFill, cBorder);
+
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
+
 }
 
 void Tree::draw() const
@@ -209,6 +262,8 @@ void Tree::resizeUp(double factor) {
 	Layer_2->setRefPoint(newRefLay2);
 	layer_3->setRefPoint(newRefLay3);
 	apple->setRefPoint(newRefLay3);
+	size *= factor;
+
 }
 
 
@@ -280,6 +335,8 @@ void Tree::resizeDown(double factor) {
 	Layer_2->setRefPoint(newRefLay2);
 	layer_3->setRefPoint(newRefLay3);
 	apple->setRefPoint(newRefLay3);
+	size /= factor;
+
 }
 
 void Tree::rotate()
@@ -340,6 +397,8 @@ void Tree::rotate()
 	Layer_1->setRefPoint(bottomRef);
 	layer_3->setRefPoint(topRef);
 	apple->setRefPoint(topRef);
+
+	angle = *TreeRotation;
 }
 
 
@@ -377,16 +436,42 @@ void Tree::moveLeft(double dist) {
 	apple->moveLeft(dist);
 }
 //////////////////////////////////////////////////////////////////////
-Car::Car(game* r_pGame, point ref) :shape(r_pGame, ref)
+Car::Car(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	angle = cAngle;
+	size = cSize;
 	name = "Car";
+	double resizeFactor;
 	point baseRef = ref;
 	point fWRef = { ref.x + (0.3 * config.car.baseWdth), ref.y + config.car.baseHeight / 2 };
 	point PWRef = { ref.x - (0.3 * config.car.baseWdth), ref.y + config.car.baseHeight / 2 };
 
-	base = new Rect(pGame, baseRef, config.car.baseHeight, config.car.baseWdth);
-	frontalWheel = new circle(pGame, fWRef, config.car.wheelRadius);
-	posteriorWheel = new circle(pGame, PWRef, config.car.wheelRadius);
+	base = new Rect(pGame, baseRef, config.car.baseHeight, config.car.baseWdth, cFill, cBorder);
+	frontalWheel = new circle(pGame, fWRef, config.car.wheelRadius, cFill, cBorder);
+	posteriorWheel = new circle(pGame, PWRef, config.car.wheelRadius, cFill, cBorder);
+
+
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
+
 }
 
 void Car::draw() const
@@ -440,6 +525,7 @@ void Car::resizeUp(double factor) {
 	}
 	frontalWheel->setRefPoint(newFrontRefPoint);
 	posteriorWheel->setRefPoint(newPostRefPoint);
+	size *= 2;
 }
 
 
@@ -497,6 +583,7 @@ void Car::resizeDown(double factor) {
 	}
 	frontalWheel->setRefPoint(newFrontRefPoint);
 	posteriorWheel->setRefPoint(newPostRefPoint);
+	size /= 2;
 
 }
 
@@ -542,6 +629,7 @@ void Car::rotate() {
 	frontalWheel->setRefPoint(new_fWRef);
 	posteriorWheel->setRefPoint(new_PWRef);
 
+	angle = *CarRotation;
 
 }
 
@@ -571,14 +659,39 @@ void Car::moveLeft(double dist) {
 
 
 ///////////////////////////////////////////
-IceCream::IceCream(game* r_pGame, point ref) :shape(r_pGame, ref)
+IceCream::IceCream(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	angle = cAngle;
+	size = cSize;
 	name = "Icecream";
+	double resizeFactor;
 	point baseRef = ref;
 	point circleRef = { ref.x, ref.y + config.icecream.baseWdth / 3 };
 
-	base = new triangle(pGame, baseRef, config.icecream.baseWdth);
-	iceCircle = new circle(pGame, circleRef, config.icecream.baseWdth / 2.17);
+	base = new triangle(pGame, baseRef, config.icecream.baseWdth, cFill, cBorder);
+	iceCircle = new circle(pGame, circleRef, config.icecream.baseWdth / 2.17, cFill, cBorder);
+
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
+
 }
 
 void IceCream::draw() const
@@ -618,6 +731,8 @@ void IceCream::resizeUp(double factor) {
 
 
 	iceCircle->setRefPoint(newIceRefPoint);
+	size*= 2;
+	angle = *IceCreamRotation;
 
 }
 void IceCream::resizeDown(double factor) {
@@ -651,6 +766,9 @@ void IceCream::resizeDown(double factor) {
 
 
 	iceCircle->setRefPoint(newIceRefPoint);
+	size /= 2;
+
+	angle = *IceCreamRotation;
 
 }
 void IceCream::rotate()
@@ -714,19 +832,44 @@ void IceCream::moveLeft(double dist) {
 
 ////////////////////////////////////////////
 
-Rocket::Rocket(game* r_pGame, point ref) :shape(r_pGame, ref)
+Rocket::Rocket(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	angle = cAngle;
+	size = cSize;
 	name = "Rocket";
+	double resizeFactor;
 	point baseRef = ref;
 	point headref = { ref.x, ref.y - config.rocket.baseHeight / 2 - (sqrt(3) / 6.0) * config.rocket.headwdth };
 	point leftbaseRef = { ref.x - config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
 	point rightbaseRef = { ref.x + config.rocket.baseWdth / 2 , ref.y + config.rocket.baseHeight / 2 - config.rocket.smallbaseWdth / 3 };
 
-	base = new Rect(pGame, baseRef, config.rocket.baseHeight, config.rocket.baseWdth);
-	head = new triangle(pGame, headref, config.rocket.headwdth);
-	liftbase = new triangle(pGame, leftbaseRef, config.rocket.smallbaseWdth);
-	rightbase = new triangle(pGame, rightbaseRef, config.rocket.smallbaseWdth);
-	door = new circle(pGame, baseRef, config.rocket.door);
+	base = new Rect(pGame, baseRef, config.rocket.baseHeight, config.rocket.baseWdth, cFill, cBorder);
+	head = new triangle(pGame, headref, config.rocket.headwdth, cFill, cBorder);
+	liftbase = new triangle(pGame, leftbaseRef, config.rocket.smallbaseWdth, cFill, cBorder);
+	rightbase = new triangle(pGame, rightbaseRef, config.rocket.smallbaseWdth, cFill, cBorder);
+	door = new circle(pGame, baseRef, config.rocket.door, cFill, cBorder);
+
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
+
 }
 
 void Rocket::draw() const
@@ -803,6 +946,7 @@ void Rocket::resizeUp(double factor) {
 	head->setRefPoint(newHeadRefPoint);
 	liftbase->setRefPoint(newLeftBaseRefPoint);
 	rightbase->setRefPoint(newRightBaseRefPoint);
+	size *= 2;
 
 }
 void Rocket::resizeDown(double factor) {
@@ -871,6 +1015,7 @@ void Rocket::resizeDown(double factor) {
 	liftbase->setRefPoint(newLeftBaseRefPoint);
 	rightbase->setRefPoint(newRightBaseRefPoint);
 
+	size /= 2;
 }
 void Rocket::rotate()
 {
@@ -932,6 +1077,9 @@ void Rocket::rotate()
 	head->setRefPoint(New_headref);
 	liftbase->setRefPoint(New_leftbaseRef);
 	rightbase->setRefPoint(New_rightbaseRef);
+
+	angle = *RocketRotation;
+
 }
 
 void Rocket::moveUp(double dist) {
@@ -970,16 +1118,40 @@ void Rocket::moveLeft(double dist) {
 
 ///////////////////////////////////////////////////
 
-House::House(game* r_pGame, point ref) :shape(r_pGame, ref)
+House::House(game* r_pGame, point ref, double cSize, double cAngle, color cFill, color cBorder) :shape(r_pGame, ref)
 {
+	angle = cAngle;
+	size = cSize;
 	name = "House";
+	double resizeFactor;
 	point baseRef = ref;
 	point headRef = { ref.x, ref.y - config.house.baseHeight / 2 - (sqrt(3) / 6.0) * config.house.baseWdth };
 	point doorRef = { ref.x, ref.y + config.house.baseHeight / 2 - config.house.doorhight / 2 };
 
-	base = new Rect(pGame, baseRef, config.house.baseHeight, config.house.baseWdth);
-	door = new Rect(pGame, doorRef, config.house.doorhight, config.house.doorwdth);
-	head = new triangle(pGame, headRef, config.house.headwdth);
+	base = new Rect(pGame, baseRef, config.house.baseHeight, config.house.baseWdth, cFill, cBorder);
+	door = new Rect(pGame, doorRef, config.house.doorhight, config.house.doorwdth, cFill, cBorder);
+	head = new triangle(pGame, headRef, config.house.headwdth, cFill, cBorder);
+
+	if (size < 1) {
+		resizeFactor = 1 / size;
+		this->resizeDown(resizeFactor);
+	}
+	else if (size > 1) {
+		resizeFactor = size;
+		this->resizeUp(resizeFactor);
+	}
+	if (angle == angleArr[1]) {
+		this->rotate();
+	}
+	else if (angle == angleArr[2]) {
+		this->rotate();
+		this->rotate();
+	}
+	else if (angle == angleArr[3]) {
+		this->rotate();
+		this->rotate();
+		this->rotate();
+	}
 }
 
 void House::draw() const
@@ -1042,6 +1214,8 @@ void House::resizeUp(double factor) {
 	door->setRefPoint(newDoorRefPoint);
 	head->setRefPoint(newHeadRefPoint);
 
+	size *= 2;
+
 }
 void House::resizeDown(double factor) {
 	point oldRefPoint = base->getRefPoint();
@@ -1095,6 +1269,7 @@ void House::resizeDown(double factor) {
 	door->setRefPoint(newDoorRefPoint);
 	head->setRefPoint(newHeadRefPoint);
 
+	size /= 2;
 }
 
 
@@ -1139,6 +1314,8 @@ void House::rotate()
 	}
 	head->setRefPoint(New_headRef);
 	door->setRefPoint(New_doorRef);
+
+	angle = *HouseRotation;
 
 }
 void House::moveUp(double dist) {

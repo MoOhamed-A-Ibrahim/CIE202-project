@@ -99,6 +99,15 @@ public:
 
 };
 
+class operRefresh : public operation
+{
+public:
+	operRefresh(game* r_pGame);
+	virtual void Act();
+
+
+};
+
 
 class operMoveUp : public operation
 {
@@ -133,5 +142,19 @@ class operSaveProgress : public operation
 {
 public:
 	operSaveProgress(game* r_pgame);
+	virtual void Act();
+};
+
+class operRandomizeShapes :public operation
+{
+public:
+	operRandomizeShapes(game* r_pgame);
+	virtual void Act();
+};
+
+class operSelectLevel :public operation
+{
+public:
+	operSelectLevel(game* r_pgame);
 	virtual void Act();
 };

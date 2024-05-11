@@ -4,9 +4,7 @@
 using namespace std;
 
 
-int game::lives = 5;
-int game::score = 0;
-int game::level = 1;
+
 
 game::game()
 {
@@ -19,7 +17,8 @@ game::game()
 
 	//Create and draw the grid
 	createGrid();
-	shapesGrid->draw();	//draw the grid and all shapes it contains.
+	shapesGrid->drawGrid();	//draw the grid and all shapes it contains.
+	shapesGrid->drawActiveShape();
 
 	//Create and clear the status bar
 	clearStatusBar();
@@ -49,7 +48,8 @@ void game::clearStatusBar() const
 	pWind->SetPen(config.statusBarColor, 1);
 	pWind->SetBrush(config.statusBarColor);
 	pWind->DrawRectangle(0, config.windHeight - config.statusBarHeight, config.windWidth, config.windHeight);
-	trackLives();
+
+	this->trackLives();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,12 +101,16 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 	case ITM_Rotate:
 		if (shapesGrid->getActiveShape() != nullptr) {
 			op = new operRotate(this);
-		}		printMessage("Rotate is being clicked");
+		}	printMessage("Rotates is being clicked");
 		break;
 	case ITM_Refresh:
+		op = new operRefresh(this);
+		this->clearStatusBar();
 		printMessage("Refresh is being clicked");
+		cout << "ff";
 		break;
 	case ITM_Select:
+		op = new operSelectLevel(this);
 		printMessage("Select is being clicked");
 		break;
 	case ITM_Trash:
@@ -161,11 +165,14 @@ void game::printMessage(string msg) const	//Prints a message on status bar
 }
 
 void game::trackLives() const {
-
-	string msg = "Lives = "+to_string(lives)+" \nScore = "+to_string(score)+" \nLevel = "+to_string(level);
+	int currentLives = this->getLives();
+	int currentLvl = this->getLevel();
+	int currentScore = this->getScore();
+	string msg = "Lives = "+to_string(currentLives)+" \nScore = "+to_string(currentScore)+" \nLevel = "+to_string(currentLvl);
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(config.windWidth-250, config.windHeight - (int)(0.85 * config.statusBarHeight), msg);
+
 }
 
 
@@ -217,12 +224,17 @@ void game::run()
 	int x, y;
 	bool isExit = false;
 	operation* op;
+	operation* op2;
 	char keyPressed;
 	//Change the title
 	pWind->ChangeTitle("- - - - - - - - - - SHAPE HUNT (CIE 101 / CIE202 - project) - - - - - - - - - -");
 	toolbarItem clickedItem=ITM_CNT;
+
 	do
 	{
+		op2 = new operRandomizeShapes(this);
+		op2->Act();
+
 		pWind->GetKeyPress(keyPressed);
 		if (shapesGrid->getActiveShape() != nullptr) {
 			if (keyPressed) {
@@ -230,25 +242,22 @@ void game::run()
 					printMessage("ARROW_UP/W is being clicked");
 					op = new operMoveUp(this);
 					op->Act();
-					shapesGrid->draw();
 				}
 				else if (keyPressed == 2 || keyPressed == 's') {
 					printMessage("ARROW_DOWN/S is being clicked");
 					op = new operMoveDown(this);
 					op->Act();
-					shapesGrid->draw();
 				}
 				else if (keyPressed == 6 || keyPressed == 'd') {
 					printMessage("ARROW_RIGHT/D is being clicked");
 					op = new operMoveRight(this);
 					op->Act();
-					shapesGrid->draw();
 				}
 				else if (keyPressed == 4 || keyPressed == 'a') {
 					printMessage("ARROW_LEFT/A is being clicked");
 					op = new operMoveLeft(this);
 					op->Act();
-					shapesGrid->draw();
+
 				}
 
 			}
@@ -269,22 +278,23 @@ void game::run()
 				op->Act();
 
 			//4-Redraw the grid after each action
-			shapesGrid->draw();
-
+			shapesGrid->drawGrid();
+			shapesGrid->drawActiveShape();
+			shapesGrid->drawLevelShapes();
 		}	
 
 	} while (clickedItem!=ITM_EXIT);
 }
 
-int game::getLives() {
+int game::getLives()const {
 	return lives;
 }
 
-int game::getScore() {
+int game::getScore()const {
 	return score;
 }
 
-int game::getLevel() {
+int game::getLevel()const {
 	return level;
 }
 
@@ -296,4 +306,12 @@ void game::setScore(int sc) {
 }
 void game::setLevel(int lvl) {
 	level = lvl;
+}
+
+bool game::getRandomizationStatus() {
+	return isRandomized;
+}
+
+void game::setRandomizationStatus(bool val) {
+	isRandomized = val;
 }

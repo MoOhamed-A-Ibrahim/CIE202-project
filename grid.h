@@ -18,17 +18,28 @@ class grid
 
 	int shapeCount;		//current number of shapes in the list
 	game* pGame;
+	point** gridPoints;
 public:
 	grid(point r_uprleft, int r_width, int r_height, game* r_pGame);
 	~grid();
-	void draw() const;
+	//void draw() const;
+	void drawGrid()const;
+	void drawActiveShape()const;
+	void drawLevelShapes()const;
 	void clearGridArea() const;
 	bool addShape(shape* newShape);
 	void setActiveShape(shape* actShape);
-
+	int getShapeCount()const;
+	void setShapeCount(int s);
+	int getMaxShapeCount()const;
 	/////////
 	void DELshapes(); // Delete the grid
 	shape* getActiveShape();  // pointer to
+	bool isShapeListEmpty();
+	void nullifyShapeList();
+	point getRandomGridPoint();
+
+	point** getGridPoints() const;
 };
 
 

@@ -1,6 +1,10 @@
 #include "grid.h"
 #include "game.h"
 #include "gameConfig.h"
+#include<cstdlib>
+#include<time.h>
+#include <algorithm>
+#include<iostream>
 
 
 grid::grid(point r_uprleft, int wdth, int hght, game* pG)
@@ -18,37 +22,84 @@ grid::grid(point r_uprleft, int wdth, int hght, game* pG)
 
 	activeShape = nullptr;
 
+	gridPoints = new point * [rows];
+
+	for (int r = 0; r < rows; r++) {
+		gridPoints[r] = new point[cols];
+
+		for (int c = 0; c < cols; c++) {
+			int x = c * config.gridSpacing;
+			int y = r * config.gridSpacing + uprLeft.y;
+
+			gridPoints[r][c].x = x;
+			gridPoints[r][c].y = y;
+		}
+	}
 }
 
 grid::~grid()
 {
-	for (int i = 0; i < shapeCount; i++)
+	for (int i = 0; i < shapeCount; i++) {
 		delete shapeList[i];
+	}
+	for (int i = 0; i < rows; i++) {
+		delete[] gridPoints[i];
+	}
+	delete[] gridPoints;
+
+}
+//
+//void grid::draw() const
+//{
+//	clearGridArea();
+//	window* pWind = pGame->getWind();
+//	
+//	pWind->SetPen(config.gridDotsColor,1);
+//	pWind->SetBrush(config.gridDotsColor);
+//
+//	//draw dots showing the grid reference points
+//	for (int r = 1; r < rows; r++)
+//		for (int c = 0; c < cols; c++)
+//			pWind->DrawCircle(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y, 1);
+//			//pWind->DrawPixel(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y);
+//
+//	//Draw ALL shapes
+//	for (int i = 0; i < shapeCount; i++)
+//			if (shapeList[i])
+//				shapeList[i]->draw();	//draw each shape
+//
+//	//Draw the active shape
+//	if(activeShape)
+//		activeShape->draw();
+//}
+
+void grid::drawActiveShape()const {
+	if (activeShape)
+		activeShape->draw();
 }
 
-void grid::draw() const
-{
+void grid::drawLevelShapes()const {
+//Draw ALL shapes
+	for (int i = 0; i < shapeCount; i++)
+		if (shapeList[i])
+			shapeList[i]->draw();	//draw each shape
+}
+
+void grid::drawGrid()const {
 	clearGridArea();
 	window* pWind = pGame->getWind();
-	
-	pWind->SetPen(config.gridDotsColor,1);
+
+	pWind->SetPen(config.gridDotsColor, 1);
 	pWind->SetBrush(config.gridDotsColor);
 
 	//draw dots showing the grid reference points
 	for (int r = 1; r < rows; r++)
 		for (int c = 0; c < cols; c++)
 			pWind->DrawCircle(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y, 1);
-			//pWind->DrawPixel(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y);
-
-	//Draw ALL shapes
-	for (int i = 0; i < shapeCount; i++)
-			if (shapeList[i])
-				shapeList[i]->draw();	//draw each shape
-
-	//Draw the active shape
-	if(activeShape)
-		activeShape->draw();
+	//pWind->DrawPixel(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y);
 }
+
+
 
 void grid::clearGridArea() const
 {
@@ -61,14 +112,18 @@ void grid::clearGridArea() const
 //Adds a shape to the randomly created shapes list.
 bool grid::addShape(shape* newShape)
 {
+	bool val = false;
 	//TODO:
 	// 1- Check that the shape can be drawn witout being clipped by grid boundaries
 	// 2- check shape count doesn't exceed maximum count
 	// return false if any of the checks fail
-	
+
+	if (shapeCount < MaxShapeCount) {
+		val = true;
+		shapeList[shapeCount++] = newShape;
+	}
 	//Here we assume that the above checks are passed
-	shapeList[shapeCount++] = newShape;
-	return true;
+	return val;
 }
 
 void grid::setActiveShape(shape* actShape)
@@ -82,11 +137,52 @@ shape* grid::getActiveShape()
 }
 
 
+point grid::getRandomGridPoint() {
+	srand(time(nullptr) + rand());
+	int x = rand() % rows;
+	int y = rand() % cols;
+
+	point randomGrid= gridPoints[x][y];
+	return randomGrid;
+
+}
+
+
+
 void grid::DELshapes()
 {
 	if (activeShape != nullptr) {
 		delete activeShape; // after deltete(dangling)
 		activeShape = nullptr;// activeShape(pointer)=nullptr
-		draw();// call again
+		drawGrid();// call again
 	}
 }
+
+void grid::setShapeCount(int s) {
+	shapeCount = s;
+}
+
+int grid::getShapeCount()const {
+	return shapeCount;
+}
+
+
+int grid::getMaxShapeCount()const {
+	return MaxShapeCount;
+}
+
+bool grid::isShapeListEmpty() {
+	bool val = true;
+	for (int i = 0; i < shapeCount; ++i) {
+		if (shapeList[i] != nullptr) {
+			val= false;
+		}
+	}
+	return val; 
+}
+void grid::nullifyShapeList(){
+	for (int i = 0; i < MaxShapeCount; ++i) {
+		shapeList[i] = nullptr; // Set each element to nullptr
+	}
+}
+
