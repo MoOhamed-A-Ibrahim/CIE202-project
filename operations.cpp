@@ -316,14 +316,80 @@ void operSaveProgress::Act()
 {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
-	string name = currentShape->getName();
 	int level = pGame->getLevel();
 	int lives = pGame->getLives();
 	int score = pGame->getScore();
-	ofstream outfile;
-	outfile.open("Progress//Progress.txt");
-	outfile << name << endl << level << endl << lives << endl << score << endl;
-	outfile.close();
+	point refpoint;
+	string name;
+	int intgerName;
+	int bCB;
+	int bCG;
+	int bCR;
+	int fCB;
+	int fCG;
+	int fCR;
+	int pointx;
+	int pointy;
+	int angle;
+	int size;
+	
+
+	ofstream File;
+	File.open("Progress//Progress.txt");
+	File << level << " " << lives << " " << score << endl;
+	if (currentShape)
+	{
+
+		name = currentShape->getName();
+		intgerName = int(name[0]);
+		refpoint = currentShape->getRefPoint();
+		pointx = refpoint.x;
+		pointy = refpoint.y;
+		angle = currentShape->getAngle();
+		bCB = currentShape->getBorderColor().ucBlue;
+		bCG = currentShape->getBorderColor().ucGreen;
+		bCR = currentShape->getBorderColor().ucRed;
+		fCB = currentShape->getFillColor().ucBlue;
+		fCG = currentShape->getFillColor().ucGreen;
+		fCR = currentShape->getFillColor().ucRed;
+		size = currentShape->getSize();
+
+		File << pointx << " " << pointy << " " << size << " " << angle << " "
+			<< fCR << " " << fCG << " " << fCB << " "
+			<< bCR << " " << bCG << " " << bCB << endl;
+
+	}
+	else
+	{
+		File << 00000000000000000000000 << endl;
+	}
+
+
+
+	//shape** Array =  pGrid->getArrayElements();
+	//for (int i = 0; i < pGrid->getShapeCount(); i++)
+	//{
+
+	//	name = Array[i]->getName();
+	//	intgerName = int(name[0]);
+	//	refpoint = Array[i]->getRefPoint();
+	//	pointx = refpoint.x;
+	//	pointy = refpoint.y;
+	//	angle = Array[i]->getAngle();
+	//	bCB = Array[i]->getBorderColor().ucBlue;
+	//	bCG = Array[i]->getBorderColor().ucGreen;
+	//	bCR = Array[i]->getBorderColor().ucRed;
+	//	fCB = Array[i]->getFillColor().ucBlue;
+	//	fCG = Array[i]->getFillColor().ucGreen;
+	//	fCR = Array[i]->getFillColor().ucRed;
+	//	size = Array[i]->getSize();
+
+	//	File << pointx << " " << pointy << " " << size << " " << angle << " "
+	//		<< fCR << " " << fCG << " " << fCB << " "
+	//		<< bCR << " " << bCG << " " << bCB << endl;
+
+	//	File.close();
+	//}
 }
 
 operRefresh::operRefresh(game* r_pGame) :operation(r_pGame)
@@ -449,5 +515,40 @@ void operRandomizeShapes::Act()
 }
 
 
+operHint::operHint(game* r_pGame) : operation(r_pGame)
+{
+}
 
+void operHint::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape = pGrid->getActiveShape();
+	shape** Array =  pGrid->getArrayElements();
+	int TrueFRed;
+	int TrueFGreen;
+	int TrueFBlue;
+	int TrueBRed;
+	int TrueBGreen;
+	int TrueBBlue;
+	
+	for (int i = 0; i < pGrid->getShapeCount(); i++)
+	{
+		if (Array[i]->getName() == currentShape->getName())
+		{
+			TrueFRed= 255- Array[i]->getFillColor().ucRed;
+			TrueFGreen = 255 - Array[i]->getFillColor().ucGreen;
+			TrueFBlue = 255 - Array[i]->getFillColor().ucBlue;
 
+			Array[i]->setFillColor(color(TrueFRed, TrueFGreen, TrueFBlue));
+
+			TrueBRed = 255 - Array[i]->getBorderColor().ucRed;
+			TrueFGreen = 255 - Array[i]->getBorderColor().ucGreen;
+			TrueFBlue = 255 - Array[i]->getBorderColor().ucBlue;
+			
+			Array[i]->setBorderColor(color(TrueBRed, TrueBGreen, TrueBBlue));
+			Array[i]->draw();
+		}
+		
+	}
+
+}

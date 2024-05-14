@@ -96,6 +96,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		}		printMessage("Minimize is being clicked");
 		break;
 	case ITM_Hint:
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operHint(this);
+		}
 		printMessage("Hint is being clicked");
 		break;
 	case ITM_Rotate:
