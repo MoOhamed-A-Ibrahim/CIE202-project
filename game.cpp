@@ -50,6 +50,7 @@ void game::clearStatusBar() const
 	pWind->DrawRectangle(0, config.windHeight - config.statusBarHeight, config.windWidth, config.windHeight);
 
 	this->trackLives();
+	this->printMessage(statusBarMessage);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -77,70 +78,76 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 
 	case ITM_SIGN:
 		op = new operAddSign(this);
-		printMessage("Sign is being clicked");
+		statusBarMessage="Sign is being clicked";
 		break;
 	case ITM_Save:
 		if (shapesGrid->getActiveShape() != nullptr) {
 			op = new operSaveProgress(this);
-		}		printMessage("Save is being clicked");
+		}		
+		statusBarMessage = "Save is being clicked";
 		break;
 	case ITM_Enlarge:
 		if (shapesGrid->getActiveShape() != nullptr) {
 			op = new operResizeUp(this);
 		}
-		printMessage("Enlarge is being clicked");
+		statusBarMessage = "Enlarge is being clicked";
 		break;
 	case ITM_Minimize:
 		if (shapesGrid->getActiveShape() != nullptr) {
 			op = new operResizeDown(this);
-		}		printMessage("Minimize is being clicked");
+		}		
+		statusBarMessage = "Minimize is being clicked";
 		break;
 	case ITM_Hint:
-		printMessage("Hint is being clicked");
+		if (shapesGrid->getActiveShape() != nullptr) {
+			op = new operHint(this);
+		}
+		statusBarMessage = "Hint is being clicked";
 		break;
 	case ITM_Rotate:
 		if (shapesGrid->getActiveShape() != nullptr) {
 			op = new operRotate(this);
-		}	printMessage("Rotates is being clicked");
+		}	
+		statusBarMessage = "Rotate is being clicked";
 		break;
 	case ITM_Refresh:
 		op = new operRefresh(this);
 		this->clearStatusBar();
-		printMessage("Refresh is being clicked");
+		statusBarMessage = "Refresh is being clicked";
 		break;
 	case ITM_Select:
 		op = new operSelectLevel(this);
-		printMessage("Select is being clicked");
+		statusBarMessage = "Select is being clicked";
 		break;
 	case ITM_Trash:
 		op = new operDELETE(this);
-		printMessage("Trash is being clicked");
+		statusBarMessage = "Trash is being clicked";
 		break;
 	case ITM_EXIT:
-		printMessage("Exit is being clicked");
+		statusBarMessage = "Exit is being clicked";
 		break;
 	case ITM_TREE:
 		op = new operAddTree(this);
-		printMessage("Tree is being clicked");
+		statusBarMessage = "Tree is being clicked";
 		break;
 	case ITM_CAR:
 		op = new operAddCar(this);
-		printMessage("Car is being clicked");
+		statusBarMessage = "Car is being clicked";
 		break;
 	case ITM_ICECREAM:
 		op = new operAddIceCream(this);
-		printMessage("Icecream is being clicked");
+		statusBarMessage = "Icecream is being clicked";
 		break;
 	case ITM_ROCKET:
 		op = new operRocket(this);
-		printMessage("Rocket is being clicked");
+		statusBarMessage = "Rocket is being clicked";
 		break;
 	case ITM_HOUSE:
 		op = new operAddHouse(this);
-		printMessage("House is being clicked");
+		statusBarMessage = "House is being clicked";
 		break;
 	case ITM_LOAD:
-		printMessage("Load is being clicked");
+		statusBarMessage = "Load is being clicked";
 		break;
 	default:
 		break;
@@ -157,7 +164,6 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 
 void game::printMessage(string msg) const	//Prints a message on status bar
 {
-	clearStatusBar();	//First clear the status bar
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(24, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(10, config.windHeight - (int)(0.85 * config.statusBarHeight), msg);
@@ -171,7 +177,6 @@ void game::trackLives() const {
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(config.windWidth-250, config.windHeight - (int)(0.85 * config.statusBarHeight), msg);
-
 }
 
 
@@ -238,27 +243,26 @@ void game::run()
 		if (shapesGrid->getActiveShape() != nullptr) {
 			if (keyPressed) {
 				if (keyPressed == 8 || keyPressed == 'w') {
-					printMessage("ARROW_UP/W is being clicked");
+					statusBarMessage = "ARROW_UP/W is being clicked";
 					op = new operMoveUp(this);
 					op->Act();
 				}
 				else if (keyPressed == 2 || keyPressed == 's') {
-					printMessage("ARROW_DOWN/S is being clicked");
+					statusBarMessage = "ARROW_DOWN/S is being clicked";
 					op = new operMoveDown(this);
 					op->Act();
 				}
 				else if (keyPressed == 6 || keyPressed == 'd') {
-					printMessage("ARROW_RIGHT/D is being clicked");
+					statusBarMessage = "ARROW_RIGHT/D is being clicked";
 					op = new operMoveRight(this);
 					op->Act();
 				}
 				else if (keyPressed == 4 || keyPressed == 'a') {
-					printMessage("ARROW_LEFT/A is being clicked");
+					statusBarMessage = "ARROW_LEFT/A is being clicked";
 					op = new operMoveLeft(this);
 					op->Act();
 
 				}
-
 			}
 		}
 		//printMessage("Ready...");
@@ -280,6 +284,7 @@ void game::run()
 			shapesGrid->drawGrid();
 			shapesGrid->drawActiveShape();
 			shapesGrid->drawLevelShapes();
+			this->clearStatusBar();
 		}	
 
 	} while (clickedItem!=ITM_EXIT);

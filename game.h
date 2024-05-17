@@ -14,10 +14,12 @@ class game
 	 int score=0;
 	 int level=1;
 	 bool isRandomized=0;
+	 //string statusBarMessage=" ";
 	toolbar* gameToolbar;
 
 	window* pWind;	//Pointer to the CMU graphics window
 	grid* shapesGrid;
+	string statusBarMessage;
 
 public:
 	game();

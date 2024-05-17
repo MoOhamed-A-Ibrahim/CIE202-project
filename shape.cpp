@@ -12,6 +12,8 @@ shape::shape(game* r_pGame, point ref)
 	size=1;
 }
 
+
+
 void shape::setRefPoint(point p)
 {
 	RefPoint = p;
@@ -86,11 +88,15 @@ double shape::getSize() const {
 void shape::setSize(double newSize) {
 	size = newSize;
 }
+void shape::setName(string d)
+{
+	this->name = d;
+}
 
 double shape::getAngle() const {
-	return size;
+	return angle;
 }
 
 void shape::setAngle(double newSize) {
-	size = newSize;
+	this->angle = newSize;
 }

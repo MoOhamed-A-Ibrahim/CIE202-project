@@ -47,6 +47,7 @@ public:
 
 	double getSize() const;
 	void setSize(double newSize);
+	void setName(string d);
 
 	double getAngle()const;
 	void setAngle(double ang);

@@ -19,13 +19,15 @@ class grid
 	int shapeCount;		//current number of shapes in the list
 	game* pGame;
 	point** gridPoints;
+	shape** Arr=nullptr;
 public:
+	void setArrSize(int n);
 	grid(point r_uprleft, int r_width, int r_height, game* r_pGame);
 	~grid();
 	//void draw() const;
 	void drawGrid()const;
 	void drawActiveShape()const;
-	void drawLevelShapes()const;
+	void drawLevelShapes();
 	void clearGridArea() const;
 	bool addShape(shape* newShape);
 	void setActiveShape(shape* actShape);
@@ -38,6 +40,7 @@ public:
 	bool isShapeListEmpty();
 	void nullifyShapeList();
 	point getRandomGridPoint();
+	shape** getArrayElements() const;
 
 	point** getGridPoints() const;
 };

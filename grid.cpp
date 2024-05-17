@@ -78,11 +78,22 @@ void grid::drawActiveShape()const {
 		activeShape->draw();
 }
 
-void grid::drawLevelShapes()const {
-//Draw ALL shapes
-	for (int i = 0; i < shapeCount; i++)
+void grid::drawLevelShapes() {
+	//Draw ALL shapes
+	setArrSize(shapeCount);
+	for (int i = 0; i < shapeCount; i++) {
 		if (shapeList[i])
+		{
 			shapeList[i]->draw();	//draw each shape
+			/*Arr[i]->setBorderColor(shapeList[i]->getBorderColor());
+			Arr[i]->setFillColor(shapeList[i]->getBorderColor());
+			Arr[i]->setAngle(shapeList[i]->getAngle());
+			Arr[i]->setName(shapeList[i]->getName());
+			Arr[i]->setRefPoint(shapeList[i]->getRefPoint());
+			Arr[i]->setSize(shapeList[i]->getSize());*/
+		}
+	}
+	this->drawActiveShape();
 }
 
 void grid::drawGrid()const {
@@ -103,7 +114,7 @@ void grid::drawGrid()const {
 
 void grid::clearGridArea() const
 {
-	window* pWind = pGame->getWind();	
+	window* pWind = pGame->getWind();
 	pWind->SetPen(config.bkGrndColor, 1);
 	pWind->SetBrush(config.bkGrndColor);
 	pWind->DrawRectangle(uprLeft.x, uprLeft.y, uprLeft.x + width, uprLeft.y + height);
@@ -142,7 +153,7 @@ point grid::getRandomGridPoint() {
 	int x = rand() % rows;
 	int y = rand() % cols;
 
-	point randomGrid= gridPoints[x][y];
+	point randomGrid = gridPoints[x][y];
 	return randomGrid;
 
 }
@@ -175,14 +186,28 @@ bool grid::isShapeListEmpty() {
 	bool val = true;
 	for (int i = 0; i < shapeCount; ++i) {
 		if (shapeList[i] != nullptr) {
-			val= false;
+			val = false;
 		}
 	}
-	return val; 
+	return val;
 }
-void grid::nullifyShapeList(){
+void grid::nullifyShapeList() {
 	for (int i = 0; i < MaxShapeCount; ++i) {
 		shapeList[i] = nullptr; // Set each element to nullptr
 	}
 }
 
+void grid::setArrSize(int n)
+{
+	if (Arr)
+	{
+		delete[] Arr;
+		Arr = nullptr;
+	}
+	Arr = new shape* [n];
+}
+
+shape** grid::getArrayElements() const
+{
+	return Arr;
+}
