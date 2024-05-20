@@ -18,6 +18,12 @@ Sign::Sign(game* r_pGame, point ref, double cSize, double cAngle, color cFill, c
 	top = new Rect(pGame, topRef, config.signShape.topHeight, config.signShape.topWdth, cFill, cBorder);
 	base = new Rect(pGame, baseRef, config.signShape.baseHeight, config.signShape.baseWdth, cFill, cBorder);
 
+	this->boundaryPointMin.x = top->getWidth() * size / 2;
+	this->boundaryPointMin.y = config.toolBarHeight + top->getHeight() / 2;
+
+	this->boundaryPointMax.x = config.windWidth - top->getWidth() / 2;
+	this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - base->getHeight() - top->getHeight() / 2;
+
 	if (size < 1) {
 		resizeFactor = 1 / size;
 		this->resizeDown(resizeFactor);
@@ -37,6 +43,37 @@ Sign::Sign(game* r_pGame, point ref, double cSize, double cAngle, color cFill, c
 		this->rotate();
 		this->rotate();
 		this->rotate();
+	}
+}
+
+void Sign::setRefPoint(point P) {
+	point newBaseRef;
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		top->setRefPoint(P);
+		newBaseRef.x = P.x;
+		newBaseRef.y = P.y + top->getHeight() / 2 + base->getHeight() / 2;
+		base->setRefPoint(newBaseRef);
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		top->setRefPoint(P);
+		point newBaseRef;
+		newBaseRef.x = P.x - top->getHeight() / 2 - base->getHeight() / 2;
+		newBaseRef.y = P.y;
+		base->setRefPoint(newBaseRef);
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		top->setRefPoint(P);
+		point newBaseRef;
+		newBaseRef.x = P.x;
+		newBaseRef.y = P.y - top->getHeight() / 2 - base->getHeight() / 2;
+		base->setRefPoint(newBaseRef);
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		top->setRefPoint(P);
+		point newBaseRef;
+		newBaseRef.x = P.x + top->getHeight() / 2 + base->getHeight() / 2;
+		newBaseRef.y = P.y;
+		base->setRefPoint(newBaseRef);
 	}
 }
 void Sign::draw() const
@@ -65,9 +102,39 @@ void Sign::rotate()
 	point baseRef;
 	baseRef.x = (0 * cos(*SignRotation) - ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * sin(*SignRotation))) + oldRefPoint.x;
 	baseRef.y = (0 * sin(*SignRotation) + ((0 + newTopHeight / 2.0 + newBaseHeight / 2.0) * cos(*SignRotation))) + oldRefPoint.y;
+	if (*SignRotation == ROT_angle[0] || *SignRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = top->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + top->getHeight() / 2 + 2 * config.gridSpacing;
 
+		this->boundaryPointMax.x = config.windWidth - top->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - base->getHeight() - top->getHeight() / 2;
+	}
+	else if (*SignRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = base->getHeight() + top->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + top->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - top->getHeight() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - top->getWidth() / 2;
+	}
+	else if (*SignRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = top->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() + top->getHeight() / 2 + 2 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - top->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - top->getHeight() / 2;
+	}
+	else if (*SignRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = top->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + top->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getHeight() - top->getHeight() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - top->getWidth() / 2;
+	}
 	base->setRefPoint(baseRef);
 	angle = *SignRotation;
+}
+point Sign::getRefPoint()const {
+	return top->getRefPoint();
 }
 
 void Sign::moveUp(double dist) {
@@ -164,6 +231,12 @@ Tree::Tree(game* r_pGame, point ref, double cSize, double cAngle, color cFill, c
 	layer_3 = new triangle(pGame, layer_3_ref, config.tree.triwdth, cFill, cBorder);
 	apple = new circle(pGame, apple_ref, config.tree.apple, cFill, cBorder);
 
+	this->boundaryPointMin.x = layer_3->getbase() / 2;
+	this->boundaryPointMin.y = config.toolBarHeight + layer_3->getHeight() / 2 + base->getHeight() / 2 + 3 * base->getWidth();
+
+	this->boundaryPointMax.x = config.windWidth - layer_3->getbase() / 2;
+	this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - base->getHeight() / 2;
+
 	if (size < 1) {
 		resizeFactor = 1 / size;
 		this->resizeDown(resizeFactor);
@@ -185,6 +258,70 @@ Tree::Tree(game* r_pGame, point ref, double cSize, double cAngle, color cFill, c
 		this->rotate();
 	}
 
+}
+
+point Tree::getRefPoint()const {
+	return base->getRefPoint();
+}
+void Tree::setRefPoint(point p) {
+	base->setRefPoint(p);
+	point newLayer1, newLayer2, newLayer3, newApple;
+	double newBaseHeight = base->getHeight();
+	double newBaseWidth = base->getWidth();
+
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		newLayer1.x = p.x;
+		newLayer1.y = p.y - newBaseHeight / 2 - newBaseWidth;
+
+		newLayer2.x = p.x;
+		newLayer2.y = p.y - newBaseHeight / 2 - 2 * newBaseWidth;
+
+		newLayer3.x = p.x;
+		newLayer3.y = p.y - newBaseHeight / 2 - 3 * newBaseWidth;
+
+		newApple = newLayer3;
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		newLayer1.x = p.x + newBaseWidth / 2 + newBaseHeight;
+		newLayer1.y = p.y;
+
+		newLayer2.x = p.x + newBaseWidth / 2 + 2 * newBaseHeight;
+		newLayer2.y = p.y;
+
+		newLayer3.x = p.x + newBaseWidth / 2 + 3 * newBaseHeight;
+		newLayer3.y = p.y;
+
+		newApple = newLayer3;
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		newLayer1.x = p.x;
+		newLayer1.y = p.y + newBaseHeight / 2 + newBaseWidth;
+
+		newLayer2.x = p.x;
+		newLayer2.y = p.y + newBaseHeight / 2 + 2 * newBaseWidth;
+
+		newLayer3.x = p.x;
+		newLayer3.y = p.y + newBaseHeight / 2 + 3 * newBaseWidth;
+
+		newApple = newLayer3;
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		newLayer1.x = p.x - newBaseWidth / 2 - newBaseHeight;
+		newLayer1.y = p.y;
+
+		newLayer2.x = p.x - newBaseWidth / 2 - 2 * newBaseHeight;
+		newLayer2.y = p.y;
+
+		newLayer3.x = p.x - newBaseWidth / 2 - 3 * newBaseHeight;
+		newLayer3.y = p.y;
+
+		newApple = newLayer3;
+	}
+
+	Layer_1->setRefPoint(newLayer1);
+	Layer_2->setRefPoint(newLayer2);
+	layer_3->setRefPoint(newLayer3);
+	apple->setRefPoint(newLayer3);
 }
 
 void Tree::draw() const
@@ -393,6 +530,37 @@ void Tree::rotate()
 		topRef.y = (0 * sin(*TreeRotation) + ((0 - newBaseWdth / 2 - 3 * newBaseHeight) * cos(*TreeRotation))) + oldRefPoint.y;
 
 	}
+	if (*TreeRotation == ROT_angle[0] || *TreeRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = layer_3->getbase() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + layer_3->getHeight() / 2 + base->getHeight() / 2 + 3 * base->getWidth() + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - layer_3->getbase() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - base->getHeight() / 2;
+
+	}
+	else if (*TreeRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = layer_3->getbase() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() / 2 + 2 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - layer_3->getbase() / 2;
+		this->boundaryPointMax.y = config.windHeight - config.statusBarHeight - layer_3->getHeight() - base->getHeight() / 2;
+	}
+	else if (*TreeRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + layer_3->getbase() / 2 + 2 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (layer_3->getHeight() + base->getHeight() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + layer_3->getbase() / 2);
+
+	}
+	else if (*TreeRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = layer_3->getHeight() + base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + layer_3->getbase() / 2 + 2 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (base->getHeight() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + layer_3->getbase() / 2);
+	}
+
 	Layer_2->setRefPoint(middleRef);
 	Layer_1->setRefPoint(bottomRef);
 	layer_3->setRefPoint(topRef);
@@ -450,6 +618,12 @@ Car::Car(game* r_pGame, point ref, double cSize, double cAngle, color cFill, col
 	frontalWheel = new circle(pGame, fWRef, config.car.wheelRadius, cFill, cBorder);
 	posteriorWheel = new circle(pGame, PWRef, config.car.wheelRadius, cFill, cBorder);
 
+	this->boundaryPointMin.x = base->getWidth() / 2;
+	this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() / 2;
+
+	this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+	this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + 2 * frontalWheel->getRadius() + base->getHeight() / 2);
+
 
 	if (size < 1) {
 		resizeFactor = 1 / size;
@@ -472,6 +646,42 @@ Car::Car(game* r_pGame, point ref, double cSize, double cAngle, color cFill, col
 		this->rotate();
 	}
 
+}
+void Car::setRefPoint(point p) {
+	base->setRefPoint(p);
+	point newFw, newPw;
+	double newBaseWidth = base->getWidth();
+	double newBaseHeight = base->getHeight();
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		newFw.x = p.x + (0.3 * newBaseWidth);
+		newFw.y = p.y + newBaseHeight / 2;
+		newPw.x = p.x - (0.3 * newBaseWidth);
+		newPw.y = p.y + newBaseHeight / 2;
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		newFw.x = p.x - newBaseWidth / 2;
+		newFw.y = p.y + (0.3 * newBaseHeight);
+		newPw.x = p.x - newBaseWidth / 2;
+		newPw.y = p.y - (0.3 * newBaseHeight);
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		newFw.x = p.x - (0.3 * newBaseWidth);
+		newFw.y = p.y - newBaseHeight / 2;
+		newPw.x = p.x + (0.3 * newBaseWidth);
+		newPw.y = p.y - newBaseHeight / 2;
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		newFw.x = p.x + newBaseWidth / 2;
+		newFw.y = p.y - (0.3 * newBaseHeight);
+		newPw.x = p.x + newBaseWidth / 2;
+		newPw.y = p.y + (0.3 * newBaseHeight);
+	}
+
+	frontalWheel->setRefPoint(newFw);
+	posteriorWheel->setRefPoint(newPw);
+}
+point Car::getRefPoint()const {
+	return base->getRefPoint();
 }
 
 void Car::draw() const
@@ -626,6 +836,38 @@ void Car::rotate() {
 		new_PWRef.y = ((0 - (0.3 * newBaseHeight)) * sin(*CarRotation) + (0 + (newBaseWidth / 2) * cos(*CarRotation))) + oldRefPoint.y;
 
 	}
+
+	if (*CarRotation == ROT_angle[0] || *CarRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + 2 * frontalWheel->getRadius() + base->getHeight() / 2);
+
+	}
+	else if (*CarRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = frontalWheel->getRadius() + base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getHeight() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getWidth() / 2);
+
+	}
+	else if (*CarRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + frontalWheel->getRadius() + base->getHeight() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getHeight() / 2);
+
+	}
+	else if (*CarRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (frontalWheel->getRadius() + base->getHeight() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getWidth() / 2);
+	}
 	frontalWheel->setRefPoint(new_fWRef);
 	posteriorWheel->setRefPoint(new_PWRef);
 
@@ -671,6 +913,11 @@ IceCream::IceCream(game* r_pGame, point ref, double cSize, double cAngle, color 
 	base = new triangle(pGame, baseRef, config.icecream.baseWdth, cFill, cBorder);
 	iceCircle = new circle(pGame, circleRef, config.icecream.baseWdth / 2.17, cFill, cBorder);
 
+	this->boundaryPointMin.x = base->getRefPoint().x - abs(base->getbase()) / 3;
+	this->boundaryPointMin.y = config.toolBarHeight + iceCircle->getRadius();
+	this->boundaryPointMax.x = config.windWidth - iceCircle->getRadius();
+	this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getHeight());
+
 	if (size < 1) {
 		resizeFactor = 1 / size;
 		this->resizeDown(resizeFactor);
@@ -692,6 +939,37 @@ IceCream::IceCream(game* r_pGame, point ref, double cSize, double cAngle, color 
 		this->rotate();
 	}
 
+}
+
+void IceCream::setRefPoint(point p) {
+	base->setRefPoint(p);
+	point newIceRef;
+	double newBaseWidth = base->getbase();
+	double newWidth = base->getwidth();
+
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		newIceRef.x = p.x;
+		newIceRef.y = p.y + newBaseWidth / 3;
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		newIceRef.x = p.x - newWidth / 3;
+		newIceRef.y = p.y;
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		newIceRef.x = p.x;
+		newIceRef.y = p.y - newBaseWidth / 3;
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		newIceRef.x = p.x + newWidth / 3;
+		newIceRef.y = p.y;
+	}
+
+	iceCircle->setRefPoint(newIceRef);
+
+}
+
+point IceCream::getRefPoint()const {
+	return RefPoint;
 }
 
 void IceCream::draw() const
@@ -803,6 +1081,35 @@ void IceCream::rotate()
 		New_baseRef.y = (0 * sin(*IceCreamRotation) + ((0 + abs(newBase) / 3) * cos(*IceCreamRotation))) + oldRefPoint.y;
 	}
 
+	if (*IceCreamRotation == ROT_angle[0] || *IceCreamRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = base->getbase() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getbase() * sqrt(3) / 6;
+
+		this->boundaryPointMax.x = config.windWidth - base->getbase() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + iceCircle->getRadius() + base->getbase() * sqrt(3) / 6);
+	}
+	else if (*IceCreamRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = iceCircle->getRadius() + base->getbase() * sqrt(3) / 6;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getbase() / 2;
+
+		this->boundaryPointMax.x = config.windWidth - base->getbase() * sqrt(3) / 6;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getbase() / 2);
+	}
+	else if (*IceCreamRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = base->getbase() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + iceCircle->getRadius() + base->getbase() * sqrt(3) / 6;
+
+		this->boundaryPointMax.x = config.windWidth - base->getbase() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getbase() * sqrt(3) / 6);
+	}
+	else if (*IceCreamRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = base->getbase() * sqrt(3) / 6;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getbase() / 2;
+
+		this->boundaryPointMax.x = config.windWidth - (iceCircle->getRadius() + base->getbase() * sqrt(3) / 6);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getbase() / 2);
+	}
+
 	iceCircle->setRefPoint(New_baseRef);
 
 }
@@ -849,6 +1156,12 @@ Rocket::Rocket(game* r_pGame, point ref, double cSize, double cAngle, color cFil
 	rightbase = new triangle(pGame, rightbaseRef, config.rocket.smallbaseWdth, cFill, cBorder);
 	door = new circle(pGame, baseRef, config.rocket.door, cFill, cBorder);
 
+	this->boundaryPointMin.x = liftbase->getbase() / 2 + base->getWidth() / 2;
+	this->boundaryPointMin.y = config.toolBarHeight + head->getHeight() + base->getHeight() / 2;
+
+	this->boundaryPointMax.x = config.windWidth - (rightbase->getbase() / 2 + base->getWidth() / 2);
+	this->boundaryPointMax.y = config.windHeight - base->getHeight() / 2;
+
 	if (size < 1) {
 		resizeFactor = 1 / size;
 		this->resizeDown(resizeFactor);
@@ -870,6 +1183,66 @@ Rocket::Rocket(game* r_pGame, point ref, double cSize, double cAngle, color cFil
 		this->rotate();
 	}
 
+}
+
+void Rocket::setRefPoint(point p) {
+	base->setRefPoint(p);
+	point newHead, newLeftBase, newRightBase, newDoor;
+
+	double newRocketBaseHeight = base->getHeight();
+	double newRocketBaseWidth = base->getWidth();
+	double newRocketHeadWidth = head->getbase();
+	double newSmallBaseWidth = rightbase->getbase();
+
+	double newSmallWidth = rightbase->getwidth();
+	double newRocketTriangleWidth = head->getwidth();
+
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		newHead.x = p.x;
+		newHead.y = p.y - newRocketBaseHeight / 2 - (sqrt(3) / 6) * newRocketHeadWidth;
+		newLeftBase.x = p.x - newRocketBaseWidth / 2;
+		newLeftBase.y = p.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+		newRightBase.x = p.x + newRocketBaseWidth / 2;
+		newRightBase.y = p.y + newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+		newDoor = p;
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		newHead.x = p.x + +newRocketBaseWidth / 2 + (sqrt(3) / 6.0) * abs(newRocketTriangleWidth);
+		newHead.y = p.y;
+		newLeftBase.x = p.x - newRocketBaseWidth / 2 + abs(newSmallWidth) / 3;
+		newLeftBase.y = p.y - newRocketBaseHeight / 2;
+		newRightBase.x = p.x - newRocketBaseWidth / 2 + abs(newSmallWidth) / 3;
+		newRightBase.y = p.y + newRocketBaseHeight / 2;
+		newDoor = p;
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		newHead.x = p.x;
+		newHead.y = p.y + newRocketBaseHeight / 2 + (sqrt(3) / 6) * abs(newRocketHeadWidth);
+		newLeftBase.x = p.x + newRocketBaseWidth / 2;
+		newLeftBase.y = p.y - newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+		newRightBase.x = p.x - newRocketBaseWidth / 2;
+		newRightBase.y = p.y - newRocketBaseHeight / 2 - newSmallBaseWidth / 3;
+		newDoor = p;
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		newHead.x = p.x - newRocketBaseWidth / 2 - (sqrt(3) / 6.0) * abs(newRocketTriangleWidth);
+		newHead.y = p.y;
+		newLeftBase.x = p.x + newRocketBaseWidth / 2 - abs(newSmallWidth) / 3;
+		newLeftBase.y = p.y + newRocketBaseHeight / 2;
+		newRightBase.x = p.x + newRocketBaseWidth / 2 - abs(newSmallWidth) / 3;
+		newRightBase.y = p.y - newRocketBaseHeight / 2;
+		newDoor = p;
+
+	}
+
+	head->setRefPoint(newHead);
+	liftbase->setRefPoint(newLeftBase);
+	rightbase->setRefPoint(newRightBase);
+	door->setRefPoint(newDoor);
+}
+
+point Rocket::getRefPoint()const {
+	return base->getRefPoint();
 }
 
 void Rocket::draw() const
@@ -1074,6 +1447,36 @@ void Rocket::rotate()
 		New_rightbaseRef.y = ((0 + newRocketBaseWidth / 2) * sin(*RocketRotation) + ((0 + newRocketBaseHeight / 2 - abs(newSmallBase) / 3) * cos(*RocketRotation))) + oldRefPoint.y;
 	}
 
+	if (*RocketRotation == ROT_angle[0] || *RocketRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = liftbase->getbase() / 2 + base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + head->getHeight() + base->getHeight() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (rightbase->getbase() / 2 + base->getWidth() / 2);
+		this->boundaryPointMax.y = config.windHeight - base->getHeight() / 2;
+
+	}
+	else if (*RocketRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + liftbase->getwidth() / 2 + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (head->getHeight() + base->getHeight() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + rightbase->getwidth() / 2 + base->getWidth() / 2);
+	}
+	else if (*RocketRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = rightbase->getbase() / 2 + base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (liftbase->getbase() / 2 + base->getWidth() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + head->getHeight() + base->getHeight() / 2);
+	}
+	else if (*RocketRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = head->getHeight() + base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + rightbase->getwidth() / 2 + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getHeight() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + liftbase->getwidth() / 2 + base->getWidth() / 2);
+	}
+
 	head->setRefPoint(New_headref);
 	liftbase->setRefPoint(New_leftbaseRef);
 	rightbase->setRefPoint(New_rightbaseRef);
@@ -1132,6 +1535,12 @@ House::House(game* r_pGame, point ref, double cSize, double cAngle, color cFill,
 	door = new Rect(pGame, doorRef, config.house.doorhight, config.house.doorwdth, cFill, cBorder);
 	head = new triangle(pGame, headRef, config.house.headwdth, cFill, cBorder);
 
+	this->boundaryPointMin.x = base->getWidth() / 2;
+	this->boundaryPointMin.y = config.toolBarHeight + head->getHeight() + base->getHeight() / 2;
+
+	this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+	this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + head->getHeight() / 2);
+
 	if (size < 1) {
 		resizeFactor = 1 / size;
 		this->resizeDown(resizeFactor);
@@ -1152,6 +1561,57 @@ House::House(game* r_pGame, point ref, double cSize, double cAngle, color cFill,
 		this->rotate();
 		this->rotate();
 	}
+}
+
+void House::setRefPoint(point p) {
+	base->setRefPoint(p);
+	double newHouseBaseHeight = base->getHeight();
+	double newHouseBaseWidth = base->getWidth();
+	double newDoorHeight = door->getHeight();
+
+	double newHeadWidth = head->getwidth();
+	double newDoorWidth = door->getWidth();
+	double newHeadBase = head->getbase();
+
+	point newDoorRefPoint;
+	point newHeadRefPoint;
+
+
+	if (this->getAngle() == ROT_angle[0] || this->getAngle() == ROT_angle[4]) {
+		newDoorRefPoint.x = p.x;
+		newHeadRefPoint.x = p.x;
+
+		newHeadRefPoint.y = p.y - newHouseBaseHeight / 2 - (sqrt(3) / 6.0) * newHouseBaseWidth;
+		newDoorRefPoint.y = p.y + newHouseBaseHeight / 2 - newDoorHeight / 2;
+	}
+	else if (this->getAngle() == ROT_angle[1]) {
+		newDoorRefPoint.y = p.y;
+		newHeadRefPoint.y = p.y;
+
+		newHeadRefPoint.x = p.x + newHouseBaseHeight / 2 + (sqrt(3) / 6.0) * newHouseBaseWidth;
+		newDoorRefPoint.x = p.x - newHouseBaseHeight / 2 + newDoorWidth / 2;
+	}
+	else if (this->getAngle() == ROT_angle[2]) {
+		newDoorRefPoint.x = p.x;
+		newHeadRefPoint.x = p.x;
+
+		newHeadRefPoint.y = p.y + newHouseBaseHeight / 2 + (sqrt(3) / 6.0) * newHouseBaseWidth;
+		newDoorRefPoint.y = p.y - newHouseBaseHeight / 2 + newDoorHeight / 2;
+	}
+	else if (this->getAngle() == ROT_angle[3]) {
+		newDoorRefPoint.y = p.y;
+		newHeadRefPoint.y = p.y;
+
+		newHeadRefPoint.x = p.x - newHouseBaseHeight / 2 - (sqrt(3) / 6.0) * newHouseBaseWidth;
+		newDoorRefPoint.x = p.x + newHouseBaseHeight / 2 - newDoorWidth / 2;
+	}
+
+	door->setRefPoint(newDoorRefPoint);
+	head->setRefPoint(newHeadRefPoint);
+}
+
+point House::getRefPoint()const {
+	return base->getRefPoint();
 }
 
 void House::draw() const
@@ -1312,6 +1772,38 @@ void House::rotate()
 		New_doorRef.x = ((0) * cos(*HouseRotation) - ((0 + newHouseBaseHeight / 2 - newDoorHeight / 2) * sin(*HouseRotation))) + oldRefPoint.x;
 		New_doorRef.y = ((0) * sin(*HouseRotation) + ((0 + newHouseBaseHeight / 2 - newDoorHeight / 2) * cos(*HouseRotation))) + oldRefPoint.y;
 	}
+
+	if (*HouseRotation == ROT_angle[0] || *HouseRotation == ROT_angle[4]) {
+		this->boundaryPointMin.x = base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + head->getHeight() + base->getHeight() / 2 + 12 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getHeight() / 2);
+
+	}
+	else if (*HouseRotation == ROT_angle[1]) {
+		this->boundaryPointMin.x = base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - (head->getHeight() + base->getHeight() / 2);
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getWidth());
+	}
+	else if (*HouseRotation == ROT_angle[2]) {
+		this->boundaryPointMin.x = base->getWidth() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getHeight() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getWidth() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + head->getHeight() + base->getHeight() / 2);
+
+	}
+	else if (*HouseRotation == ROT_angle[3]) {
+		this->boundaryPointMin.x = head->getHeight() + base->getHeight() / 2;
+		this->boundaryPointMin.y = config.toolBarHeight + base->getWidth() / 2 + 4 * config.gridSpacing;
+
+		this->boundaryPointMax.x = config.windWidth - base->getHeight() / 2;
+		this->boundaryPointMax.y = config.windHeight - (config.statusBarHeight + base->getWidth());
+	}
+
 	head->setRefPoint(New_headRef);
 	door->setRefPoint(New_doorRef);
 
@@ -1340,4 +1832,56 @@ void House::moveLeft(double dist) {
 	base->moveLeft(dist);
 	door->moveLeft(dist);
 	head->moveLeft(dist);
+}
+
+bool Sign::Match(shape* sh)
+{
+	Sign* sign = dynamic_cast<Sign*> (sh);
+	if (sign) {
+		return base->Match(sign->base) && top->Match(sign->top);
+	}
+	return false;
+}
+bool Tree::Match(shape* sh)
+{
+	Tree* tree = dynamic_cast<Tree*> (sh);
+	if (tree) {
+		return base->Match(tree->base) && Layer_1->Match(tree->Layer_1) && Layer_2->Match(tree->Layer_2) && layer_3->Match(tree->layer_3) && apple->Match(tree->apple);
+	}
+	return false;
+}
+bool Car::Match(shape* sh)
+{
+	Car* car = dynamic_cast<Car*> (sh);
+	if (car) {
+		return base->Match(car->base) && frontalWheel->Match(car->frontalWheel) && posteriorWheel->Match(car->posteriorWheel);
+	}
+	return false;
+}
+
+bool IceCream::Match(shape* sh)
+{
+	IceCream* ice = dynamic_cast<IceCream*> (sh);
+	if (ice) {
+		return base->Match(ice->base) && iceCircle->Match(ice->iceCircle);
+	}
+	return false;
+}
+
+bool Rocket::Match(shape* sh)
+{
+	Rocket* rock = dynamic_cast<Rocket*> (sh);
+	if (rock) {
+		return base->Match(rock->base) && head->Match(rock->head) && liftbase->Match(rock->liftbase) && rightbase->Match(rock->rightbase) && door->Match(rock->door);
+	}
+	return false;
+}
+
+bool House::Match(shape* sh)
+{
+	House* house = dynamic_cast<House*> (sh);
+	if (house) {
+		return door->Match(house->door) && base->Match(house->base) && head->Match(house->head);
+	}
+	return false;
 }

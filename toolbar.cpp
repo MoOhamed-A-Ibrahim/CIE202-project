@@ -65,3 +65,12 @@ toolbarItem toolbar::getItemClicked(int x)
 	return (toolbarItem)(x / config.toolbarItemWidth);
 
 }
+
+void toolbar::update() {
+	window* pWind = pGame->getWind();
+	for (int i = 0; i < ITM_CNT; i++) {
+		pWind->DrawImage(toolbarItemImages[i], i * config.toolbarItemWidth, 0, config.toolbarItemWidth, height);
+	}
+	pWind->SetPen(DARKBLUE, 3);
+	pWind->DrawLine(0, height, width, height);
+}

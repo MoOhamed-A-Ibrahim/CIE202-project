@@ -145,12 +145,12 @@ public:
 	virtual void Act();
 };
 
-class operHint : public operation
-{
-public:
-	operHint(game* r_pgame);
-	virtual void Act();
-};
+//class operHint : public operation
+//{
+//public:
+//	operHint(game* r_pgame);
+//	virtual void Act();
+//};
 
 
 class operRandomizeShapes :public operation
@@ -163,6 +163,13 @@ public:
 class operSelectLevel :public operation
 {
 public:
-	operSelectLevel(game* r_pgame);
+	operSelectLevel(game* r_pGame);
+	virtual void Act();
+};
+
+class operLoad : public operation
+{
+public:
+	operLoad(game* r_pGame);
 	virtual void Act();
 };

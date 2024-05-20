@@ -28,6 +28,7 @@ public:
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
 	virtual void rotate();
+	bool Match(shape* sh);
 };
 
 
@@ -38,13 +39,14 @@ class circle :public shape
 	//Add data memebrs for class circle
 	double rad;
 public:
-	circle(game* r_pGame, point ref, double r, color cFill= config.fillColor, color cBorder= config.penColor);	//add more parameters for the constructor if needed
+	circle(game* r_pGame, point ref, double r, color cFill = config.fillColor, color cBorder = config.penColor);	//add more parameters for the constructor if needed
 	virtual void draw() const;
 	void setRadius(double radius);
 	double getRadius() const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
 	virtual void rotate();
+	bool Match(shape* sh);
 };
 
 class triangle :public shape {
@@ -56,8 +58,10 @@ public:
 	void setbase(double BASE);
 	void setwidth(double Wdth);
 	double getbase()const;
+	double getHeight()const;
 	double getwidth()const;
 	virtual void resizeUp(double factor);
 	virtual void resizeDown(double factor);
 	virtual void rotate();
+	bool Match(shape* sh);
 };

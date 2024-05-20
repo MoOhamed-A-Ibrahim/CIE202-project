@@ -51,6 +51,7 @@ void game::clearStatusBar() const
 
 	this->trackLives();
 	this->printMessage(statusBarMessage);
+	//this->DrawTimer();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,9 +100,9 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage = "Minimize is being clicked";
 		break;
 	case ITM_Hint:
-		if (shapesGrid->getActiveShape() != nullptr) {
-			op = new operHint(this);
-		}
+		//if (shapesGrid->getActiveShape() != nullptr) {
+		//	op = new operHint(this);
+		//}
 		statusBarMessage = "Hint is being clicked";
 		break;
 	case ITM_Rotate:
@@ -147,6 +148,7 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage = "House is being clicked";
 		break;
 	case ITM_LOAD:
+		op = new operLoad(this);
 		statusBarMessage = "Load is being clicked";
 		break;
 	default:
@@ -285,6 +287,7 @@ void game::run()
 			shapesGrid->drawActiveShape();
 			shapesGrid->drawLevelShapes();
 			this->clearStatusBar();
+			this->updateToolbar();
 		}	
 
 	} while (clickedItem!=ITM_EXIT);
@@ -318,4 +321,21 @@ bool game::getRandomizationStatus() {
 
 void game::setRandomizationStatus(bool val) {
 	isRandomized = val;
+}
+
+void game::DrawTimer() const
+{
+	pWind->SetPen(config.penColor, 50);
+	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(0.5*(config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), countDownTimer->getinsec());
+}
+
+void game::updateToolbar() {
+	if (gameToolbar) {
+		gameToolbar->update();
+	}
+}
+
+void game::setStatusBarMessage(string msg) {
+	statusBarMessage = msg;
 }

@@ -35,6 +35,7 @@ grid::grid(point r_uprleft, int wdth, int hght, game* pG)
 			gridPoints[r][c].y = y;
 		}
 	}
+	shapesReferencePoints = new point[MaxShapeCount];
 }
 
 grid::~grid()
@@ -80,7 +81,6 @@ void grid::drawActiveShape()const {
 
 void grid::drawLevelShapes() {
 	//Draw ALL shapes
-	setArrSize(shapeCount);
 	for (int i = 0; i < shapeCount; i++) {
 		if (shapeList[i])
 		{
@@ -94,6 +94,30 @@ void grid::drawLevelShapes() {
 		}
 	}
 	this->drawActiveShape();
+}
+
+void grid::draw() const
+{
+	clearGridArea();
+	window* pWind = pGame->getWind();
+
+	pWind->SetPen(config.gridDotsColor, 1);
+	pWind->SetBrush(config.gridDotsColor);
+
+	//draw dots showing the grid reference points
+	for (int r = 1; r < rows; r++)
+		for (int c = 0; c < cols; c++)
+			pWind->DrawCircle(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y, 1);
+	//pWind->DrawPixel(c * config.gridSpacing, r * config.gridSpacing + uprLeft.y);
+
+//Draw ALL shapes
+	for (int i = 0; i < shapeCount; i++)
+		if (shapeList[i])
+			shapeList[i]->draw();	//draw each shape
+
+	//Draw the active shape
+	if (activeShape)
+		activeShape->draw();
 }
 
 void grid::drawGrid()const {
@@ -191,23 +215,92 @@ bool grid::isShapeListEmpty() {
 	}
 	return val;
 }
-void grid::nullifyShapeList() {
+void grid::nullifyShapeList()
+{
 	for (int i = 0; i < MaxShapeCount; ++i) {
-		shapeList[i] = nullptr; // Set each element to nullptr
+		shapeList[i] = nullptr; 
 	}
 }
 
-void grid::setArrSize(int n)
+
+
+shape** grid::getshapeList()
 {
-	if (Arr)
-	{
-		delete[] Arr;
-		Arr = nullptr;
-	}
-	Arr = new shape* [n];
+	return shapeList;
 }
 
-shape** grid::getArrayElements() const
+point grid::getRandomGridPoint(shape* newShape) {
+	srand(time(nullptr) + rand());
+	point randomGrid;
+	point newShapeRefPoint;
+	do {
+		int x = rand() % rows;
+		int y = rand() % cols;
+		randomGrid = gridPoints[x][y];
+		newShape->setRefPoint(randomGrid);
+		newShapeRefPoint = newShape->getRefPoint();
+	} while (newShapeRefPoint.x < newShape->getBoundaryPointMin().x ||
+		newShapeRefPoint.y < newShape->getBoundaryPointMin().y ||
+		newShapeRefPoint.x > newShape->getBoundaryPointMax().x ||
+		newShapeRefPoint.y > newShape->getBoundaryPointMax().y);
+	return randomGrid;
+}
+point* grid::getShapesRefList()const {
+	return shapesReferencePoints;
+}
+void grid::nullifyShapesReferencePoints() {
+
+	delete[] shapesReferencePoints;
+	shapesReferencePoints = new point[MaxShapeCount];
+
+}
+
+bool grid::gridInVicinity(point p1, point p2, int threshold) {
+	bool val = false;
+	int distance = threshold * config.gridSpacing;
+	double diffX = p1.x - p2.x;
+	double diffY = p1.y - p2.y;
+	double dist = sqrt(diffX * diffX + diffY * diffY);
+	if (dist < distance) {
+		val = true;
+	}
+	return val;
+}
+void grid::DetectMatch()
+
 {
-	return Arr;
+	bool check = false;
+	int n = pGame->getScore();
+	int l = pGame->getLevel();
+	for (int i = 0; i < shapeCount; i++) {
+
+		if (activeShape->Match(shapeList[i])) {
+			pGame->setScore(n + 2);
+			pGame->setStatusBarMessage("Match Found!");
+			delete activeShape;
+			delete shapeList[i];
+			activeShape = nullptr;
+			shapeList[i] = nullptr;
+			//drawGrid(); // Redraw the grid without the deleted shapes
+			this->drawGrid();
+			this->drawLevelShapes();
+			shapeCount++;
+			break;
+		}
+		else {
+			// Shapes don't match, print message
+			pGame->setScore(n - 1);
+			pGame->setStatusBarMessage("No Match Found!");
+		}
+
+	}
+	if (isShapeListEmpty()) {
+		check = false;
+		pGame->setLevel(l + 1);
+		pGame->clearStatusBar();
+		pGame->trackLives();
+		pGame->setRandomizationStatus(check);
+
+
+	}
 }

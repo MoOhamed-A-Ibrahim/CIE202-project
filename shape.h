@@ -2,6 +2,7 @@
 #include <string>
 using namespace std;
 #include "CMUgraphicsLib\CMUgraphics.h"
+#include <fstream>
 
 class game;     //forward declaration
 
@@ -24,6 +25,8 @@ protected:
 	double ROT_angle[5] = { 0,  PI_Value / 2.0,  PI_Value, 3.0 * PI_Value / 2.0, 2.0 * PI_Value };
 	double size;
 	double angle;
+	point boundaryPointMin;
+	point boundaryPointMax;
 
 public:
 	shape(game* r_pGame, point ref);
@@ -61,4 +64,13 @@ public:
 	//virtual void save(ofstream &OutFile) = 0;	//Save the shape parameters to the file
 	//virtual void load(ifstream &Infile) = 0;	//Load the shape parameters to the file
 
+	void fileMyself(string txt);
+	point getBoundaryPointMin()const;
+	void setBoundaryPointMin(point newBoundaryPoint);
+
+	point getBoundaryPointMax()const;
+	void setBoundaryPointMax(point newBoundaryPoint);
+	virtual bool Match(shape* sh) = 0;
+
 };
+

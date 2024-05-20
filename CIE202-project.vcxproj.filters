@@ -111,7 +111,6 @@
     <ClCompile Include="toolbar.cpp">
       <Filter>toolbar</Filter>
     </ClCompile>
-    <ClCompile Include="grid.cpp" />
     <ClCompile Include="BasicShapes.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
@@ -124,6 +123,10 @@
     <ClCompile Include="operations.cpp">
       <Filter>Operations</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMUgraphicsLib\auxil.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="operations.h">
       <Filter>Operations</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GraphicsLib">
@@ -217,6 +223,9 @@
     </Filter>
     <Filter Include="toolbar">
       <UniqueIdentifier>{5f727420-cd1d-483b-8541-bd342f07e6df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{17a79d5e-3b79-4a24-aec2-2a446c80c325}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

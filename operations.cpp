@@ -10,6 +10,7 @@
 #include"shape.h"
 #include<iostream>
 #include <cctype> 
+#include <sstream>
 using namespace std;
 
 
@@ -112,6 +113,7 @@ void operResizeUp::Act()
 	currentShape->resizeUp(2);
 	pGrid->setActiveShape(currentShape);
 	pGame->clearStatusBar();
+	pGame->updateToolbar();
 }
 
 
@@ -128,6 +130,7 @@ void operResizeDown::Act()
 	currentShape->resizeDown(2);
 	pGrid->setActiveShape(currentShape);
 	pGame->clearStatusBar();
+	pGame->updateToolbar();
 }
 
 
@@ -151,9 +154,9 @@ void operSelectLevel::Act()
 		pGame->clearStatusBar();
 		pGrid->nullifyShapeList();
 		pGame->setRandomizationStatus(false);
-
 	}
 	pGame->clearStatusBar();
+	pGame->updateToolbar();
 }
 
 //////////////////////////////
@@ -252,6 +255,7 @@ void operRotate::Act()
 	shape* shape = grid->getActiveShape();
 	shape->rotate();
 	pGame->clearStatusBar();
+	pGame->updateToolbar();
 }
 
 
@@ -268,6 +272,7 @@ void operMoveUp::Act() {
 	pGrid->drawActiveShape();
 	pGrid->drawLevelShapes();
 	pGame->clearStatusBar();
+	pGame->createToolBar();
 }
 
 operMoveDown::operMoveDown(game* r_pGame) :operation(r_pGame)
@@ -283,6 +288,7 @@ void operMoveDown::Act() {
 	pGrid->drawActiveShape();
 	pGrid->drawLevelShapes();
 	pGame->clearStatusBar();
+	pGame->createToolBar();
 }
 
 operMoveRight::operMoveRight(game* r_pGame) :operation(r_pGame)
@@ -298,6 +304,7 @@ void operMoveRight::Act() {
 	pGrid->drawActiveShape();
 	pGrid->drawLevelShapes();
 	pGame->clearStatusBar();
+	pGame->createToolBar();
 }
 
 operMoveLeft::operMoveLeft(game* r_pGame) :operation(r_pGame)
@@ -313,6 +320,7 @@ void operMoveLeft::Act() {
 	pGrid->drawActiveShape();
 	pGrid->drawLevelShapes();
 	pGame->clearStatusBar();
+	pGame->createToolBar();
 }
 
 operSaveProgress::operSaveProgress(game* r_pGame) : operation(r_pGame)
@@ -323,80 +331,43 @@ void operSaveProgress::Act()
 {
 	grid* pGrid = pGame->getGrid();
 	shape* currentShape = pGrid->getActiveShape();
+	int shapecount = pGrid->getShapeCount();
 	int level = pGame->getLevel();
 	int lives = pGame->getLives();
-	int score = pGame->getScore();
-	point refpoint;
-	string name;
-	int intgerName;
-	int bCB;
-	int bCG;
-	int bCR;
-	int fCB;
-	int fCG;
-	int fCR;
-	int pointx;
-	int pointy;
-	int angle;
-	int size;
-	
+	int score = pGame->getScore();	
 
 	ofstream File;
 	File.open("Progress//Progress.txt");
-	File << level << " " << lives << " " << score << endl;
+	File << shapecount << " " << level << " " << lives << " " << score << endl;
+	File.close();
 	if (currentShape)
 	{
-
-		name = currentShape->getName();
-		intgerName = int(name[0]);
-		refpoint = currentShape->getRefPoint();
-		pointx = refpoint.x;
-		pointy = refpoint.y;
-		angle = currentShape->getAngle();
-		bCB = currentShape->getBorderColor().ucBlue;
-		bCG = currentShape->getBorderColor().ucGreen;
-		bCR = currentShape->getBorderColor().ucRed;
-		fCB = currentShape->getFillColor().ucBlue;
-		fCG = currentShape->getFillColor().ucGreen;
-		fCR = currentShape->getFillColor().ucRed;
-		size = currentShape->getSize();
-
-		File << pointx << " " << pointy << " " << size << " " << angle << " "
-			<< fCR << " " << fCG << " " << fCB << " "
-			<< bCR << " " << bCG << " " << bCB << endl;
-
+		currentShape->fileMyself("Progress//Progress.txt");
 	}
 	else
 	{
+		File.open("Progress//Progress.txt", std::ios::app);
 		File << 00000000000000000000000 << endl;
+		File.close();
 	}
+	
 
+	///////////////////////////////////////////////////////
 
-
-	//shape** Array =  pGrid->getArrayElements();
-	//for (int i = 0; i < pGrid->getShapeCount(); i++)
-	//{
-
-	//	name = Array[i]->getName();
-	//	intgerName = int(name[0]);
-	//	refpoint = Array[i]->getRefPoint();
-	//	pointx = refpoint.x;
-	//	pointy = refpoint.y;
-	//	angle = Array[i]->getAngle();
-	//	bCB = Array[i]->getBorderColor().ucBlue;
-	//	bCG = Array[i]->getBorderColor().ucGreen;
-	//	bCR = Array[i]->getBorderColor().ucRed;
-	//	fCB = Array[i]->getFillColor().ucBlue;
-	//	fCG = Array[i]->getFillColor().ucGreen;
-	//	fCR = Array[i]->getFillColor().ucRed;
-	//	size = Array[i]->getSize();
-
-	//	File << pointx << " " << pointy << " " << size << " " << angle << " "
-	//		<< fCR << " " << fCG << " " << fCB << " "
-	//		<< bCR << " " << bCG << " " << bCB << endl;
-
-	//	File.close();
-	//}
+	shape** shapelist = pGrid->getshapeList();
+	for (int i = ((pGrid->getShapeCount())/2); i <( pGrid->getShapeCount()); i++)
+	{
+		if (shapelist[i])
+		{
+			(shapelist[i])->fileMyself("Progress//Progress.txt");
+		}
+		else
+		{
+			File.open("Progress//Progress.txt", std::ios::app);
+			File << 00000000000000000000000 << endl;
+			File.close();
+		}
+	}
 }
 
 operRefresh::operRefresh(game* r_pGame) :operation(r_pGame)
@@ -406,14 +377,15 @@ operRefresh::operRefresh(game* r_pGame) :operation(r_pGame)
 void operRefresh::Act() {
 	grid* pGrid = pGame->getGrid();
 	pGrid->clearGridArea();
-	int currentLevel = pGame->getLevel();
-	if (currentLevel > 1) {
-		pGame->setLevel(currentLevel - 1);
+	int currentLives = pGame->getLives();
+	if (currentLives > 1) {
+		pGame->setLives(currentLives - 1);
 	}
 	pGrid->nullifyShapeList();
 	pGame->setRandomizationStatus(false);
+	pGame->clearStatusBar();
+	pGame->updateToolbar();
 }
-
 
 operRandomizeShapes::operRandomizeShapes(game* r_pGame) : operation(r_pGame)
 {
@@ -421,15 +393,12 @@ operRandomizeShapes::operRandomizeShapes(game* r_pGame) : operation(r_pGame)
 
 void operRandomizeShapes::Act()
 {
-	//point boundaryPoint1 = {0,config.toolBarHeight };
-	//point boundaryPoint2 = { config.windWidth ,config.windHeight - config.statusBarHeight };
-
 	window* pw = pGame->getWind();
 	grid* pGrid = pGame->getGrid();
-	//pGrid->nullifyShapeList();
-
+	pGrid->nullifyShapesReferencePoints();
+	point* referenceShapes = pGrid->getShapesRefList();
 	bool currentRandomizationStatus = pGame->getRandomizationStatus();
-	if (currentRandomizationStatus == false) {
+	if (!currentRandomizationStatus) {
 		srand(time(nullptr) + rand());
 		color randomFill;
 		color randomBorder;
@@ -440,122 +409,234 @@ void operRandomizeShapes::Act()
 		int currentLevel = pGame->getLevel();
 		int currentShapeCount = 2 * currentLevel - 1;
 		int maxShapes = pGrid->getMaxShapeCount();
-		ShapeType randomShape;
 		if (currentShapeCount > maxShapes) {
 			currentShapeCount = maxShapes;
 		}
 		pGrid->setShapeCount(currentShapeCount);
-		shape* newShape = nullptr;
-		if (currentLevel < 3) {
-			for (int i = 0; i < currentShapeCount; i++) {
+
+		for (int i = 0; i < currentShapeCount; i++) {
+			if (currentLevel < 3) {
 				randomFill = getRandomColors(colorArr, 215)[0];
 				randomBorder = getRandomColors(colorArr, 215)[1];
-				randomSize = getRandomNum(sizeArr, 4);
-				randomAngle = getRandomNum(angleArr, 4);
-				randomShape = getRandomShape();
-				randomGridReferencePoint = pGrid->getRandomGridPoint();
-				switch (randomShape) {
-				case SIGN:
-					newShape = new Sign(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case TREE:
-					newShape = new Tree(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case CAR:
-					newShape = new Car(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case ICECREAM:
-					newShape = new IceCream(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case HOUSE:
-					newShape = new House(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case ROCKET:
-					newShape = new Rocket(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				}
-
-				pGrid->addShape(newShape);
 			}
-		}
-		else {
-			for (int i = 0; i < currentShapeCount; i++) {
+			else {
 				randomFill = BLACK;
 				randomBorder = BLACK;
-				randomSize = getRandomNum(sizeArr, 4);
-				randomAngle = getRandomNum(angleArr, 4);
-				randomShape = getRandomShape();
-				randomGridReferencePoint = pGrid->getRandomGridPoint();
-
-				switch (randomShape) {
-				case SIGN:
-					newShape = new Sign(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case TREE:
-					newShape = new Tree(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case CAR:
-					newShape = new Car(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case ICECREAM:
-					newShape = new IceCream(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case HOUSE:
-					newShape = new House(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				case ROCKET:
-					newShape = new Rocket(pGame, { randomGridReferencePoint.x,randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
-					break;
-				}
-
-				pGrid->addShape(newShape);
 			}
+			randomSize = getRandomNum(sizeArr, 4);
+			randomAngle = getRandomNum(angleArr, 4);
+			ShapeType randomShape = getRandomShape();
+			randomGridReferencePoint = pGrid->getRandomGridPoint();
+			if (currentShapeCount > 1) {
+				if (referenceShapes) {
+					if (currentLevel < 3) {
+						while (pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[i], 9)) {
+							randomGridReferencePoint = pGrid->getRandomGridPoint();
+						}
+					}
+					else {
+						bool overlaps = false;
+						while (overlaps) {
+							randomGridReferencePoint = pGrid->getRandomGridPoint();
+							for (int j = 0; j < i; j++) {
+								if (!pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[j], 2)) {
+									overlaps = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			shape* newShape = nullptr;
+
+			switch (randomShape) {
+			case SIGN:
+				newShape = new Sign(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			case TREE:
+				newShape = new Tree(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			case CAR:
+				newShape = new Car(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			case ICECREAM:
+				newShape = new IceCream(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			case HOUSE:
+				newShape = new House(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			case ROCKET:
+				newShape = new Rocket(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
+				break;
+			}
+			point newShapeRefPoint = newShape->getRefPoint();
+			if (randomShape != ICECREAM) {
+				randomGridReferencePoint = pGrid->getRandomGridPoint(newShape);
+			}
+			pGrid->addShape(newShape);
+			referenceShapes[currentShapeCount] = newShape->getRefPoint();
 		}
 		pGrid->drawGrid();
 		pGrid->drawActiveShape();
-
 		pGrid->drawLevelShapes();
 		pGame->setRandomizationStatus(true);
 		pGame->clearStatusBar();
+		pGame->updateToolbar();
 	}
-	
 }
 
-
-operHint::operHint(game* r_pGame) : operation(r_pGame)
+//operHint::operHint(game* r_pGame) : operation(r_pGame)
+//{
+//}
+//
+//void operHint::Act()
+//{
+//	grid* pGrid = pGame->getGrid();
+//	shape* currentShape = pGrid->getActiveShape();
+//	shape** Array =  pGrid->getArrayElements();
+//	int TrueFRed;
+//	int TrueFGreen;
+//	int TrueFBlue;
+//	int TrueBRed;
+//	int TrueBGreen;
+//	int TrueBBlue;
+//	
+//	for (int i = 0; i < pGrid->getShapeCount(); i++)
+//	{
+//		if (Array[i]->getName() == currentShape->getName())
+//		{
+//			TrueFRed= 255- Array[i]->getFillColor().ucRed;
+//			TrueFGreen = 255 - Array[i]->getFillColor().ucGreen;
+//			TrueFBlue = 255 - Array[i]->getFillColor().ucBlue;
+//
+//			Array[i]->setFillColor(color(TrueFRed, TrueFGreen, TrueFBlue));
+//
+//			TrueBRed = 255 - Array[i]->getBorderColor().ucRed;
+//			TrueFGreen = 255 - Array[i]->getBorderColor().ucGreen;
+//			TrueFBlue = 255 - Array[i]->getBorderColor().ucBlue;
+//			
+//			Array[i]->setBorderColor(color(TrueBRed, TrueBGreen, TrueBBlue));
+//			Array[i]->draw();
+//		}
+//		
+//	}
+//
+//}
+//
+operLoad::operLoad(game* r_pGame) : operation(r_pGame)
 {
 }
 
-void operHint::Act()
+void operLoad::Act()
 {
+	//inittalize variables and nullify shapes//
+
 	grid* pGrid = pGame->getGrid();
+	shape** shapelist = pGrid->getshapeList();
 	shape* currentShape = pGrid->getActiveShape();
-	shape** Array =  pGrid->getArrayElements();
-	int TrueFRed;
-	int TrueFGreen;
-	int TrueFBlue;
-	int TrueBRed;
-	int TrueBGreen;
-	int TrueBBlue;
-	
-	for (int i = 0; i < pGrid->getShapeCount(); i++)
-	{
-		if (Array[i]->getName() == currentShape->getName())
-		{
-			TrueFRed= 255- Array[i]->getFillColor().ucRed;
-			TrueFGreen = 255 - Array[i]->getFillColor().ucGreen;
-			TrueFBlue = 255 - Array[i]->getFillColor().ucBlue;
+	shape* LooShape;
 
-			Array[i]->setFillColor(color(TrueFRed, TrueFGreen, TrueFBlue));
+	pGrid->nullifyShapeList();
+	pGrid->DELshapes();
 
-			TrueBRed = 255 - Array[i]->getBorderColor().ucRed;
-			TrueFGreen = 255 - Array[i]->getBorderColor().ucGreen;
-			TrueFBlue = 255 - Array[i]->getBorderColor().ucBlue;
-			
-			Array[i]->setBorderColor(color(TrueBRed, TrueBGreen, TrueBBlue));
-			Array[i]->draw();
+	//file open//
+
+	ifstream File;
+	File.open("Progress//Progress.txt");
+	if (File.is_open()) {
+
+
+		string line;
+		getline(File, line);
+
+		int Level, Lives, Score, shapecount;
+		istringstream iss1(line);
+		iss1 >> shapecount >> Level >> Lives >> Score;
+
+
+		pGame->setLives(Lives);
+		pGame->setLevel(Level);
+		pGame->setScore(Score);
+		pGame->clearStatusBar();
+
+
+		int intgername;
+		double pointx;
+		double pointy;
+		double size;
+		double angle;
+		double fCR, fCG, fCB; double bCR, bCG, bCB;
+		point Ref;
+
+		if (getline(File, line)) {
+			istringstream iss2(line);
+			iss2 >> intgername >> pointx >> pointy >> size >> angle >> fCR >> fCG >> fCB >> bCR >> bCG >> bCB;
+			color Bordercolor = color(bCR, bCG, bCB);
+			color Fillcolor = color(fCR, fCG, fCB);
+			Ref.x = pointx;
+			Ref.y = pointy;
+
+			switch (intgername)
+			{
+			case (int('S')):
+				currentShape = new Sign(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			case (int('T')):
+				currentShape = new Tree(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			case (int('C')):
+				currentShape = new Car(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			case (int('I')):
+				currentShape = new IceCream(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			case (int('R')):
+				currentShape = new Rocket(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			case (int('H')):
+				currentShape = new House(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+				break;
+			}
+			pGrid->setActiveShape(currentShape);
+			pGrid->drawActiveShape();
+			for (int i = 0; i < shapecount; i++)
+			{
+				if (getline(File, line)) {
+					istringstream issi(line);
+
+					issi >> intgername >> pointx >> pointy >> size >> angle >> fCR >> fCG >> fCB >> bCR >> bCG >> bCB;
+					color Bordercolor = color(bCR, bCG, bCB);
+					color Fillcolor = color(fCR, fCG, fCB);
+					Ref.x = pointx;
+					Ref.y = pointy;
+				}
+				switch (intgername)
+				{
+				case (int('S')):
+					LooShape = new Sign(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('T')):
+					LooShape = new Tree(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('C')):
+					LooShape = new Car(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('I')):
+					LooShape = new IceCream(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('R')):
+					LooShape = new Rocket(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('H')):
+					LooShape = new House(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				}
+				pGrid->addShape(LooShape);
+
+			}
+			pGrid->drawLevelShapes();
 		}
-		
-	}
 
+	}
 }

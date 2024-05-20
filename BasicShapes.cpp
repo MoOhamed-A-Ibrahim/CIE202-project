@@ -163,3 +163,34 @@ void triangle::rotate()
 	width = temp;
 	draw();
 }
+
+double triangle::getHeight()const {
+	return (sqrt(3) / 2) * base;
+}
+
+bool Rect::Match(shape* sh)
+{
+	Rect* rec = dynamic_cast<Rect*> (sh);
+	if (rec) {
+		return RefPoint.x == rec->getRefPoint().x && RefPoint.y == rec->getRefPoint().y && hght == rec->hght && wdth == rec->wdth;
+	}
+	return false;
+}
+
+bool circle::Match(shape* sh)
+{
+	circle* cir = dynamic_cast<circle*> (sh);
+	if (cir) {
+		return RefPoint.x == cir->getRefPoint().x && RefPoint.y == cir->getRefPoint().y && rad == cir->rad;
+	}
+	return false;
+}
+
+bool triangle::Match(shape* sh)
+{
+	triangle* tri = dynamic_cast<triangle*> (sh);
+	if (tri) {
+		return RefPoint.x == tri->getRefPoint().x && RefPoint.y == tri->getRefPoint().y && base == tri->base && width == tri->width;
+	}
+	return false;
+}

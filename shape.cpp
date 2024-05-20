@@ -1,6 +1,7 @@
 #include "shape.h"
 #include "game.h"
 #include "gameConfig.h"
+#include <fstream>
 
 shape::shape(game* r_pGame, point ref)
 {
@@ -99,4 +100,45 @@ double shape::getAngle() const {
 
 void shape::setAngle(double newSize) {
 	this->angle = newSize;
+}
+
+void shape::fileMyself(string txt) 
+{
+	ofstream file;
+	file.open(txt, std::ios::app);
+
+	int intgername = int(name[0]);
+
+	int pointx = RefPoint.x;
+	int pointy = RefPoint.y;
+
+	int fCR = fillColor.ucRed;
+	int fCG = fillColor.ucGreen;
+	int fCB = fillColor.ucBlue;
+
+	int bCR = borderColor.ucRed;
+	int bCG = borderColor.ucGreen;
+	int bCB = borderColor.ucBlue;
+
+	file << intgername << " " << pointx << " " << pointy << " " << size << " " << angle << " "
+		 << fCR << " " << fCG << " " << fCB << " "
+		 << bCR << " " << bCG << " " << bCB << endl;
+
+	file.close();
+}
+
+point shape::getBoundaryPointMin()const {
+	return boundaryPointMin;
+}
+void shape::setBoundaryPointMin(point newBoundaryPointMin) {
+	boundaryPointMin = newBoundaryPointMin;
+}
+
+
+point shape::getBoundaryPointMax()const {
+	return boundaryPointMax;
+}
+
+void shape::setBoundaryPointMax(point newBoundaryPointMax) {
+	boundaryPointMax = newBoundaryPointMax;
 }

@@ -41,6 +41,9 @@ public:
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
 
 class Tree :public shape
@@ -61,6 +64,9 @@ public:
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
 
 class Car :public shape
@@ -80,6 +86,9 @@ public:
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
 
 class IceCream :public shape
@@ -99,6 +108,9 @@ public:
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
 
 class Rocket :public shape
@@ -119,6 +131,9 @@ public:
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
 
 class House :public shape
@@ -133,9 +148,11 @@ public:
 	void resizeUp(double factor);
 	void resizeDown(double factor);
 	void rotate();
-
 	void moveUp(double dist);
 	void moveDown(double dist);
 	void moveRight(double dist);
 	void moveLeft(double dist);
+	virtual void setRefPoint(point p);
+	virtual point getRefPoint() const;
+	virtual bool Match(shape* sh);
 };
