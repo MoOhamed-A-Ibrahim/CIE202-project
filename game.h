@@ -15,6 +15,7 @@ class game
 	 int score=0;
 	 int level=1;
 	 bool isRandomized=0;
+	 bool userChoice;
 	toolbar* gameToolbar;
 
 	window* pWind;	//Pointer to the CMU graphics window
@@ -26,6 +27,7 @@ public:
 	game();
 	~game();
 
+	void initGame();
 	string getSrting() const;	 //Returns a string entered by the user
 	void createWind(int, int, int, int); //creates the game window
 	void clearStatusBar() const;	//Clears the status bar
@@ -52,5 +54,8 @@ public:
 	 bool getRandomizationStatus();
 	
 	 void setRandomizationStatus(bool val);
-	 void DrawTimer() const;
+	 void DrawTimer();
+	 bool getUserChoice()const;
+	 void setUserChoice(bool ch);
+
 };

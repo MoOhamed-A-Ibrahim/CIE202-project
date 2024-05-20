@@ -1,6 +1,8 @@
 #include "game.h"
 #include "gameConfig.h"
 #include<iostream>
+#include <thread>
+#include <chrono>
 using namespace std;
 
 
@@ -30,6 +32,23 @@ game::~game()
 {
 	delete pWind;
 	delete shapesGrid;
+}
+void game::initGame() {
+	bool choice;
+	char keyPressed;
+	window* pw = this->getWind();
+	grid* pGrid = this->getGrid();
+	pw->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press Y for timed game, N for non-timed game");
+	pw->WaitKeyPress(keyPressed);
+	if (keyPressed == 'y') {
+		this->clearStatusBar();
+		this->setUserChoice(true);
+		this->DrawTimer();
+	}
+	else if (keyPressed == 'n') {
+		this->setUserChoice(false);
+	}
+	this->clearStatusBar();
 }
 
 
@@ -235,7 +254,7 @@ void game::run()
 	//Change the title
 	pWind->ChangeTitle("- - - - - - - - - - SHAPE HUNT (CIE 101 / CIE202 - project) - - - - - - - - - -");
 	toolbarItem clickedItem=ITM_CNT;
-
+	this->initGame();
 	do
 	{
 		op2 = new operRandomizeShapes(this);
@@ -323,11 +342,28 @@ void game::setRandomizationStatus(bool val) {
 	isRandomized = val;
 }
 
-void game::DrawTimer() const
+void game::DrawTimer() 
 {
 	pWind->SetPen(config.penColor, 50);
 	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
-	pWind->DrawString(0.5*(config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), countDownTimer->getinsec());
+	pWind->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press any key to begin time");
+	char key;
+	int x, y;
+	int counter;
+	if (pWind->WaitKeyPress(key)!= NO_KEYPRESS || pWind->WaitMouseClick(x, y)== RIGHT_CLICK|| pWind->WaitMouseClick(x, y) == LEFT_CLICK) {
+		this->clearStatusBar();
+		if (this->getLevel() == 1) {
+			counter = 10;
+		}
+		else {
+			counter = 10 * shapesGrid->getShapeCount();
+		}
+		while (counter > 0) {
+			pWind->DrawString(0.5 * (config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), to_string(counter--));
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			this->clearStatusBar();
+		}
+	}
 }
 
 void game::updateToolbar() {
@@ -338,4 +374,12 @@ void game::updateToolbar() {
 
 void game::setStatusBarMessage(string msg) {
 	statusBarMessage = msg;
+}
+
+bool game::getUserChoice()const {
+	return userChoice;
+}
+
+void game::setUserChoice(bool ch) {
+	userChoice = ch;
 }

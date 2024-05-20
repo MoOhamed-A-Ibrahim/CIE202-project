@@ -79,6 +79,11 @@ void grid::drawActiveShape()const {
 		activeShape->draw();
 }
 
+void grid::DelShapefromlist()
+{
+	shapeList[shapeCount] = nullptr;
+}
+
 void grid::drawLevelShapes() {
 	//Draw ALL shapes
 	for (int i = 0; i < shapeCount; i++) {

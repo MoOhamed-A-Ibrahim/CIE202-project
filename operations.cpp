@@ -4,6 +4,8 @@
 #include <fstream>
 #include<cstdlib>
 #include"gameConfig.h"
+#include <thread>
+#include <chrono>
 #include<time.h>
 #include"grid.h"
 #include<iostream>
@@ -486,44 +488,58 @@ void operRandomizeShapes::Act()
 	}
 }
 
-//operHint::operHint(game* r_pGame) : operation(r_pGame)
-//{
-//}
-//
-//void operHint::Act()
-//{
-//	grid* pGrid = pGame->getGrid();
-//	shape* currentShape = pGrid->getActiveShape();
-//	shape** Array =  pGrid->getArrayElements();
-//	int TrueFRed;
-//	int TrueFGreen;
-//	int TrueFBlue;
-//	int TrueBRed;
-//	int TrueBGreen;
-//	int TrueBBlue;
-//	
-//	for (int i = 0; i < pGrid->getShapeCount(); i++)
-//	{
-//		if (Array[i]->getName() == currentShape->getName())
-//		{
-//			TrueFRed= 255- Array[i]->getFillColor().ucRed;
-//			TrueFGreen = 255 - Array[i]->getFillColor().ucGreen;
-//			TrueFBlue = 255 - Array[i]->getFillColor().ucBlue;
-//
-//			Array[i]->setFillColor(color(TrueFRed, TrueFGreen, TrueFBlue));
-//
-//			TrueBRed = 255 - Array[i]->getBorderColor().ucRed;
-//			TrueFGreen = 255 - Array[i]->getBorderColor().ucGreen;
-//			TrueFBlue = 255 - Array[i]->getBorderColor().ucBlue;
-//			
-//			Array[i]->setBorderColor(color(TrueBRed, TrueBGreen, TrueBBlue));
-//			Array[i]->draw();
-//		}
-//		
-//	}
-//
-//}
-//
+void operHint::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape = pGrid->getActiveShape();
+	int shapecount = pGrid->getShapeCount();
+	shape** shapelist = pGrid->getshapeList();
+	shape* LooShape;
+	int level = pGame->getLevel();
+	int lives = pGame->getLives();
+	int score = pGame->getScore();
+	if (level >= 3)
+	{
+		lives -= 1;
+
+		pGame->setLives(lives);
+		pGame->setLevel(level);
+		pGame->setScore(score);
+		pGame->clearStatusBar();
+
+		if (shapelist[shapecount])
+		{
+			point Ref = shapelist[shapecount]->getRefPoint();
+			double size = shapelist[shapecount]->getSize();
+			double angle = shapelist[shapecount]->getAngle();
+			switch ((shapelist[shapecount]->getName())[0])
+			{
+			case (int('S')):
+				LooShape = new Sign(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			case (int('T')):
+				LooShape = new Tree(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			case (int('C')):
+				LooShape = new Car(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			case (int('I')):
+				LooShape = new IceCream(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			case (int('R')):
+				LooShape = new Rocket(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			case (int('H')):
+				LooShape = new House(pGame, Ref, size, angle, YELLOW, BLACK);
+				break;
+			}
+		}
+		pGrid->DelShapefromlist();
+		pGrid->addShape(LooShape);
+		pGrid->drawLevelShapes();
+	}
+
+}
 operLoad::operLoad(game* r_pGame) : operation(r_pGame)
 {
 }

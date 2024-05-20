@@ -26,6 +26,7 @@ public:
 	void draw() const;
 	void drawGrid()const;
 	void drawActiveShape()const;
+	void grid::DelShapefromlist();
 	void drawLevelShapes();
 	void clearGridArea() const;
 	bool addShape(shape* newShape);
