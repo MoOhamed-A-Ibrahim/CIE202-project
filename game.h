@@ -16,6 +16,8 @@ class game
 	 int level=1;
 	 bool isRandomized=0;
 	 bool userChoice;
+	 bool hinttt = false;
+	 bool checkExit = false;
 	toolbar* gameToolbar;
 
 	window* pWind;	//Pointer to the CMU graphics window

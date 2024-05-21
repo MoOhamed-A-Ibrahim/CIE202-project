@@ -14,6 +14,7 @@
 #include <cctype> 
 #include <sstream>
 #include "Timer.h"
+#include <ctime>
 using namespace std;
 
 
@@ -563,7 +564,7 @@ void operHint::Act()
 	int lives = pGame->getLives();
 	int score = pGame->getScore();
 
-	if ((x-y) <= 25) 
+	if ((x-y) <= 15) 
 	{
 
 		if (level >= 3)
@@ -610,38 +611,44 @@ void operHint::Act()
 
 		
 	}
-	if (shapelist[shapecount - 1])
+	if (level >= 3)
 	{
-		point Ref = shapelist[shapecount - 1]->getRefPoint();
-		double size = shapelist[shapecount - 1]->getSize();
-		double angle = shapelist[shapecount - 1]->getAngle();
-		switch ((shapelist[shapecount - 1]->getName())[0])
+		if (shapelist[shapecount - 1])
 		{
-		case (int('S')):
-			LooShape = new Sign(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
-		case (int('T')):
-			LooShape = new Tree(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
-		case (int('C')):
-			LooShape = new Car(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
-		case (int('I')):
-			LooShape = new IceCream(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
-		case (int('R')):
-			LooShape = new Rocket(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
-		case (int('H')):
-			LooShape = new House(pGame, Ref, size, angle, BLACK, BLACK);
-			break;
+			point Ref = shapelist[shapecount - 1]->getRefPoint();
+			double size = shapelist[shapecount - 1]->getSize();
+			double angle = shapelist[shapecount - 1]->getAngle();
+			switch ((shapelist[shapecount - 1]->getName())[0])
+			{
+			case (int('S')):
+				LooShape = new Sign(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			case (int('T')):
+				LooShape = new Tree(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			case (int('C')):
+				LooShape = new Car(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			case (int('I')):
+				LooShape = new IceCream(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			case (int('R')):
+				LooShape = new Rocket(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			case (int('H')):
+				LooShape = new House(pGame, Ref, size, angle, BLACK, BLACK);
+				break;
+			}
 		}
+		pGrid->DELshapes();
+		pGrid->DelShapefromlist();
+		pGrid->addShape(LooShape);
+		pGrid->drawLevelShapes();
 	}
-	pGrid->DELshapes();
-	pGrid->DelShapefromlist();
-	pGrid->addShape(LooShape);
-	pGrid->drawLevelShapes();
+	
 }
+
+
 operLoad::operLoad(game* r_pGame) : operation(r_pGame)
 {
 }

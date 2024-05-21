@@ -15,29 +15,17 @@ string Timer::getinsec()
 		start = time(0);
 		c += 1;
 	}
-	if (initialize)
-	{
-
+	if (initialize) {
 		now = time(0);
-		if( Max >= dif)
-			dif = (now - start);
-		else
-		{
-			dif = 0;
+		dif = Max - (now - start); // Countdown from Max to 0
+
+		if (dif < 0) {
+			dif = 0; // Ensure dif doesn't go negative
 		}
-
 	}
-	//if (dif < 10)
-	//{
-	//	return to_string(Max-dif);
-	//}
-	//if (dif < 100)
-	//{
-	//	return to_string(Max-dif);
-	//}
-	return to_string(Max-dif);
-}
 
+	return to_string(dif);
+}
 
 void Timer::Reset(int max)
 {

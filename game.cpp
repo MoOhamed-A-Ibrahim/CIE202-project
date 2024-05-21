@@ -92,6 +92,7 @@ void game::createGrid()
 operation* game::createRequiredOperation(toolbarItem clickedItem)
 {
 	operation* op = nullptr;
+	static bool check = false;
 	switch (clickedItem)
 	{
 
@@ -103,6 +104,7 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 	case ITM_Save:
 		op = new operSaveProgress(this);
 		statusBarMessage = "Save is being clicked";
+		check = true;
 		break;
 	case ITM_Enlarge:
 		if (shapesGrid->getActiveShape() != nullptr) {
@@ -117,8 +119,10 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage = "Minimize is being clicked";
 		break;
 	case ITM_Hint:
+
 		op = new operHint(this);
 		statusBarMessage = "Hint is being clicked";
+
 		break;
 	case ITM_Rotate:
 		if (shapesGrid->getActiveShape() != nullptr) {
@@ -140,7 +144,14 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage = "Trash is being clicked";
 		break;
 	case ITM_EXIT:
-		statusBarMessage = "Exit is being clicked";
+		if (check) {
+			op = new operExit(this);
+			statusBarMessage = "Exit is being clicked";
+			checkExit = true;
+		}
+		else {
+			statusBarMessage = "Save fisrt";
+		}
 		break;
 	case ITM_TREE:
 		op = new operAddTree(this);
@@ -166,8 +177,7 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		op = new operLoad(this);
 		statusBarMessage = "Load is being clicked";
 		break;
-	default:
-		break;
+	
 
 	}
 	return op;
@@ -311,7 +321,7 @@ void game::run()
 			this->updateToolbar();
 		}	
 
-	} while (clickedItem!=ITM_EXIT);
+	} while (checkExit == false);
 }
 
 int game::getLives()const {

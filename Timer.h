@@ -18,5 +18,6 @@ public:
 	string getinsec();
 	void Reset(int max);
 	int getMax();
+	int checktime_end;
 };
 
