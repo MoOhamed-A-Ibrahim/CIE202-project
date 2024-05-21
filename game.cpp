@@ -263,6 +263,7 @@ void game::run()
 		if (shapesGrid->getActiveShape() != nullptr) {
 			if (keyPressed == 32)
 				shapesGrid->DetectMatch();
+			if (keyPressed)
 			if (keyPressed) {
 				if (keyPressed == 8 || keyPressed == 'w') {
 					statusBarMessage = "ARROW_UP/W is being clicked";
@@ -397,3 +398,9 @@ void game::DrawTimer( int &x) const
 	}
 
 }
+
+Timer* game::ReturnTime()const
+{
+	return countDownTimer;
+}
+

@@ -545,19 +545,27 @@ operHint::operHint(game* r_pgame) : operation(r_pgame)
 
 void operHint::Act()
 {
-	Timer* Timing;
-	Timing->Timerr(true);
-	Timing->Reset(2);
-	while (Timing->getinsec() > "0")
+
+	int x, y;
+	if (this->c == 0)
 	{
-		grid* pGrid = pGame->getGrid();
-		shape* currentShape = pGrid->getActiveShape();
-		int shapecount = pGrid->getShapeCount();
-		shape** shapelist = pGrid->getshapeList();
-		shape* LooShape;
-		int level = pGame->getLevel();
-		int lives = pGame->getLives();
-		int score = pGame->getScore();
+		this->c++;
+		x = stoi(pGame->ReturnTime()->getinsec());
+	}
+	y= stoi(pGame->ReturnTime()->getinsec());
+
+	grid* pGrid = pGame->getGrid();
+	shape* currentShape = pGrid->getActiveShape();
+	int shapecount = pGrid->getShapeCount();
+	shape** shapelist = pGrid->getshapeList();
+	shape* LooShape;
+	int level = pGame->getLevel();
+	int lives = pGame->getLives();
+	int score = pGame->getScore();
+
+	if ((x-y) <= 25) 
+	{
+
 		if (level >= 3)
 		{
 			score -= 1;
@@ -599,9 +607,40 @@ void operHint::Act()
 			pGrid->addShape(LooShape);
 			pGrid->drawLevelShapes();
 		}
-	}
-	
 
+		
+	}
+	if (shapelist[shapecount - 1])
+	{
+		point Ref = shapelist[shapecount - 1]->getRefPoint();
+		double size = shapelist[shapecount - 1]->getSize();
+		double angle = shapelist[shapecount - 1]->getAngle();
+		switch ((shapelist[shapecount - 1]->getName())[0])
+		{
+		case (int('S')):
+			LooShape = new Sign(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		case (int('T')):
+			LooShape = new Tree(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		case (int('C')):
+			LooShape = new Car(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		case (int('I')):
+			LooShape = new IceCream(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		case (int('R')):
+			LooShape = new Rocket(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		case (int('H')):
+			LooShape = new House(pGame, Ref, size, angle, BLACK, BLACK);
+			break;
+		}
+	}
+	pGrid->DELshapes();
+	pGrid->DelShapefromlist();
+	pGrid->addShape(LooShape);
+	pGrid->drawLevelShapes();
 }
 operLoad::operLoad(game* r_pGame) : operation(r_pGame)
 {

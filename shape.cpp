@@ -112,13 +112,13 @@ void shape::fileMyself(string txt)
 	int pointx = RefPoint.x;
 	int pointy = RefPoint.y;
 
-	unsigned char fCR = fillColor.ucRed;
-	unsigned char fCG = fillColor.ucGreen;
-	unsigned char fCB = fillColor.ucBlue;
-	 		 
-	unsigned char bCR = borderColor.ucRed;
-	unsigned char bCG = borderColor.ucGreen;
-	unsigned char bCB = borderColor.ucBlue;
+	int fCR = fillColor.ucRed;
+	int fCG = fillColor.ucGreen;
+	int fCB = fillColor.ucBlue;
+	
+	int bCR = borderColor.ucRed;
+	int bCG = borderColor.ucGreen;
+	int bCB = borderColor.ucBlue;
 
 	file << intgername << " " << pointx << " " << pointy << " " << size << " " << angle << " "
 		<< fCR << " " << fCG << " " << fCB << " "

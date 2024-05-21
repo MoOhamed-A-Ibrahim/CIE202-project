@@ -14,6 +14,7 @@ public:
 	//Implements the action that should be taken by this operation
 	//Should be overriden by derived classes
 	virtual void Act() = 0;
+	int c = 0;
 };
 /////////////////////////////////// class operAddSign  //////////////////
 //Responsible for 

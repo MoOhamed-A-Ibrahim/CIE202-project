@@ -58,5 +58,7 @@ public:
 	 bool getUserChoice()const;
 	 void setUserChoice(bool ch);
 	 void DrawTimer(int &x)const;
+	 Timer* ReturnTime()const;
+	 
 };
 
