@@ -81,7 +81,7 @@ void grid::drawActiveShape()const {
 
 void grid::DelShapefromlist()
 {
-	shapeList[shapeCount] = nullptr;
+	shapeList[shapeCount-1] = nullptr;
 }
 
 void grid::drawLevelShapes() {

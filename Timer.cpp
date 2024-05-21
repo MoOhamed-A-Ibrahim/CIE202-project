@@ -1,7 +1,7 @@
 #include "Timer.h"
 #include <string>
 
-Timer::Timer(bool initialize)
+void Timer::Timerr(bool initialize)
 {
 	this->initialize = initialize;
 	dif = 0;
@@ -19,7 +19,12 @@ string Timer::getinsec()
 	{
 
 		now = time(0);
-		dif = now - start;
+		if( Max >= dif)
+			dif = (now - start);
+		else
+		{
+			dif = 0;
+		}
 
 	}
 	//if (dif < 10)
@@ -38,5 +43,10 @@ void Timer::Reset(int max)
 {
 	this->Max = max;
 	dif = 0;
-	start = 0;
+	start = time(0);
+}
+
+int Timer::getMax()
+{
+	return Max;
 }

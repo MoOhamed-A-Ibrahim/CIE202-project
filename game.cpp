@@ -33,23 +33,23 @@ game::~game()
 	delete pWind;
 	delete shapesGrid;
 }
-void game::initGame() {
-	bool choice;
-	char keyPressed;
-	window* pw = this->getWind();
-	grid* pGrid = this->getGrid();
-	pw->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press Y for timed game, N for non-timed game");
-	pw->WaitKeyPress(keyPressed);
-	if (keyPressed == 'y') {
-		this->clearStatusBar();
-		this->setUserChoice(true);
-		this->DrawTimer();
-	}
-	else if (keyPressed == 'n') {
-		this->setUserChoice(false);
-	}
-	this->clearStatusBar();
-}
+//void game::initGame() {
+//	bool choice;
+//	char keyPressed;
+//	window* pw = this->getWind();
+//	grid* pGrid = this->getGrid();
+//	//pw->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press Y for timed game, N for non-timed game");
+//	pw->WaitKeyPress(keyPressed);
+//	if (keyPressed == 'y') {
+//		this->clearStatusBar();
+//		this->setUserChoice(true);
+//		this->DrawTimer();
+//	}
+//	else if (keyPressed == 'n') {
+//		this->setUserChoice(false);
+//	}
+//	this->clearStatusBar();
+//}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,9 +101,7 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage="Sign is being clicked";
 		break;
 	case ITM_Save:
-		if (shapesGrid->getActiveShape() != nullptr) {
-			op = new operSaveProgress(this);
-		}		
+		op = new operSaveProgress(this);
 		statusBarMessage = "Save is being clicked";
 		break;
 	case ITM_Enlarge:
@@ -119,9 +117,7 @@ operation* game::createRequiredOperation(toolbarItem clickedItem)
 		statusBarMessage = "Minimize is being clicked";
 		break;
 	case ITM_Hint:
-		//if (shapesGrid->getActiveShape() != nullptr) {
-		//	op = new operHint(this);
-		//}
+		op = new operHint(this);
 		statusBarMessage = "Hint is being clicked";
 		break;
 	case ITM_Rotate:
@@ -254,14 +250,19 @@ void game::run()
 	//Change the title
 	pWind->ChangeTitle("- - - - - - - - - - SHAPE HUNT (CIE 101 / CIE202 - project) - - - - - - - - - -");
 	toolbarItem clickedItem=ITM_CNT;
-	this->initGame();
+	/*this->initGame();*/
+	int z = 0;
 	do
 	{
+		countDownTimer->Timerr(true);
+		DrawTimer(z);
 		op2 = new operRandomizeShapes(this);
 		op2->Act();
 
 		pWind->GetKeyPress(keyPressed);
 		if (shapesGrid->getActiveShape() != nullptr) {
+			if (keyPressed == 32)
+				shapesGrid->DetectMatch();
 			if (keyPressed) {
 				if (keyPressed == 8 || keyPressed == 'w') {
 					statusBarMessage = "ARROW_UP/W is being clicked";
@@ -301,7 +302,7 @@ void game::run()
 			if (op)
 				op->Act();
 
-			//4-Redraw the grid after each action
+			//4-Redraw the grid after each actiondo
 			shapesGrid->drawGrid();
 			shapesGrid->drawActiveShape();
 			shapesGrid->drawLevelShapes();
@@ -342,29 +343,29 @@ void game::setRandomizationStatus(bool val) {
 	isRandomized = val;
 }
 
-void game::DrawTimer() 
-{
-	pWind->SetPen(config.penColor, 50);
-	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
-	pWind->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press any key to begin time");
-	char key;
-	int x, y;
-	int counter;
-	if (pWind->WaitKeyPress(key)!= NO_KEYPRESS || pWind->WaitMouseClick(x, y)== RIGHT_CLICK|| pWind->WaitMouseClick(x, y) == LEFT_CLICK) {
-		this->clearStatusBar();
-		if (this->getLevel() == 1) {
-			counter = 10;
-		}
-		else {
-			counter = 10 * shapesGrid->getShapeCount();
-		}
-		while (counter > 0) {
-			pWind->DrawString(0.5 * (config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), to_string(counter--));
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-			this->clearStatusBar();
-		}
-	}
-}
+//void game::DrawTimer() 
+//{
+//	pWind->SetPen(config.penColor, 50);
+//	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
+//	pWind->DrawString(0.5 * (config.windWidth) - 150, config.windHeight - (int)(0.85 * config.statusBarHeight), "Press any key to begin time");
+//	char key;
+//	int x, y;
+//	int counter;
+//	if (pWind->WaitKeyPress(key)!= NO_KEYPRESS || pWind->WaitMouseClick(x, y)== RIGHT_CLICK|| pWind->WaitMouseClick(x, y) == LEFT_CLICK) {
+//		this->clearStatusBar();
+//		if (this->getLevel() == 1) {
+//			counter = 10;
+//		}
+//		else {
+//			counter = 10 * shapesGrid->getShapeCount();
+//		}
+//		while (counter > 0) {
+//			pWind->DrawString(0.5 * (config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), to_string(counter--));
+//			std::this_thread::sleep_for(std::chrono::seconds(1));
+//			this->clearStatusBar();
+//		}
+//	}
+//}
 
 void game::updateToolbar() {
 	if (gameToolbar) {
@@ -382,4 +383,17 @@ bool game::getUserChoice()const {
 
 void game::setUserChoice(bool ch) {
 	userChoice = ch;
+}
+
+void game::DrawTimer( int &x) const
+{
+	pWind->SetPen(config.penColor, 50);
+	pWind->SetFont(30, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(0.5 * (config.windWidth), config.windHeight - (int)(0.85 * config.statusBarHeight), countDownTimer->getinsec());
+	if (((countDownTimer->getMax())-(stoi(countDownTimer->getinsec()))==x)) {
+		clearStatusBar();
+		x += 1;
+
+	}
+
 }

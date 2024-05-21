@@ -13,6 +13,7 @@
 #include<iostream>
 #include <cctype> 
 #include <sstream>
+#include "Timer.h"
 using namespace std;
 
 
@@ -67,24 +68,31 @@ operAddSign::operAddSign(game* r_pGame) :operation(r_pGame)
 void operAddSign::Act()
 {
 	window* pw = pGame->getWind();
-
-	//TODO:
-	// Don't allow adding new shape if there is alreday an active shape
-
-	//align reference point to the nearest grid point
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-
-	//take the aligned point as the sign shape ref point
-	point signShapeRef = { xGrid,yGrid };
-
-	//create a sign shape
-	shape* psh = new Sign(pGame, signShapeRef);
-
-	//Add the shape to the grid
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+	if (pGrid->getActiveShape() == nullptr) {
 
+
+		//TODO:
+		// Don't allow adding new shape if there is alreday an active shape
+
+		//align reference point to the nearest grid point
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+
+		//take the aligned point as the sign shape ref point
+		point signShapeRef = { xGrid,yGrid };
+
+		//create a sign shape
+		shape* psh = new Sign(pGame, signShapeRef);
+
+		//Add the shape to the grid
+
+		pGrid->setActiveShape(psh);
+	}
+	else {
+		pGame->printMessage("please Delte the shape first");
+
+	}
 }
 
 ///////////////////////////////////
@@ -171,12 +179,19 @@ operAddIceCream::operAddIceCream(game* r_pGame) : operation(r_pGame)
 void operAddIceCream::Act()
 {
 	window* pw = pGame->getWind();
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-	point triShapeRef = { xGrid,yGrid };
-	shape* psh = new IceCream(pGame, triShapeRef);
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+	if (pGrid->getActiveShape() == nullptr) {
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+		point triShapeRef = { xGrid,yGrid };
+		shape* psh = new IceCream(pGame, triShapeRef);
+
+		pGrid->setActiveShape(psh);
+	}
+	else {
+		pGame->printMessage("please Delte the shape first");
+
+	}
 
 }
 
@@ -189,12 +204,19 @@ operAddCar::operAddCar(game* r_pGame) : operation(r_pGame)
 void operAddCar::Act()
 {
 	window* pw = pGame->getWind();
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-	point triShapeRef = { xGrid,yGrid };
-	shape* psh = new Car(pGame, triShapeRef);
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+	if (pGrid->getActiveShape() == nullptr) {
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+		point triShapeRef = { xGrid,yGrid };
+		shape* psh = new Car(pGame, triShapeRef);
+
+		pGrid->setActiveShape(psh);
+	}
+	else {
+		pGame->printMessage("please Delte the shape first");
+
+	}
 }
 ////////////////////////////////////////////////
 
@@ -205,12 +227,19 @@ operAddHouse::operAddHouse(game* r_pGame) : operation(r_pGame)
 void operAddHouse::Act()
 {
 	window* pw = pGame->getWind();
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-	point triShapeRef = { xGrid,yGrid };
-	shape* psh = new House(pGame, triShapeRef);
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+	if (pGrid->getActiveShape() == nullptr) {
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+		point triShapeRef = { xGrid,yGrid };
+		shape* psh = new House(pGame, triShapeRef);
+		pGrid->setActiveShape(psh);
+	}
+	else {
+		pGame->printMessage("please Delte the shape first");
+
+	}
+
 }
 ////////////////////////////////////////
 
@@ -221,12 +250,22 @@ operAddTree::operAddTree(game* r_pGame) : operation(r_pGame)
 void operAddTree::Act()
 {
 	window* pw = pGame->getWind();
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-	point triShapeRef = { xGrid,yGrid };
-	shape* psh = new Tree(pGame, triShapeRef);
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+
+	if (pGrid->getActiveShape() == nullptr) {
+
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+		point triShapeRef = { xGrid,yGrid };
+		shape* psh = new Tree(pGame, triShapeRef);
+		grid* pGrid = pGame->getGrid();
+		pGrid->setActiveShape(psh);
+
+	}
+	else {
+
+		pGame->printMessage("please Delte the shape first");
+	}
 }
 
 ///////////////////////////////////////
@@ -237,12 +276,20 @@ operRocket::operRocket(game* r_pGame) : operation(r_pGame)
 void operRocket::Act()
 {
 	window* pw = pGame->getWind();
-	int xGrid = config.RefX - config.RefX % config.gridSpacing;
-	int yGrid = config.RefY - config.RefX % config.gridSpacing;
-	point triShapeRef = { xGrid,yGrid };
-	shape* psh = new Rocket(pGame, triShapeRef);
 	grid* pGrid = pGame->getGrid();
-	pGrid->setActiveShape(psh);
+	if (pGrid->getActiveShape() == nullptr) {
+		int xGrid = config.RefX - config.RefX % config.gridSpacing;
+		int yGrid = config.RefY - config.RefX % config.gridSpacing;
+		point triShapeRef = { xGrid,yGrid };
+		shape* psh = new Rocket(pGame, triShapeRef);
+		pGrid->setActiveShape(psh);
+	}
+	else {
+		pGame->printMessage("please Delte the shape first");
+
+	}
+
+
 }
 /////////////////////////////////////////
 
@@ -336,7 +383,7 @@ void operSaveProgress::Act()
 	int shapecount = pGrid->getShapeCount();
 	int level = pGame->getLevel();
 	int lives = pGame->getLives();
-	int score = pGame->getScore();	
+	int score = pGame->getScore();
 
 	ofstream File;
 	File.open("Progress//Progress.txt");
@@ -352,12 +399,12 @@ void operSaveProgress::Act()
 		File << 00000000000000000000000 << endl;
 		File.close();
 	}
-	
+
 
 	///////////////////////////////////////////////////////
 
 	shape** shapelist = pGrid->getshapeList();
-	for (int i = ((pGrid->getShapeCount())/2); i <( pGrid->getShapeCount()); i++)
+	for (int i = ((pGrid->getShapeCount()) / 2); i < (pGrid->getShapeCount()); i++)
 	{
 		if (shapelist[i])
 		{
@@ -399,6 +446,7 @@ void operRandomizeShapes::Act()
 	grid* pGrid = pGame->getGrid();
 	pGrid->nullifyShapesReferencePoints();
 	point* referenceShapes = pGrid->getShapesRefList();
+
 	bool currentRandomizationStatus = pGame->getRandomizationStatus();
 	if (!currentRandomizationStatus) {
 		srand(time(nullptr) + rand());
@@ -407,6 +455,7 @@ void operRandomizeShapes::Act()
 		double randomSize;
 		double randomAngle;
 		point randomGridReferencePoint;
+		shape* newShape = nullptr;
 
 		int currentLevel = pGame->getLevel();
 		int currentShapeCount = 2 * currentLevel - 1;
@@ -429,29 +478,6 @@ void operRandomizeShapes::Act()
 			randomAngle = getRandomNum(angleArr, 4);
 			ShapeType randomShape = getRandomShape();
 			randomGridReferencePoint = pGrid->getRandomGridPoint();
-			if (currentShapeCount > 1) {
-				if (referenceShapes) {
-					if (currentLevel < 3) {
-						while (pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[i], 9)) {
-							randomGridReferencePoint = pGrid->getRandomGridPoint();
-						}
-					}
-					else {
-						bool overlaps = false;
-						while (overlaps) {
-							randomGridReferencePoint = pGrid->getRandomGridPoint();
-							for (int j = 0; j < i; j++) {
-								if (!pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[j], 2)) {
-									overlaps = true;
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-			shape* newShape = nullptr;
-
 			switch (randomShape) {
 			case SIGN:
 				newShape = new Sign(pGame, { randomGridReferencePoint.x, randomGridReferencePoint.y }, randomSize, randomAngle, randomFill, randomBorder);
@@ -473,8 +499,33 @@ void operRandomizeShapes::Act()
 				break;
 			}
 			point newShapeRefPoint = newShape->getRefPoint();
-			if (randomShape != ICECREAM) {
-				randomGridReferencePoint = pGrid->getRandomGridPoint(newShape);
+			if (currentShapeCount == 1) {
+				if (randomShape != ICECREAM) {
+					randomGridReferencePoint = pGrid->getRandomGridPoint(newShape);
+				}
+			}
+			else if (currentShapeCount > 1 && !pGrid->isShapeListEmpty()) {
+				if (referenceShapes) {
+					if (currentLevel < 3) {
+						while (pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[i], 9)) {
+							cout << randomGridReferencePoint.x << " " << randomGridReferencePoint.y << " " << referenceShapes[i].x << " " << referenceShapes[i].y << endl;
+							randomGridReferencePoint = pGrid->getRandomGridPoint(newShape);
+						}
+					}
+					else {
+						bool overlaps = false;
+						while (overlaps == true) {///should be false
+							cout << randomGridReferencePoint.x << " " << randomGridReferencePoint.y << " " << referenceShapes[i].x << " " << referenceShapes[i].y << endl;
+							randomGridReferencePoint = pGrid->getRandomGridPoint(newShape);
+							for (int j = 0; j < i; j++) {
+								if (!pGrid->gridInVicinity(randomGridReferencePoint, referenceShapes[j], 2)) {
+									overlaps = true;
+									break;
+								}
+							}
+						}
+					}
+				}
 			}
 			pGrid->addShape(newShape);
 			referenceShapes[currentShapeCount] = newShape->getRefPoint();
@@ -488,56 +539,68 @@ void operRandomizeShapes::Act()
 	}
 }
 
+operHint::operHint(game* r_pgame) : operation(r_pgame)
+{
+}
+
 void operHint::Act()
 {
-	grid* pGrid = pGame->getGrid();
-	shape* currentShape = pGrid->getActiveShape();
-	int shapecount = pGrid->getShapeCount();
-	shape** shapelist = pGrid->getshapeList();
-	shape* LooShape;
-	int level = pGame->getLevel();
-	int lives = pGame->getLives();
-	int score = pGame->getScore();
-	if (level >= 3)
+	Timer* Timing;
+	Timing->Timerr(true);
+	Timing->Reset(2);
+	while (Timing->getinsec() > "0")
 	{
-		lives -= 1;
-
-		pGame->setLives(lives);
-		pGame->setLevel(level);
-		pGame->setScore(score);
-		pGame->clearStatusBar();
-
-		if (shapelist[shapecount])
+		grid* pGrid = pGame->getGrid();
+		shape* currentShape = pGrid->getActiveShape();
+		int shapecount = pGrid->getShapeCount();
+		shape** shapelist = pGrid->getshapeList();
+		shape* LooShape;
+		int level = pGame->getLevel();
+		int lives = pGame->getLives();
+		int score = pGame->getScore();
+		if (level >= 3)
 		{
-			point Ref = shapelist[shapecount]->getRefPoint();
-			double size = shapelist[shapecount]->getSize();
-			double angle = shapelist[shapecount]->getAngle();
-			switch ((shapelist[shapecount]->getName())[0])
+			score -= 1;
+
+			pGame->setLives(lives);
+			pGame->setLevel(level);
+			pGame->setScore(score);
+			pGame->clearStatusBar();
+
+			if (shapelist[shapecount - 1])
 			{
-			case (int('S')):
-				LooShape = new Sign(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
-			case (int('T')):
-				LooShape = new Tree(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
-			case (int('C')):
-				LooShape = new Car(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
-			case (int('I')):
-				LooShape = new IceCream(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
-			case (int('R')):
-				LooShape = new Rocket(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
-			case (int('H')):
-				LooShape = new House(pGame, Ref, size, angle, YELLOW, BLACK);
-				break;
+				point Ref = shapelist[shapecount - 1]->getRefPoint();
+				double size = shapelist[shapecount - 1]->getSize();
+				double angle = shapelist[shapecount - 1]->getAngle();
+				switch ((shapelist[shapecount - 1]->getName())[0])
+				{
+				case (int('S')):
+					LooShape = new Sign(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				case (int('T')):
+					LooShape = new Tree(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				case (int('C')):
+					LooShape = new Car(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				case (int('I')):
+					LooShape = new IceCream(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				case (int('R')):
+					LooShape = new Rocket(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				case (int('H')):
+					LooShape = new House(pGame, Ref, size, angle, YELLOW, BLACK);
+					break;
+				}
 			}
+			pGrid->DELshapes();
+			pGrid->DelShapefromlist();
+			pGrid->addShape(LooShape);
+			pGrid->drawLevelShapes();
 		}
-		pGrid->DelShapefromlist();
-		pGrid->addShape(LooShape);
-		pGrid->drawLevelShapes();
 	}
+	
 
 }
 operLoad::operLoad(game* r_pGame) : operation(r_pGame)
@@ -582,7 +645,7 @@ void operLoad::Act()
 		double pointy;
 		double size;
 		double angle;
-		double fCR, fCG, fCB; double bCR, bCG, bCB;
+		char fCR, fCG, fCB; char bCR, bCG, bCB;
 		point Ref;
 
 		if (getline(File, line)) {
@@ -592,31 +655,35 @@ void operLoad::Act()
 			color Fillcolor = color(fCR, fCG, fCB);
 			Ref.x = pointx;
 			Ref.y = pointy;
-
-			switch (intgername)
+			if (line != "0")
 			{
-			case (int('S')):
-				currentShape = new Sign(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
-			case (int('T')):
-				currentShape = new Tree(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
-			case (int('C')):
-				currentShape = new Car(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
-			case (int('I')):
-				currentShape = new IceCream(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
-			case (int('R')):
-				currentShape = new Rocket(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
-			case (int('H')):
-				currentShape = new House(pGame, Ref, size, angle, Fillcolor, Bordercolor);
-				break;
+
+
+				switch (intgername)
+				{
+				case (int('S')):
+					currentShape = new Sign(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('T')):
+					currentShape = new Tree(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('C')):
+					currentShape = new Car(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('I')):
+					currentShape = new IceCream(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('R')):
+					currentShape = new Rocket(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				case (int('H')):
+					currentShape = new House(pGame, Ref, size, angle, Fillcolor, Bordercolor);
+					break;
+				}
+				pGrid->setActiveShape(currentShape);
+				pGrid->drawActiveShape();
 			}
-			pGrid->setActiveShape(currentShape);
-			pGrid->drawActiveShape();
-			for (int i = 0; i < shapecount; i++)
+			for (int i = 0; i < shapecount / 2; i++)
 			{
 				if (getline(File, line)) {
 					istringstream issi(line);
@@ -626,6 +693,7 @@ void operLoad::Act()
 					color Fillcolor = color(fCR, fCG, fCB);
 					Ref.x = pointx;
 					Ref.y = pointy;
+
 				}
 				switch (intgername)
 				{
@@ -648,6 +716,7 @@ void operLoad::Act()
 					LooShape = new House(pGame, Ref, size, angle, Fillcolor, Bordercolor);
 					break;
 				}
+
 				pGrid->addShape(LooShape);
 
 			}
@@ -655,4 +724,17 @@ void operLoad::Act()
 		}
 
 	}
+}
+
+operExit::operExit(game* r_pGame) :operation(r_pGame)
+{
+}
+
+void operExit::Act()
+{
+	grid* grid = pGame->getGrid();
+	shape* shape = grid->getActiveShape();
+	delete shape;
+	shape = nullptr;
+
 }

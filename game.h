@@ -21,7 +21,7 @@ class game
 	window* pWind;	//Pointer to the CMU graphics window
 	grid* shapesGrid;
 	string statusBarMessage;
-	Timer* countDownTimer;
+	Timer* countDownTimer= new Timer;
 	
 public:
 	game();
@@ -54,8 +54,9 @@ public:
 	 bool getRandomizationStatus();
 	
 	 void setRandomizationStatus(bool val);
-	 void DrawTimer();
+	 //void DrawTimer();
 	 bool getUserChoice()const;
 	 void setUserChoice(bool ch);
-
+	 void DrawTimer(int &x)const;
 };
+
