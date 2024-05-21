@@ -784,3 +784,35 @@ void operExit::Act()
 	shape = nullptr;
 
 }
+
+operPowerUp::operPowerUp(game* r_pGame) :operation(r_pGame)
+{
+}
+
+void operPowerUp::Act()
+{
+	grid* pGrid = pGame->getGrid();
+	shape** shapelist = pGrid->getshapeList();
+	int score = pGame->getScore();
+
+	int x, y;
+	if (this->c == 0)
+	{
+		this->c++;
+		x = stoi(pGame->ReturnTime()->getinsec());
+	}
+	y = stoi(pGame->ReturnTime()->getinsec());
+	int height = config.toolBarHeight;
+	int width = config.windWidth;
+	window* pWind = pGame->getWind();
+	while (x - y <= 50)
+	{
+		if ((pGame->getScore()) > score)
+		{
+			window* pWind = pGame->getWind();
+			pWind->DrawImage("images\\PowerUp\\PowerUp.jpg", 14 * config.toolbarItemWidth, 0, config.toolbarItemWidth, config.toolBarHeight);
+			pWind->SetPen(DARKBLUE, 3);
+			pWind->DrawLine(0, height, width, height);
+		}
+	}
+}

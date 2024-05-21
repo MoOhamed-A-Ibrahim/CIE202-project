@@ -182,3 +182,11 @@ public:
 	virtual void Act();
 
 };
+
+class operPowerUp : public operation
+{
+public:
+	operPowerUp(game* r_pGame);
+	virtual void Act();
+
+};

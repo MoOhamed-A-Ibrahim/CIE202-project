@@ -74,3 +74,4 @@ void toolbar::update() {
 	pWind->SetPen(DARKBLUE, 3);
 	pWind->DrawLine(0, height, width, height);
 }
+
